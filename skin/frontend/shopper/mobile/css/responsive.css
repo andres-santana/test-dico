@@ -639,7 +639,9 @@
     .nav-container, .nav-container .nav-top-title, .nav-container li.parent em {display:block; }
     .below-logo .nav-container {float: left;
     width: 100%;
-    margin-top: 15px;}
+    margin-top: 0;
+    border-top: 3px solid #910039;
+    border-bottom: 3px solid #910039;}
     #queldoreiNav2, #nav{float:none; width:240px !important; margin:0 auto 10px !important; display:none;}
     #queldoreiNav2 li, #nav li { float:none; position:relative; width:240px; margin:0 auto 3px;}
     #queldoreiNav2 li a, #nav li a, #queldoreiNav2 ul li a, #nav ul li a { float:none; padding:0; }

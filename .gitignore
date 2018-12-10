@@ -107,3 +107,12 @@ skin/frontend/default/modern/
 skin/frontend/enterprise
 skin/install/
 var/
+.sucuriquarantine/
+Newsletter/
+colchones/
+df/
+oriente/
+shell/
+suroeste/
+.cloud-locale-test.skip
+media
