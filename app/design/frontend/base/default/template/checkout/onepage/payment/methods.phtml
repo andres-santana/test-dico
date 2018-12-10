@@ -1,0 +1,277 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * One page checkout payment methods
+ *
+ * @var $this Mage_Checkout_Block_Onepage_Payment_Methods
+ */
+?>
+<style type="text/css">
+    ul.tabs2 li:hover{border-bottom: 1px solid #ff0000;}
+    ul.tabs2 li{cursor: pointer;}
+
+</style>
+<?php
+    $methods = $this->getMethods();
+    $oneMethod = count($methods) <= 1;
+?>
+<?php if (empty($methods)): ?>
+    <dt>
+        <?php echo $this->__('No Payment Methods') ?>
+    </dt>
+<?php else: ?>
+
+<div id="myTabs">    
+    <ul  class="tabs2" style="float: left; width: 33%;">
+  
+ 
+<?php
+    foreach ($methods as $_method):
+        $_code = $_method->getCode();
+?>
+    <li id ="li-<?php echo $_code; ?>" style="background-color: <?php if($_method==reset($methods)):; ?>rgba(0,0,0,0.008); border-bottom:2px solid #ff0000;<?php else:?>rgba(0,0,0,0); <?php endif; ?> line-height: 24px;margin-bottom: 20px;padding:5px 5px 0;">
+    <?php if(!$oneMethod): ?>
+        <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" <?php if($_method==reset($methods)): ?>checked="checked"<?php endif; ?> onclick="payment.switchMethod('<?php echo $_code ?>');" class="radio" hidden="hidden"/><?php if($_method==reset($methods)): ?><script type="text/javascript">payment.switchMethod('<?php echo $_code ?>');</script><?php endif;?>
+        <div id="button_<?php echo $_code; ?>"> 
+        <?php if($_code=="webpay"): ?>
+           <span style="display: block;width: 100%; color: #000000;">Tarjeta de crédito o débito</span>
+        <?php endif; ?>
+        <?php if($_code=="paypal_standard"): ?>
+            <span style="display: block;width: 100%; color: #000000;">Paypal</span>
+        <?php endif; ?>
+        <?php if($_code=="mercadopago_standard"): ?>
+            <span style="display:block;width: 100%; color: #780024;font-size: 21px;font-weight: bold;">Hasta 12 MSI</span>
+            <span style="display: block;width: 100%; color: #000000;">Mercado Pago</span>
+        <?php endif; ?>
+        <?php if($_code=="banktransfer"): ?>
+            <span style="display: block;width: 100%; color: #000000;">Transferencia bancaria</span>
+        <?php endif; ?>
+        </div>
+    <?php else: ?>
+        <span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio" /></span>
+        <?php $oneMethod = $_code; ?>
+    <?php endif; ?>
+    </li>
+    <?php if($_code=="mercadopago_standard"): ?>
+        <span style="display:block;width: 100%;color: #780024;font-size: 16px;font-weight: bold;padding: 10px 0px 0;">Otros métodos de pago</span>
+    <?php endif;?>
+<?php endforeach; ?>
+  </ul>
+<div style="width: 58%; float: right;font-family: open-sans, Verdana, Geneva, sans-serif; padding: 10px 20px; background-color: rgba(0,0,0,0.008);">
+<?php
+    foreach ($methods as $_method):
+        $_code = $_method->getCode();
+?>
+    <div id="container-<?php echo $_code ?>" style="width: 100%; float: right; <?php if($_method==reset($methods)):; ?>display:block;<?php else:?>display: none;<?php endif; ?>">
+        <?php if($_code=="webpay"): ?>
+            <div style="font-size: 16px;"><strong>Tarjetas VISA / Mastercard</strong></div>
+            <div style="padding: 20px 0 10px;">Tarjetas de crédito</div>
+            <div style="padding-bottom: 20px;"><ul style="width: 100%; float: left; padding-bottom: 20px;">
+                <li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/visa.png" height="30px"></li>
+                <li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/mastercard.png" height="30px"></li>
+<li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/american.png" height="30px"></li>
+            </ul></div>
+            <div style="padding: 20px 0 10px;float: left;width: 100%; border-top: 1px solid #dadada;">Tarjetas de débito</div>
+            <div style="padding-bottom: 20px;">
+                <ul style="width: 100%; float: left;">
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/bancomer.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/citibanamex.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/banorte.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/hsbc.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/santander.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/bancoppel.png" height="20px"></li>
+            </ul>
+            </div>
+           
+
+        <?php endif; ?>
+        <?php if($_code=="paypal_standard"): ?>
+            <div><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/paypal.png"></div>
+            <div style="padding: 20px 0 10px;">Tarjetas de crédito</div>
+            <div style="padding-bottom: 20px;"><ul style="width: 100%; float: left; padding-bottom: 20px;">
+                <li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/visa.png" height="30px"></li>
+                <li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/mastercard.png" height="30px"></li>
+<li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/american.png" height="30px"></li>
+            </ul></div>
+            <div style="padding: 20px 0 10px;float: left;width: 100%; border-top: 1px solid #dadada;">Tarjetas de débito</div>
+            <div style="padding-bottom: 20px;">
+                <ul style="width: 100%; float: left;">
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/bancomer.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/citibanamex.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/banorte.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/hsbc.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/santander.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/bancoppel.png" height="20px"></li>
+<li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/banco_Azteca.png" height="20px"></li>
+            </ul>
+            </div>
+
+        <?php endif; ?>
+        <?php if($_code=="mercadopago_standard"): ?>
+            <div><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/mercado_pago.png"></div>
+            <div style="padding: 20px 0 10px;">Tarjetas de crédito</div>
+            <div style="padding-bottom: 20px;"><ul style="width: 100%; float: left; padding-bottom: 20px;">
+                <li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/visa.png" height="30px"></li>
+                <li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/mastercard.png" height="30px"></li>
+<li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/american.png" height="30px"></li>
+            </ul></div>
+            <div style="padding: 20px 0 10px;float: left;width: 100%; border-top: 1px solid #dadada;">Tarjetas de débito</div>
+            <div style="padding-bottom: 20px;">
+                <ul style="width: 100%; float: left;">
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/bancomer.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/citibanamex.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/banorte.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/hsbc.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/santander.png" height="20px"></li>
+                <li style="float: left; padding: 5px 10px 5px 0;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/bancoppel.png" height="20px"></li>
+            </ul>
+            </div>
+            <div style="padding: 20px 0 10px;">Efectivo</div>
+            <div style="padding-bottom: 20px;"><ul style="width: 100%; float: left; padding-bottom: 20px;">
+                <li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/oxxo.png" height="30px"></li>
+                <li style="float: left;"><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/seven_eleven.png" height="30px"></li>
+            </ul></div>
+            <div><img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+?>wysiwyg/mercadopago_banner.png" width="100%;"></div>
+        <?php endif; ?>
+        <?php if($_code=="banktransfer"): ?>
+            <div style="padding: 20px 0 10px;"><strong>Transferencia Bancaria</strong></div>
+            <p>Datos para realizar el depósito bancario. Usted cuenta 8 días a partir de su pedido para generar el pago correspondiente.</p><br>
+            <p>BBVA Bancomer<br>
+                Muebles Dico S.A. de C.V. <br>
+                RFC: MDI790709766<br>
+                Plaza Ciudad de México<br>
+                Cta: 044469937-8 (para depósito)
+            </p>
+        <?php endif; ?>
+    </div>
+
+<?php endforeach; ?>
+</div>
+ <div style="padding-top:40px;width: 40%;float: left;margin-left: 35%;">
+                <input type="checkbox" id="tyc" checked="checked" style="width: 18px; height: 18px;"><label>Acepto términos y condiciones</label>
+                <a href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+ ?>politica-de-compra/" target="_blank">Consultar términos y condiciones</a>
+            </div>
+<?php
+    endif;
+?>
+<?php echo $this->getChildChildHtml('additional'); ?>
+<script type="text/javascript">
+    //<![CDATA[
+    <?php echo $this->getChildChildHtml('scripts'); ?>
+    payment.init();
+    <?php if (is_string($oneMethod)): ?>
+    payment.switchMethod('<?php echo $oneMethod ?>');
+        <?php endif; ?>
+    //]]>
+    jQuery(document).ready(function($) {
+        $('#button_webpay').click(function(){
+            $("#p_method_webpay").prop('checked', true);
+            $("#container-webpay").css('display','block');
+            $("#container-paypal_standard").css('display','none');
+            $("#container-mercadopago_standard").css('display','none');
+            $("#container-banktransfer").css('display','none');
+
+            $("#li-paypal_standard").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+            $("#li-webpay").css({'background-color':'rgba(0,0,0,0.008)','border-bottom':'1px solid #ff0000'});
+            $("#li-mercadopago_standard").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+            $("#li-banktransfer").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+        });
+        $('#button_paypal_standard').click(function(){
+            $("#p_method_paypal_standard").prop('checked', true);
+            $("#container-webpay").css('display','none');
+            $("#container-paypal_standard").css('display','block');
+            $("#container-mercadopago_standard").css('display','none');
+            $("#container-banktransfer").css('display','none');
+
+            $("#li-paypal_standard").css({'background-color':'rgba(0,0,0,0.008)','border-bottom':'1px solid #ff0000'});
+            $("#li-webpay").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+            $("#li-mercadopago_standard").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+            $("#li-banktransfer").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+        }); 
+        $('#button_mercadopago_standard').click(function(){
+            $("#p_method_mercadopago_standard").prop('checked', true);
+            $("#container-webpay").css('display','none');
+            $("#container-paypal_standard").css('display','none');
+            $("#container-mercadopago_standard").css('display','block');
+            $("#container-banktransfer").css('display','none');
+
+            $("#li-paypal_standard").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+            $("#li-webpay").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+            $("#li-mercadopago_standard").css({'background-color':'rgba(0,0,0,0.008)','border-bottom':'1px solid #ff0000'});
+            $("#li-banktransfer").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+        });
+        $('#button_banktransfer').click(function(){
+            $("#p_method_banktransfer").prop('checked', true);
+            $("#container-webpay").css('display','none');
+            $("#container-paypal_standard").css('display','none');
+            $("#container-mercadopago_standard").css('display','none');
+            $("#container-banktransfer").css('display','block');
+
+            $("#li-paypal_standard").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+            $("#li-webpay").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+            $("#li-mercadopago_standard").css({'background-color':'rgba(0,0,0,0.00)','border-bottom':'none'});
+            $("#li-banktransfer").css({'background-color':'rgba(0,0,0,0.008)','border-bottom':'1px solid #ff0000'});
+        });
+        $("#tyc").prop("disabled", false);
+        //$('#myTabs').tabs();
+    });
+</script>

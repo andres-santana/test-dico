@@ -1,0 +1,130 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Customer onepage checkout login form template
+ *
+ * @see app/design/frontend/base/default/template/checkout/onepage/login.phtml
+ */
+/** @var $this Mage_Checkout_Block_Onepage_Login */
+?>
+<?php echo $this->getChildHtml('login_before')?>
+<div class="grid_12 row">
+<div class="page-title grid_4">
+    <h1 style="color:#780024;">1.- <?php echo $this->__('Registro') ?></h1>
+</div>
+</div>
+<div class="grid_12 row">
+    <div class="grid_2"></div>
+<div class="block block-checkout-login grid_4">
+    <div class="page-title-checkout">
+        <strong><span>Iniciar sesión</span></strong>
+    </div>
+    <div class="block-content">
+
+        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+        <form id="login-form" action="<?php echo $this->getPostAction() ?>" method="post">
+            <fieldset>
+                <ul class="form-list">
+                    <li>
+                        <label for="login-email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+                        <div class="input-box">
+                            <input type="text" class="input-text required-entry validate-email" id="login-email" name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" />
+                        </div>
+                    </li>
+                    <li>
+                        <label for="login-password" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
+                        <div class="input-box">
+                            <input type="password" class="input-text required-entry" id="login-password" name="login[password]" />
+                        </div>
+                    </li>
+                    <?php echo $this->getChildHtml('form.additional.info'); ?>
+                    <?php echo $this->getChildHtml('persistent.remember.me'); ?>
+                </ul>
+                <input name="context" type="hidden" value="checkout" />
+            </fieldset>
+        </form>
+
+        <div class="buttons-set">
+            <p class="required"><?php echo $this->__('* Campos obligatorios') ?></p>
+            <button type="submit" class="button" onclick="onepageLogin(this)"><span><span><?php echo $this->__('Entrar') ?></span></span></button>
+            <a href="<?php echo $this->getUrl('customer/account/forgotpassword') ?>" style="text-align: left; padding-top: 10px;" class="f-left"><?php echo $this->__('Forgot your password?') ?></a>
+        </div>
+        <hr>
+          <div class="buttons-set">
+            <button id="onepage-register-button" type="button" class="button" onclick="window.location='<?php echo $this->helper('checkout/url')->getRegistrationUrl();?>'"><span style="background-color: #575757;"><span style="background-color: #575757; width: 140px;"><?php echo $this->__('Register') ?></span></span></button>
+            <input type="radio" name="checkout_method" id="login:guest" value="guest" checked="checked" hidden="hidden" class="radio" />
+            <button id="onepage-guest-register-button" type="button" class="button" onclick="checkout.setMethod();"><span style="background-color: #979797;"><span style="background-color: #979797;"><?php echo $this->__('Seguir como invitado') ?></span></span></button>
+            
+        </div>
+
+    </div>
+</div>
+<div class="clear"></div>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    var loginForm = new VarienForm('login-form', true);
+    $('login-email').observe('keypress', bindLoginPost);
+    $('login-password').observe('keypress', bindLoginPost);
+    function bindLoginPost(evt){
+        if (evt.keyCode == Event.KEY_RETURN) {
+            loginForm.submit();
+        }
+    }
+    function onepageLogin(button)
+    {
+        if(loginForm.validator && loginForm.validator.validate()){
+            button.disabled = true;
+            loginForm.submit();
+        }
+    }
+
+    jQuery("#onepage-guest-register-button").click(function(){
+    jQuery('#title-2').css('display','block');
+    jQuery('#registro').css('color','#656565');
+    jQuery('#datos').css('color','#ff0000');
+    jQuery('#pago').css('color','#656565');
+    jQuery('#confirmacion').css('color','#656565');
+    });
+//]]>
+</script>
+<?php
+    $registerParam = $this->getRequest()->getParam('register');
+    if ($registerParam || $registerParam === ''):
+?>
+    <script type="text/javascript">
+    //<![CDATA[
+        document.observe("dom:loaded", function() {
+            if($('login:register')) {
+                $('login:register').checked = true;
+                checkout.setMethod();
+            }
+        })
+    //]]>
+    </script>
+<?php endif; ?>

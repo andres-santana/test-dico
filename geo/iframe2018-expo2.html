@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Selecciona tu ciudad</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+     <link rel="stylesheet" type="text/css" href="source/iframe.css" />
+	<script type="text/javascript" src="lib/jquery-1.10.1.min.js"></script>	
+     <script type="text/javascript" src="lib/jquery.cookie.js"></script>
+</head>
+<body>
+     <div id="maingeo" class="maingeo" style="margin: 0px auto;">
+            <div class="topbar"><div class="logo"> <span>Muebles Dico</span></div></div>
+               <div class="main-mg">
+                <div class="col-sm-6 selecciona-text">
+                    <div class="suc-drop aright col1">
+                        <div class="rr f15 pf">Por favor selecciona<br> tu ciudad:</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="suc-actual col2">
+                              
+                        <div class="selectP multsuc dd" id="state-container">
+                             <select name="select-native-1" id="select-native-1" onchange="redirige()">
+                                   <option value="ciudad">Selecciona una Ciudad</option>  
+                                   <option value="https://dico.com.mx/df/"><span class="strong">CDMX y Area Metropolitana</span></option>
+                                   <option value="https://bajio.dico.com.mx/exposhow/">Guadalajara</option>
+                                   <option value="https://bajio.dico.com.mx/exposhow/">Aguascalientes</option>
+                                   <option value="https://dico.com.mx/oriente/">Acapulco</option>
+                                   <option value="https://dico.com.mx/df//">Apizaco</option>
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Caborca</option>
+                                   <option value="https://sureste.dico.com.mx/">Campeche</option> 
+                                   <option value="https://sureste.dico.com.mx/">Canc&uacute;n</option>
+                                   <option value="https://dico.com.mx/suroeste/">Cd. Carmen</option>
+                                   <option value="https://dico.com.mx/df/">Celaya</option>
+                                   <option value="https://dico.com.mx/oriente">Chilpancingo</option> 
+                                   <option value="https://dico.com.mx/suroeste">Coatzacoalcos</option> 
+                                    <option value="https://bajio.dico.com.mx/exposhow/">Colima</option>
+                                   <option value="https://dico.com.mx/suroeste/">Comalcalco</option>
+                                   <option value="https://dico.com.mx/suroeste/">Comit&aacute;n</option> 
+                                   <option value="https://dico.com.mx/oriente/">C&oacute;rdoba</option> 
+                                   <option value="https://dico.com.mx/df/">Cuautla</option>
+                                   <option value="https://dico.com.mx/df/">Cuernavaca</option> 
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Culiac&aacute;n</option>
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Durango</option>
+                                   <option value="https://norte.dico.com.mx/">Ensenada</option>                   
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Guamuchil</option>
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Guasave</option>
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Guaymas</option>
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Hermosillo</option> 
+                                   <option value="https://bajio.dico.com.mx/">Irapuato</option>
+                                   <option value="https://bajio.dico.com.mx/noroeste/">La Paz BCS</option> 
+                                   <option value="https://bajio.dico.com.mx/exposhow/">La Piedad</option>
+                                   <option value="https://bajio.dico.com.mx/pacifico/">L&aacute;zaro C&aacute;rdenas</option>
+                                   <option value="https://bajio.dico.com.mx/">Le&oacute;n</option>
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Los Mochis</option>                   
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Mazatl&aacute;n</option> 
+                                   <option value="https://sureste.dico.com.mx/">M&eacute;rida</option> 
+                                   <option value="https://dico.com.mx/df/">Metepec</option>
+                                   <option value="https://norte.dico.com.mx/">Mexicali</option>
+                                   <option value="https://bajio.dico.com.mx/">Morelia</option>
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Navolato</option> 
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Nogales</option>
+                                   <option value="https://dico.com.mx/suroeste">Oaxaca</option>
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Obreg&oacute;n</option> 
+                                   <option value="https://dico.com.mx/oriente">Orizaba</option>
+                                   <option value="https://dico.com.mx/df/">Pachuca</option>
+                                   <option value="https://sureste.dico.com.mx/">Playa del Carmen</option>
+                                   <option value="https://dico.com.mx/oriente">Poza Rica</option>
+                                   <option value="https://dico.com.mx/df/">Puebla</option>
+                                   <option value="https://bajio.dico.com.mx/exposhow/">Puerto Vallarta</option>
+                                   <option value="https://dico.com.mx/df/">Quer&eacute;taro</option>
+                                   <option value="https://bajio.dico.com.mx/">Salamanca</option> 
+                                   <option value="https://dico.com.mx/suroeste">San Cristobal de las Casas</option>
+                                   <option value="https://dico.com.mx/df/">San Juan <br>del R&iacute;o</option>
+                                   <option value="https://bajio.dico.com.mx/">San Luis Potos&iacute;</option>
+                                   <option value="https://norte.dico.com.mx/">San Luis R&iacute;o Colorado</option>
+                                   <option value="https://dico.com.mx/suroeste">Tapachula</option>
+                                   <option value="https://dico.com.mx/oriente">Taxco</option>
+                                   <option value="https://norte.dico.com.mx/">Tecate</option>                    
+                                   <option value="https://dico.com.mx/oriente">Tehuac&aacute;n</option>
+                                   <option value="https://bajio.dico.com.mx/exposhow/">Tepic</option> 
+                                   <option value="https://dico.com.mx/oriente">Tezuitl&aacute;n</option>
+                                   <option value="https://norte.dico.com.mx/">Tijuana</option>
+                                   <option value="https://dico.com.mx/df/">Toluca</option>
+                                   <option value="https://dico.com.mx/suroeste">Tuxtla Guti&eacute;rrez</option>
+                                   <option value="https://bajio.dico.com.mx/exposhow/">Uruapan</option>
+                                   <option value="https://dico.com.mx/oriente">Veracruz</option>
+                                   <option value="https://dico.com.mx/suroeste">Villahermosa</option> 
+                                   <option value="https://dico.com.mx/oriente">Xalapa</option>
+                                   <option value="https://bajio.dico.com.mx/pacifico/">Zacatecas</option>
+                                   <option value="https://bajio.dico.com.mx/exposhow/">Zamora</option>
+                              </select>
+                              <div class="validation-advice" id="advice-validate" style="">Por favor seleccione una opci&oacute;n.</div>
+                        </div>
+                        <div class="rec rr">
+                            <input name="remember-location" id="remember-location" type="checkbox" value="1" checked>
+                            <label>Recordar Ubicaci&oacute;n</label>
+                        </div>
+                        <div class="clear"></div>
+
+                    </div>
+                </div>
+                <div class="clear"></div>
+          </div>
+          <div class="buttons-set">
+            <div class="aut col-sm-12 nopadd">Le informamos que en nuestra p&aacute;gina de Internet utilizamos cookies, para mayor informaci&oacute;n sobre las mismas favor de acceder al aviso de privacidad.</div>
+
+          </div>
+    </div>
+	<script>
+     $(document).ready(function(){
+
+               $('#select-native-1').change(function() {
+                    var seleccion = $("#select-native-1").val();
+                    var recordar = $("#remember-location").val();
+                    if(seleccion=="ciudad"){
+                         $("#advice-validate").css("display","block");
+                    }
+                    else{
+                         /*if($("#remember-location").is(':checked')){
+                              $.cookie('ciudad',seleccion,{ expires: 0, path: '/', domain: 'dico.com.mx'});
+                         }*/
+                         parent.location.assign(seleccion);
+                    }
+               });  
+
+     });
+</script>
+<script type="text/javascript">
+	function redirige(){
+		var x = document.getElementById("select-native-1").value;
+		parent.location = x;
+	}
+</script>
+</body>
+</html>

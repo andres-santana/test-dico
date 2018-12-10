@@ -1,0 +1,863 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product additional attributes template
+ *
+ * @see Mage_Catalog_Block_Product_View_Attributes
+ */
+?>
+<?php
+    $_helper = $this->helper('catalog/output');
+    $_product = $this->getProduct();
+    $productId = $_product->getId(); 
+    $attSet = Mage::getModel('catalog/product')->load($productId)->getAttributeSetId(); 
+    $attSetName = Mage::getModel('eav/entity_attribute_set')->load($attSet)->getAttributeSetName();
+    $_alto = $this->htmlEscape($_product->getData('alto'));
+    $_frente = $this->htmlEscape($_product->getData('frente'));
+    $_fondo = $this->htmlEscape($_product->getData('fondo'));
+    $_mesa_alto = $this->htmlEscape($_product->getData('mesa_alto'));
+    $_mesa_frente = $this->htmlEscape($_product->getData('mesa_frente'));
+    $_mesa_fondo = $this->htmlEscape($_product->getData('mesa_fondo'));
+    $_silla_alto = $this->htmlEscape($_product->getData('silla_alto'));
+    $_silla_frente = $this->htmlEscape($_product->getData('silla_frente'));
+    $_silla_fondo = $this->htmlEscape($_product->getData('silla_fondo'));
+    $_love_alto = $this->htmlEscape($_product->getData('love_alto'));
+    $_love_frente = $this->htmlEscape($_product->getData('love_frente'));
+    $_love_fondo = $this->htmlEscape($_product->getData('love_fondo'));
+    $_sillon_alto = $this->htmlEscape($_product->getData('sillon_alto'));
+    $_sillon_frente = $this->htmlEscape($_product->getData('sillon_frente'));
+    $_sillon_fondo = $this->htmlEscape($_product->getData('sillon_fondo'));
+    $_chaise_alto = $this->htmlEscape($_product->getData('chaise_alto'));
+    $_chaise_frente = $this->htmlEscape($_product->getData('chaise_frente'));
+    $_chaise_fondo = $this->htmlEscape($_product->getData('chaise_fondo')); 
+    $_sofa_alto = $this->htmlEscape($_product->getData('sofa_alto'));
+    $_sofa_frente = $this->htmlEscape($_product->getData('sofa_frente'));
+    $_sofa_fondo = $this->htmlEscape($_product->getData('sofa_fondo'));
+    $_cabecera_alto = $this->htmlEscape($_product->getData('cabecera_alto'));
+    $_cabecera_frente = $this->htmlEscape($_product->getData('cabecera_frente'));
+    $_cabecera_fondo = $this->htmlEscape($_product->getData('cabecera_fondo')); 
+    $_comoda_alto = $this->htmlEscape($_product->getData('comoda_alto'));
+    $_comoda_frente = $this->htmlEscape($_product->getData('comoda_frente'));
+    $_comoda_fondo = $this->htmlEscape($_product->getData('comoda_fondo')); 
+    $_marco_alto = $this->htmlEscape($_product->getData('marco_alto'));
+    $_marco_frente = $this->htmlEscape($_product->getData('marco_frente'));
+    $_marco_fondo = $this->htmlEscape($_product->getData('marco_fondo')); 
+    $_buro_alto = $this->htmlEscape($_product->getData('buro_alto'));
+    $_buro_frente = $this->htmlEscape($_product->getData('buro_frente'));
+    $_buro_fondo = $this->htmlEscape($_product->getData('buro_fondo')); 
+    $_love_derecho_alto = $this->htmlEscape($_product->getData('love_derecho_alto'));
+    $_love_derecho_frente = $this->htmlEscape($_product->getData('love_derecho_frente'));
+    $_love_derecho_fondo = $this->htmlEscape($_product->getData('love_derecho_fondo')); 
+    $_love_izquierdo_alto = $this->htmlEscape($_product->getData('love_izquierdo_alto'));
+    $_love_izquierdo_frente = $this->htmlEscape($_product->getData('love_izquierdo_frente'));
+    $_love_izquierdo_fondo = $this->htmlEscape($_product->getData('love_izquierdo_fondo')); 
+    $_esquinero_alto = $this->htmlEscape($_product->getData('esquinero_alto'));
+    $_esquinero_frente = $this->htmlEscape($_product->getData('esquinero_frente'));
+    $_esquinero_fondo = $this->htmlEscape($_product->getData('esquinero_fondo')); 
+    $_alacena_alto = $this->htmlEscape($_product->getData('alacena_alto'));
+    $_alacena_frente = $this->htmlEscape($_product->getData('alacena_frente'));
+    $_alacena_fondo = $this->htmlEscape($_product->getData('alacena_fondo')); 
+    $_modulo_alto = $this->htmlEscape($_product->getData('cocina_modulo_alto'));
+    $_modulo_frente = $this->htmlEscape($_product->getData('cocina_modulo_frente'));
+    $_modulo_fondo = $this->htmlEscape($_product->getData('cocina_modulo_fondo'));
+    $_campana_alto = $this->htmlEscape($_product->getData('campana_modulo_alto'));
+    $_campana_frente = $this->htmlEscape($_product->getData('campana_modulo_frente'));
+    $_campana_fondo = $this->htmlEscape($_product->getData('campana_modulo_fondo')); 
+    $_alacena_esquinera_alto = $this->htmlEscape($_product->getData('alacena_esquinada_alto'));
+    $_alacena_esquinera_frente = $this->htmlEscape($_product->getData('alacena_esquinada_frente'));
+    $_alacena_esquinera_fondo = $this->htmlEscape($_product->getData('alacena_esquinada_fondo')); 
+    $_modulo_esquinero_alto = $this->htmlEscape($_product->getData('modulo_esquinado_alto'));
+    $_modulo_esquinero_frente = $this->htmlEscape($_product->getData('modulo_esquinado_frente'));
+    $_modulo_esquinero_fondo = $this->htmlEscape($_product->getData('modulo_esquinado_fondo')); 
+    $_aparador_alto = $this->htmlEscape($_product->getData('aparador_alto')); 
+    $_aparador_frente = $this->htmlEscape($_product->getData('aparador_frente')); 
+    $_aparador_fondo = $this->htmlEscape($_product->getData('aparador_fondo')); 
+    $_vitrina_alto = $this->htmlEscape($_product->getData('vitrina_alto')); 
+    $_vitrina_frente = $this->htmlEscape($_product->getData('vitrina_frente')); 
+    $_vitrina_fondo = $this->htmlEscape($_product->getData('vitrina_fondo'));
+    $_barra_alto = $this->htmlEscape($_product->getData('barra_alto')); 
+    $_barra_frente = $this->htmlEscape($_product->getData('barra_frente')); 
+    $_barra_fondo = $this->htmlEscape($_product->getData('barra_fondo'));
+    $_contrabarra_alto = $this->htmlEscape($_product->getData('contrabarra_alto')); 
+    $_contrabarra_frente = $this->htmlEscape($_product->getData('contrabarra_frente')); 
+    $_contrabarra_fondo = $this->htmlEscape($_product->getData('contrabarra_fondo'));
+    $_modulo_central_alto = $this->htmlEscape($_product->getData('modulo_central_alto')); 
+    $_modulo_central_frente = $this->htmlEscape($_product->getData('modulo_central_frente')); 
+    $_modulo_central_fondo = $this->htmlEscape($_product->getData('modulo_central_fondo'));
+    $_modulo_lateral_alto = $this->htmlEscape($_product->getData('modulo_lateral_alto')); 
+    $_modulo_lateral_frente = $this->htmlEscape($_product->getData('modulo_lateral_frente')); 
+    $_modulo_lateral_fondo = $this->htmlEscape($_product->getData('modulo_lateral_fondo'));
+    $_modulo_puente_alto = $this->htmlEscape($_product->getData('modulo_puente_alto')); 
+    $_modulo_puente_frente = $this->htmlEscape($_product->getData('modulo_puente_frente')); 
+    $_modulo_puente_fondo = $this->htmlEscape($_product->getData('modulo_puente_fondo'));
+    $_mesa_centro_alto = $this->htmlEscape($_product->getData('mesa_centro_alto')); 
+    $_mesa_centro_frente = $this->htmlEscape($_product->getData('mesa_centro_frente')); 
+    $_mesa_centro_fondo = $this->htmlEscape($_product->getData('mesa_centro_fondo'));
+    $_mesa_lateral_alto = $this->htmlEscape($_product->getData('mesa_lateral_alto')); 
+    $_mesa_lateral_frente = $this->htmlEscape($_product->getData('mesa_lateral_frente')); 
+    $_mesa_lateral_fondo = $this->htmlEscape($_product->getData('mesa_lateral_fondo'));
+    $_mesa_taburete_alto = $this->htmlEscape($_product->getData('mesa_taburete_alto')); 
+    $_mesa_taburete_frente = $this->htmlEscape($_product->getData('mesa_taburete_frente')); 
+    $_mesa_taburete_fondo = $this->htmlEscape($_product->getData('mesa_taburete_fondo'));
+    $_taburete_alto = $this->htmlEscape($_product->getData('taburete_alto')); 
+    $_taburete_frente = $this->htmlEscape($_product->getData('taburete_frente')); 
+    $_taburete_fondo = $this->htmlEscape($_product->getData('taburete_fondo'));
+    $_cocina170_tarja_alto = $this->htmlEscape($_product->getData('cocina170_tarja_alto')); 
+    $_cocina170_tarja_frente = $this->htmlEscape($_product->getData('cocina170_tarja_frente')); 
+    $_cocina170_tarja_fondo = $this->htmlEscape($_product->getData('cocina170_tarja_fondo'));
+    $_cocina170_alacena_alto = $this->htmlEscape($_product->getData('cocina170_alacena_alto')); 
+    $_cocina170_alacena_frente = $this->htmlEscape($_product->getData('cocina170_alacena_frente')); 
+    $_cocina170_alacena_fondo = $this->htmlEscape($_product->getData('cocina170_alacena_fondo'));
+    $_cocina170_portacampana_alto = $this->htmlEscape($_product->getData('cocina170_portacampana_alto')); 
+    $_cocina170_portacampana_frente = $this->htmlEscape($_product->getData('cocina170_portacampana_frente')); 
+    $_cocina170_portacampana_fondo = $this->htmlEscape($_product->getData('cocina170_portacampana_fondo'));
+    $_cocina200_alacena120_alto = $this->htmlEscape($_product->getData('cocina200_alacena120_alto')); 
+    $_cocina200_alacena120_frente = $this->htmlEscape($_product->getData('cocina200_alacena120_frente')); 
+    $_cocina200_alacena120_fondo = $this->htmlEscape($_product->getData('cocina200_alacena120_fondo'));
+    $_cocina200_alacena043_alto = $this->htmlEscape($_product->getData('cocina200_alacena043_alto')); 
+    $_cocina200_alacena043_frente = $this->htmlEscape($_product->getData('cocina200_alacena043_frente')); 
+    $_cocina200_alacena043_fondo = $this->htmlEscape($_product->getData('cocina200_alacena043_fondo'));
+    $_cocina200_modulo120_alto = $this->htmlEscape($_product->getData('cocina200_modulo120_alto')); 
+    $_cocina200_modulo120_frente = $this->htmlEscape($_product->getData('cocina200_modulo120_frente')); 
+    $_cocina200_modulo120_fondo = $this->htmlEscape($_product->getData('cocina200_modulo120_fondo'));
+    $_cocina200_modulo043_alto = $this->htmlEscape($_product->getData('cocina200_modulo043_alto')); 
+    $_cocina200_modulo043_frente = $this->htmlEscape($_product->getData('cocina200_modulo043_frente')); 
+    $_cocina200_modulo043_fondo = $this->htmlEscape($_product->getData('cocina200_modulo043_fondo'));
+    $_cocina200_portacampana_alto = $this->htmlEscape($_product->getData('cocina200_portacampana_alto')); 
+    $_cocina200_portacampana_frente = $this->htmlEscape($_product->getData('cocina200_portacampana_frente')); 
+    $_cocina200_portacampana_fondo = $this->htmlEscape($_product->getData('cocina200_portacampana_fondo'));
+    $_cocina_modulo080_alto = $this->htmlEscape($_product->getData('cocina_modulo080_alto')); 
+    $_cocina_modulo080_frente = $this->htmlEscape($_product->getData('cocina_modulo080_frente')); 
+    $_cocina_modulo080_fondo = $this->htmlEscape($_product->getData('cocina_modulo080_fondo'));
+    $_cocina_alacena080_alto = $this->htmlEscape($_product->getData('cocina_alacena080_alto')); 
+    $_cocina_alacena080_frente = $this->htmlEscape($_product->getData('cocina_alacena080_frente')); 
+    $_cocina_alacena080_fondo = $this->htmlEscape($_product->getData('cocina_alacena080_fondo'));
+    $_cocina_modulo_esquina_alto = $this->htmlEscape($_product->getData('cocina_modulo_esquina_alto')); 
+    $_cocina_modulo_esquina_frente = $this->htmlEscape($_product->getData('cocina_modulo_esquina_frente')); 
+    $_cocina_modulo_esquina_fondo = $this->htmlEscape($_product->getData('cocina_modulo_esquina_fondo'));
+    $_cocina_alacena_esquinada_alto = $this->htmlEscape($_product->getData('alacena_esquinada_alto')); 
+    $_cocina_alacena_esquinada_frente = $this->htmlEscape($_product->getData('alacena_esquinada_frente')); 
+    $_cocina_alacena_esquinada_fondo = $this->htmlEscape($_product->getData('alacena_esquinada_fondo'));
+    $_chico_alto = $this->htmlEscape($_product->getData('chico_alto')); 
+    $_chico_frente = $this->htmlEscape($_product->getData('chico_frente')); 
+    $_chico_fondo = $this->htmlEscape($_product->getData('chico_fondo'));
+    $_mediano_alto = $this->htmlEscape($_product->getData('mediano_alto')); 
+    $_mediano_frente = $this->htmlEscape($_product->getData('mediano_frente')); 
+    $_mediano_fondo = $this->htmlEscape($_product->getData('mediano_fondo'));                    
+    $_grande_alto = $this->htmlEscape($_product->getData('grande_alto')); 
+    $_grande_frente = $this->htmlEscape($_product->getData('grande_frente')); 
+    $_grande_fondo = $this->htmlEscape($_product->getData('grande_fondo'));
+
+?>
+
+<?php if($_additional = $this->getAdditionalData()): ?>
+    <h2><?php echo $this->__('Additional Information') ?></h2>
+    <table class="data-table" id="product-attribute-specs-table">
+        <col width="25%" />
+        <col />
+        <tbody>
+        <?php /* foreach ($_additional as $_data): ?>
+            <tr>
+                <th class="label"><?php echo $this->escapeHtml($this->__($_data['label'])) ?></th>
+                <td class="data"><?php echo $_helper->productAttribute($_product, $_data['value'], $_data['code']) ?></td>
+            </tr>
+        <?php endforeach; */ ?>
+        <?php 
+            switch ($attSetName) {
+                case 'Default':
+        ?>
+            <tr class="border-bottom">
+                <th class="border-bottom center">Alto</th>
+                <th class="border-bottom center">Frente</th>
+                <th class="border-bottom center">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="a-center data"><?php echo $_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'Comedores simples':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Mesa</td>
+                <td class="a-center data"><?php echo $_mesa_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_mesa_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_mesa_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Silla</td>
+                <td class="a-center data"><?php echo $_silla_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_silla_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_silla_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'sala modular 2 piezas':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Love</td>
+                <td class="a-center data"><?php echo $_love_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Chaise</td>
+                <td class="a-center data"><?php echo $_chaise_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_chaise_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_chaise_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'sala modular love love esquinero':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Love Derecho</td>
+                <td class="a-center data"><?php echo $_love_derecho_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_derecho_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_derecho_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Love Izquierdo</td>
+                <td class="a-center data"><?php echo $_love_izquierdo_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_izquierdo_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_izquierdo_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Esquinero</td>
+                <td class="a-center data"><?php echo $_esquinero_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_esquinero_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_esquinero_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'sala modular sofa love':
+        ?>
+            <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Sof&aacute;</td>
+                <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Love</td>
+                <td class="a-center data"><?php echo $_love_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'recamara 4 piezas':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Cabecera</td>
+                <td class="a-center data"><?php echo $_cabecera_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cabecera_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cabecera_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">C&oacute;moda</td>
+                <td class="a-center data"><?php echo $_comoda_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_comoda_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_comoda_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Marco c/luna</td>
+                <td class="a-center data"><?php echo $_marco_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_marco_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_marco_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Bur&oacute;</td>
+                <td class="a-center data"><?php echo $_buro_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_buro_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_buro_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'cocinas':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Alacena</td>
+                <td class="a-center data"><?php echo $_alacena_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_alacena_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_alacena_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo</td>
+                <td class="a-center data"><?php echo $_modulo_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Porta Campana</td>
+                <td class="a-center data"><?php echo $_campana_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_campana_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_campana_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'cocinas con escuadra':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Alacena</td>
+                <td class="a-center data"><?php echo $_cabecera_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cabecera_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cabecera_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo</td>
+                <td class="a-center data"><?php echo $_comoda_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_comoda_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_comoda_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Porta Campana</td>
+                <td class="a-center data"><?php echo $_marco_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_marco_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_marco_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Alacena Esquinera</td>
+                <td class="a-center data"><?php echo $_alacena_esquinera_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_alacena_esquinera_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_alacena_esquinera_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo Esquinero</td>
+                <td class="a-center data"><?php echo $_modulo_esquinero_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_esquinero_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_esquinero_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'aparador y vitrina':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Aparador</td>
+                <td class="a-center data"><?php echo $_aparador_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_aparador_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_aparador_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Vitrina</td>
+                <td class="a-center data"><?php echo $_vitrina_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_vitrina_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_vitrina_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'cantinas':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Barra</td>
+                <td class="a-center data"><?php echo $_barra_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_barra_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_barra_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Contrabarra</td>
+                <td class="a-center data"><?php echo $_contrabarra_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_contrabarra_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_contrabarra_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break; 
+
+                case 'centro de entretenimiento':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo Central</td>
+                <td class="a-center data"><?php echo $_modulo_central_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_central_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_central_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo Lateral</td>
+                <td class="a-center data"><?php echo $_modulo_lateral_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_lateral_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_lateral_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo Puente</td>
+                <td class="a-center data"><?php echo $_modulo_puente_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_puente_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_puente_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'mesa centro y lateral':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Mesa Centro</td>
+                <td class="a-center data"><?php echo $_mesa_centro_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_mesa_centro_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_mesa_centro_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Mesa Lateral</td>
+                <td class="a-center data"><?php echo $_mesa_lateral_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_mesa_lateral_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_mesa_lateral_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'mesa y taburete':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Mesa</td>
+                <td class="a-center data"><?php echo $_mesa_taburete_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_mesa_taburete_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_mesa_taburete_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Taburete</td>
+                <td class="a-center data"><?php echo $_taburete_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_taburete_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_taburete_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'alacena configurable':
+        ?>
+            <tr class="border-bottom">
+                Las medidas dependen del tamaño de los componentes seleccionados.<br><br>
+            </tr>
+        <?php        
+                break;
+
+                case 'cocina 1.70m agrupada':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Tarja</td>
+                <td class="a-center data"><?php echo $_cocina170_tarja_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina170_tarja_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina170_tarja_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Alacena</td>
+                <td class="a-center data"><?php echo $_cocina170_alacena_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina170_alacena_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina170_alacena_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Portacampana</td>
+                <td class="a-center data"><?php echo $_cocina170_portacampana_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina170_portacampana_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina170_portacampana_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'cocina 2m agrupada':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Alacena 1.20</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena120_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena120_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena120_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo 1.20</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo120_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo120_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo120_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Portacampana</td>
+                <td class="a-center data"><?php echo $_cocina200_portacampana_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_portacampana_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_portacampana_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Alacena 0.43</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena043_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena043_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena043_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo 0.43</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo043_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo043_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo043_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'cocina escuadra agrupada':
+        ?>
+                <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Alacena 1.20</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena120_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena120_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena120_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo 1.20</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo120_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo120_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo120_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Portacampana</td>
+                <td class="a-center data"><?php echo $_cocina200_portacampana_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_portacampana_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_portacampana_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Alacena 0.43</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena043_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena043_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_alacena043_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo 0.43</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo043_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo043_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina200_modulo043_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Alacena 0.80</td>
+                <td class="a-center data"><?php echo $_cocina_alacena080_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina_alacena080_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina_alacena080_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo 0.80</td>
+                <td class="a-center data"><?php echo $_cocina_modulo080_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina_modulo080_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina_modulo080_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Alacena esquinera</td>
+                <td class="a-center data"><?php echo $_alacena_esquinada_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_alacena_esquinada_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_alacena_esquinada_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo esquinero</td>
+                <td class="a-center data"><?php echo $_cocina_modulo_esquina_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina_modulo_esquina_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cocina_modulo_esquina_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'centro de entretenimiento agrupado y configurable':
+        ?>
+            <tr class="border-bottom">
+                Las medidas dependen del tamaño de los componentes seleccionados.<br><br>
+            </tr>
+        <?php        
+                break;
+
+                case 'modulo esquinero y alacena esquinera':
+        ?>
+            <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">M&oacute;dulo</td>
+                <td class="a-center data"><?php echo $_modulo_esquinero_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_esquinero_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_modulo_esquinero_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Alacena</td>
+                <td class="a-center data"><?php echo $_alacena_esquinera_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_alacena_esquinera_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_alacena_esquinera_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'sofa love seat y sillon':
+        ?>
+            <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Sof&aacute;</td>
+                <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Love Seat</td>
+                <td class="a-center data"><?php echo $_love_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_fondo ?>&nbsp;cm</td>
+            </tr>                                        
+            <tr>   
+                <td class="label">Sill&oacute;n</td>
+                <td class="a-center data"><?php echo $_sillon_alto ?>&nbsp;cm</td>
+                 <td class="a-center data"><?php echo $_sillon_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_sillon_fondo ?>&nbsp;cm</td>
+            </tr>
+        <?php        
+                break;
+
+                case 'sofa y chaise long':
+        ?>
+            <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Sof&aacute;</td>
+                <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Chaise Long</td>
+                <td class="a-center data"><?php echo $_chaise_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_chaise_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_chaise_fondo ?>&nbsp;cm</td>
+            </tr>                                        
+        <?php        
+                break;
+
+                case 'cabecera y buros':
+        ?>
+            <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">Cabecera</td>
+                <td class="a-center data"><?php echo $_cabecera_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cabecera_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_cabecera_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Bur&oacute;</td>
+                <td class="a-center data"><?php echo $_buro_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_buro_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_buro_fondo ?>&nbsp;cm</td>
+            </tr>                                        
+        <?php        
+                break;
+
+                case 'comoda y luna':
+        ?>
+            <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr>   
+                <td class="label">C&oacute;moda</td>
+                <td class="a-center data"><?php echo $_comoda_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_comoda_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_comoda_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr>   
+                <td class="label">Marco con luna</td>
+                <td class="a-center data"><?php echo $_marco_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_marco_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_marco_fondo ?>&nbsp;cm</td>
+            </tr>                                        
+        <?php        
+                break;
+                case 'sala modular sofa love y esquinero':
+                                ?>
+            <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+            </tr>
+            <tr class="medidas">    
+                <td class="label">Sof&aacute;</td>
+                <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr class="medidas">    
+                <td class="label">Love</td>
+                <td class="a-center data"><?php echo $_love_alto ?>&nbsp;cm</td>
+                 <td class="a-center data"><?php echo $_love_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_love_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr class="medidas">    
+                <td class="label">Esquinero</td>
+                <td class="a-center data"><?php echo $_esquinero_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_esquinero_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_esquinero_fondo ?>&nbsp;cm</td>
+            </tr>
+            <?php        
+                break;
+                case 'accesorios':
+                                ?>
+            <tr class="border-bottom">
+                <th>&nbsp;</th>
+                <th class="border-bottom">Alto</th>
+                <th class="border-bottom">Frente</th>
+                <th class="border-bottom">Fondo</th>
+             </tr>
+            <tr class="medidas">    
+                <td class="label">Chico</td>
+                <td class="a-center data"><?php echo $_chico_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_chico_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_chico_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr class="medidas">    
+                <td class="label">Mediano</td>
+                <td class="a-center data"><?php echo $_mediano_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_mediano_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_mediano_fondo ?>&nbsp;cm</td>
+            </tr>
+            <tr class="medidas">    
+                <td class="label">Grande</td>
+                <td class="a-center data"><?php echo $_grande_alto ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_grande_frente ?>&nbsp;cm</td>
+                <td class="a-center data"><?php echo $_grande_fondo ?>&nbsp;cm</td>
+            </tr>
+            <?php        
+                break;
+            }
+        ?>
+            
+        </tbody>
+    </table>
+    <script type="text/javascript">decorateTable('product-attribute-specs-table')</script>
+<?php endif;?>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+
+<head>
+  <meta charset="utf-8">
+  <title>Geocodificación código postal</title>
+  <meta name="description" content="Geocodificación código postal">
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;key=AIzaSyAOQtHEc5B5j31oCVNyyW4YveEEYfsKgEw
+"></script>
+  <style>
+*{
+  margin: 0px;
+  padding: 0px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+html{
+  font-family:Trebuchet MS,verdana,arial;
+  height:100%;
+  background-color: #E1E1E1;
+  font-size:1em;
+}
+header, section, footer, aside, nav, article, figure, figcaption, hgroup,main{
+  display: block;
+}
+#mapa {
+  width:98%;
+  height: 400px;
+  margin: 10px auto;
+  padding: 10px;
+  color: #1E1E1E;  
+}
+  </style>
+  <script>
+  var map, geocoder;
+
+  function inicio() {
+    var latlng = new google.maps.LatLng(48.8656182, 2.3031914);
+    var mapOptions = {
+      zoom: 8,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById('mapa'), mapOptions);
+    geocoder = new google.maps.Geocoder();
+  };
+
+  function codeAddress() {
+    var address = document.getElementById('address').value;
+    geocoder.geocode({
+      'address': address
+        // 'latLng': latlng si lo que queremos ejecutar en geocodificación inversa
+    }, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        document.getElementById('x').innerHTML = results[0].geometry.location.lat().toFixed(6);
+        document.getElementById('y').innerHTML = results[0].geometry.location.lng().toFixed(6);
+        map.setCenter(results[0].geometry.location);
+        document.getElementById('direccion').innerHTML = results[0].formatted_address;
+        var marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location
+        });
+            for(var j=0;j < results[0].address_components.length; j++){
+                for(var k=0; k < results[0].address_components[j].types.length; k++){
+                    if(results[0].address_components[j].types[k] == "postal_code"){
+                        zipcode = results[0].address_components[j].short_name;
+						document.getElementById('CP').innerHTML = zipcode;
+                    }
+                }
+            }
+        infowindow = new google.maps.InfoWindow({
+          content: results[0].formatted_address + '<br> Latitud: ' + results[0].geometry.location.lat().toFixed(6) + '<br> Longitud: ' + results[0].geometry.location.lng().toFixed(6)
+        });
+        infowindow.open(map, marker)
+      }
+      // Se detallan los diferentes tipos de error
+      else {
+        alert('Geocode no tuvo éxito por la siguiente razón: ' + status)
+      }
+    })
+  };
+  google.maps.event.addDomListener(window, 'load', inicio);
+  </script>
+</head>
+
+<body>
+  <header>
+  </header>
+  <section class="cuerpo">
+    <div style="text-align:center;">
+      <h4 style="margin: 0;padding: 0px;">Dirección a localizar con código postal en resultado</h4>
+	  Escriba la dirección (texto) o coordenadas lat,lng separadas por coma (,):
+      <br>
+      <input id="address" type="textbox" size="38" maxlength="80" value="" placeholder="Dirección o Lat, Lng" />
+      <br> Latitud: <span style="color:#FF00AA;" id="x"></span>
+      <br> Longitud: <span style="color:#FF00AA;" id="y"></span>
+      <br> Dirección completa:
+      <br><span style="color:#FF00AA;" id="direccion"></span>
+      <h4> Código postal: <span style="color:#FF00AA;" id="CP"></span></h4>
+      <input type="button" class="button" value="Localizar" onclick="codeAddress()"> </div>
+  <div id="mapa"></div>
+  </section>
+  <div style="clear:both;"></div>
+  <footer>
+    <!-- Pie -->
+    <!-- Fin pie -->
+  </footer>
+</body>

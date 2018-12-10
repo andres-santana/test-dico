@@ -1,0 +1,1660 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Grouped product data template
+ *
+ * @see Mage_Catalog_Block_Product_View_Media
+ * @see Mage_Catalog_Block_Product_View_Type_Grouped
+ */
+?>
+<?php $this->setPreconfiguredValue(); ?>
+<?php $_product = $this->getProduct(); ?>
+<?php $_associatedProducts = $this->getAssociatedProducts(); ?>
+<?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
+<?php if ($this->helper('groupedoptions')->isProductAvailable($_product) && $_hasAssociatedProducts): ?>
+    <p class="availability in-stock"><?php // echo $this->__('Availability:') ?> <span><?php //echo $this->__('In stock') ?></span></p>
+<?php else: ?>
+    <p class="availability out-of-stock"><?php //echo $this->__('Availability:') ?> <span><?php //echo $this->__('Out of stock') ?></span></p>
+<?php endif; ?>
+<?php echo $this->getChildHtml('product_type_data_extra') ?>
+<table class="data-table grouped-items-table" id="super-product-table">
+    <col />
+    <col />
+    <col width="1" />
+    <thead> 
+        <tr><th colspan="5"><h1>Selecciona tus componentes</h1><br><em>* Elige un color o un tamaño si están disponibles y/o escribe la cantidad a comprar</em></th></tr>
+        <tr>
+            <th>Imagen</th>
+            <th style="width:24%;">Descripci&oacute;n</th>
+            <th style="width:40%;">Medidas</th>
+            <?php if ($_product->isSaleable()): ?>
+            <?php $storeId = Mage::app()->getStore()->getStoreId(); ?>
+            <?php if($storeId=="16" || $storeId=="17" || $storeId=="18"){}
+                else{ ?>
+            <th class="a-center" style="width:6%;"><?php echo $this->__('Qty') ?></th>
+            <?php } ?>
+            <?php endif; ?>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if ($_hasAssociatedProducts): ?>
+    <?php foreach ($_associatedProducts as $_item): ?>
+        <?php $_finalPriceInclTax = $this->helper('tax')->getPrice($_item, $_item->getFinalPrice(), true) ?>
+        <tr>
+            <td>
+            <p class="product-image center img-grouped">
+                <?php 
+                
+                    $id = $_item->getId();
+                    $color[] = null;
+                    $urlImg[] = null;
+                    $urlLink[] = null;
+                    $_shipping_time3[] = null;
+                    $_tiempo_de_entrega = null;
+                    $_tiempo_de_entrega_simple =  null;
+                    $conf = Mage::getModel('catalog/product_type_configurable')->setProduct($_item);
+                    $simple_collection = $conf->getUsedProductCollection()->addAttributeToSelect('*')->addAttributeToSort('ordenar_producto_asociado', 'ASC')->addFilterByRequiredOptions();
+                    $n = 0;
+                    
+                    if($_item->isConfigurable()){
+                    foreach($simple_collection as $simple_product){
+                        $color[$n] = $simple_product->getData('color');
+                        $urlImg[$color[$n]] = $this->helper('catalog/image')->init($simple_product, 'small_image')->resize(360,177);
+
+                            $_images = Mage::getModel('catalog/product')->load($simple_product->getId())->getMediaGalleryImages(); ?>
+                            <?php if($_images){?>            
+                            <?php $i=0; foreach($_images as $_image){ $i++; ?>
+                             <?php if ($i==1 && $n==0) { ?>
+                            <a id="product-<?php echo $simple_product->getId(); ?>" href="<?php echo $this->helper('catalog/image')->init($simple_product, 'image', $_image->getFile())->resize(1200,590); ?>" class="image-gallery <?php echo $id ?>" rel="<?php echo $simple_product->getId(); ?>" title="<?php $this->htmlEscape($simple_product->getName());?>"><img id="image-<?php echo $simple_product->getId(); ?>" src="<?php echo $this->helper('catalog/image')->init($simple_product, 'thumbnail', $_image->getFile())->resize(300,150); ?>" alt="<?php echo $this->htmlEscape($simple_product->getName());?>" width="350" height="auto"/></a>
+                            <?php } ?>
+                            <?php if ($i>1 || ($n>0 && $i>=1)) { ?>
+                            <a id="product-<?php echo $simple_product->getId(); ?>" href="<?php echo $this->helper('catalog/image')->init($simple_product, 'image', $_image->getFile())->resize(1200,590); ?>" class="image-gallery hidden <?php echo $id ?>" rel="<?php echo $simple_product->getId(); ?>" title="<?php $this->htmlEscape($simple_product->getName());?>"><img id="image-<?php echo $simple_product->getId(); ?>" src="<?php echo $this->helper('catalog/image')->init($simple_product, 'thumbnail', $_image->getFile())->resize(300,150); ?>" alt="<?php echo $this->htmlEscape($simple_product->getName());?>" width="350" height="auto"/></a>
+                            <?php } ?>
+                                <?php } ?>
+                            <?php } ?>
+
+
+                    <?php 
+                        $_tiempo_de_entrega[$n] = $this->htmlEscape($simple_product->getData('tiempo_entrega'));
+                        $n++;
+                    }
+                    }
+                    else{
+                            $_images = Mage::getModel('catalog/product')->load($_item->getId())->getMediaGalleryImages(); ?>
+                            <?php if($_images){
+                                $i=0; foreach($_images as $_image){ $i++;
+                                    if ($i==1) { ?>
+                                        <a id="product-<?php echo $_item->getId(); ?>" href="<?php echo $this->helper('catalog/image')->init($_item, 'image', $_image->getFile())->resize(1200,590); ?>" class="image-gallery <?php echo $id ?>" rel="<?php echo $_item->getId(); ?>" title="<?php $this->htmlEscape($_item->getName());?>"><img id="image-<?php echo $_item->getId(); ?>" src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail', $_image->getFile())->resize(300,150); ?>" alt="<?php echo $this->htmlEscape($_item->getName());?>" width="350" height="auto" /></a>
+                            <?php } ?>
+                            <?php if ($i>1 || ($n>0 && $i>=1)) { ?>
+                                <a id="product-<?php echo $_item->getId(); ?>" href="<?php echo $this->helper('catalog/image')->init($_item, 'image', $_image->getFile())->resize(1200,590); ?>" class="image-gallery hidden <?php echo $id ?>" rel="<?php echo $_item->getId(); ?>" title="<?php $this->htmlEscape($_item->getName());?>"><img id="image-<?php echo $_item->getId(); ?>" src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail', $_image->getFile())->resize(300,150); ?>" alt="<?php echo $this->htmlEscape($_item->getName());?>" width="350" height="auto" /></a>
+                            <?php } ?>
+                                <?php } ?>
+                            <?php } 
+                    }
+                    
+                    $productId = $_item->getId(); 
+                    $attSet = Mage::getModel('catalog/product')->load($productId)->getAttributeSetId(); 
+                    $attSetName = Mage::getModel('eav/entity_attribute_set')->load($attSet)->getAttributeSetName();
+                    $_mesa_alto = $this->htmlEscape($_item->getData('mesa_alto'));
+                    $_mesa_frente = $this->htmlEscape($_item->getData('mesa_frente'));
+                    $_mesa_fondo = $this->htmlEscape($_item->getData('mesa_fondo'));
+                    
+                    $_silla_alto = $this->htmlEscape($_item->getData('silla_alto'));
+                    $_silla_frente = $this->htmlEscape($_item->getData('silla_frente'));
+                    $_silla_fondo = $this->htmlEscape($_item->getData('silla_fondo'));
+
+                    $_server_alto = $this->htmlEscape($_item->getData('server_alto'));
+                    $_server_frente = $this->htmlEscape($_item->getData('server_frente'));
+                    $_server_fondo = $this->htmlEscape($_item->getData('server_fondo'));
+
+                    $_banca_alto = $this->htmlEscape($_item->getData('banca_alto'));
+                    $_banca_frente = $this->htmlEscape($_item->getData('banca_frente'));
+                    $_banca_fondo = $this->htmlEscape($_item->getData('banca_fondo'));
+                    
+                    $_love_alto = $this->htmlEscape($_item->getData('love_alto'));
+                    $_love_frente = $this->htmlEscape($_item->getData('love_frente'));
+                    $_love_fondo = $this->htmlEscape($_item->getData('love_fondo'));
+                    
+                    $_chaise_alto = $this->htmlEscape($_item->getData('chaise_alto'));
+                    $_chaise_frente = $this->htmlEscape($_item->getData('chaise_frente'));
+                    $_chaise_fondo = $this->htmlEscape($_item->getData('chaise_fondo'));
+                    
+                    $_sofa_alto = $this->htmlEscape($_item->getData('sofa_alto'));
+                    $_sofa_frente = $this->htmlEscape($_item->getData('sofa_frente'));
+                    $_sofa_fondo = $this->htmlEscape($_item->getData('sofa_fondo'));
+
+                    $_sofa_izquierdo_alto = $this->htmlEscape($_item->getData('sofa_izquierdo_alto'));
+                    $_sofa_izquierdo_frente = $this->htmlEscape($_item->getData('sofa_izquierdo_frente'));
+                    $_sofa_izquierdo_fondo = $this->htmlEscape($_item->getData('sofa_izquierdo_fondo'));
+                    
+                    $_sofa_derecho_alto = $this->htmlEscape($_item->getData('sofa_derecho_alto'));
+                    $_sofa_derecho_frente = $this->htmlEscape($_item->getData('sofa_derecho_frente'));
+                    $_sofa_derecho_fondo = $this->htmlEscape($_item->getData('sofa_derecho_fondo'));
+                    
+                    $_sillon_alto = $this->htmlEscape($_item->getData('sillon_alto'));
+                    $_sillon_frente = $this->htmlEscape($_item->getData('sillon_frente'));
+                    $_sillon_fondo = $this->htmlEscape($_item->getData('sillon_fondo'));
+
+                    $_sillon_reclinable_alto = $this->htmlEscape($_item->getData('sillon_reclinable_alto'));
+                    $_sillon_reclinable_frente = $this->htmlEscape($_item->getData('sillon_reclinable_frente'));
+                    $_sillon_reclinable_fondo = $this->htmlEscape($_item->getData('sillon_reclinable_fondo'));
+
+                    $_sillon_sin_brazos_alto = $this->htmlEscape($_item->getData('sillon_sin_brazos_alto'));
+                    $_sillon_sin_brazos_frente = $this->htmlEscape($_item->getData('sillon_sin_brazos_frente'));
+                    $_sillon_sin_brazos_fondo = $this->htmlEscape($_item->getData('sillon_sin_brazos_fondo'));
+                    
+                    $_cabecera_alto = $this->htmlEscape($_item->getData('cabecera_alto'));
+                    $_cabecera_frente = $this->htmlEscape($_item->getData('cabecera_frente'));
+                    $_cabecera_fondo = $this->htmlEscape($_item->getData('cabecera_fondo')); 
+                    
+                    $_comoda_alto = $this->htmlEscape($_item->getData('comoda_alto'));
+                    $_comoda_frente = $this->htmlEscape($_item->getData('comoda_frente'));
+                    $_comoda_fondo = $this->htmlEscape($_item->getData('comoda_fondo')); 
+                    
+                    $_consola_alto = $this->htmlEscape($_item->getData('consola_alto'));
+                    $_consola_frente = $this->htmlEscape($_item->getData('consola_frente'));
+                    $_consola_fondo = $this->htmlEscape($_item->getData('consola_fondo')); 
+                    
+                    $_marco_alto = $this->htmlEscape($_item->getData('marco_alto'));
+                    $_marco_frente = $this->htmlEscape($_item->getData('marco_frente'));
+                    $_marco_fondo = $this->htmlEscape($_item->getData('marco_fondo')); 
+                    
+                    $_buro_alto = $this->htmlEscape($_item->getData('buro_alto'));
+                    $_buro_frente = $this->htmlEscape($_item->getData('buro_frente'));
+                    $_buro_fondo = $this->htmlEscape($_item->getData('buro_fondo')); 
+                    
+                    $_love_derecho_alto = $this->htmlEscape($_item->getData('love_derecho_alto'));
+                    $_love_derecho_frente = $this->htmlEscape($_item->getData('love_derecho_frente'));
+                    $_love_derecho_fondo = $this->htmlEscape($_item->getData('love_derecho_fondo')); 
+                    $_love_izquierdo_alto = $this->htmlEscape($_item->getData('love_izquierdo_alto'));
+                    $_love_izquierdo_frente = $this->htmlEscape($_item->getData('love_izquierdo_frente'));
+                    $_love_izquierdo_fondo = $this->htmlEscape($_item->getData('love_izquierdo_fondo')); 
+                    
+                    $_esquinero_alto = $this->htmlEscape($_item->getData('esquinero_alto'));
+                    $_esquinero_frente = $this->htmlEscape($_item->getData('esquinero_frente'));
+                    $_esquinero_fondo = $this->htmlEscape($_item->getData('esquinero_fondo')); 
+                    
+                    $_alacena_alto = $this->htmlEscape($_item->getData('alacena_alto'));
+                    $_alacena_frente = $this->htmlEscape($_item->getData('alacena_frente'));
+                    $_alacena_fondo = $this->htmlEscape($_item->getData('alacena_fondo'));
+                    
+                    $_cocina170_alacena_alto = $this->htmlEscape($_item->getData('cocina170_alacena_alto'));
+                    $_cocina170_alacena_frente = $this->htmlEscape($_item->getData('cocina170_alacena_frente'));
+                    $_cocina170_alacena_fondo = $this->htmlEscape($_item->getData('cocina170_alacena_fondo')); 
+                    $_cocina170_campana_alto = $this->htmlEscape($_item->getData('cocina170_portacampana_alto'));
+                    $_cocina170_campana_frente = $this->htmlEscape($_item->getData('cocina170_portacampana_frente'));
+                    $_cocina170_campana_fondo = $this->htmlEscape($_item->getData('cocina170_portacampana_fondo')); 
+                    $_cocina170_tarja_alto = $this->htmlEscape($_item->getData('cocina170_tarja_alto'));
+                    $_cocina170_tarja_frente = $this->htmlEscape($_item->getData('cocina170_tarja_frente'));
+                    $_cocina170_tarja_fondo = $this->htmlEscape($_item->getData('cocina170_tarja_fondo'));
+                    
+                    $_cocina200_alacena120_alto = $this->htmlEscape($_item->getData('cocina200_alacena120_alto'));
+                    $_cocina200_alacena120_frente = $this->htmlEscape($_item->getData('cocina200_alacena120_frente'));
+                    $_cocina200_alacena120_fondo = $this->htmlEscape($_item->getData('cocina200_alacena120_fondo'));
+                    $_cocina200_modulo120_alto = $this->htmlEscape($_item->getData('cocina200_modulo120_alto'));
+                    $_cocina200_modulo120_frente = $this->htmlEscape($_item->getData('cocina200_modulo120_frente'));
+                    $_cocina200_modulo120_fondo = $this->htmlEscape($_item->getData('cocina200_modulo120_fondo'));
+                    $_cocina200_portacampana_alto = $this->htmlEscape($_item->getData('cocina200_portacampana_alto'));
+                    $_cocina200_portacampana_frente = $this->htmlEscape($_item->getData('cocina200_portacampana_frente'));
+                    $_cocina200_portacampana_fondo = $this->htmlEscape($_item->getData('cocina200_portacampana_fondo'));
+                    $_cocina200_alacena80_alto = $this->htmlEscape($_item->getData('cocina_alacena080_alto'));
+                    $_cocina200_alacena80_frente = $this->htmlEscape($_item->getData('cocina_alacena080_frente'));
+                    $_cocina200_alacena80_fondo = $this->htmlEscape($_item->getData('cocina_alacena080_fondo'));
+                    $_cocina200_modulo80_alto = $this->htmlEscape($_item->getData('cocina_modulo080_alto'));
+                    $_cocina200_modulo80_frente = $this->htmlEscape($_item->getData('cocina_modulo080_frente'));
+                    $_cocina200_modulo80_fondo = $this->htmlEscape($_item->getData('cocina_modulo080_fondo'));
+                    $_cocina_modulo_esquina_alto = $this->htmlEscape($_item->getData('cocina_modulo_esquina_alto'));
+                    $_cocina_modulo_esquina_frente = $this->htmlEscape($_item->getData('cocina_modulo_esquina_frente'));
+                    $_cocina_modulo_esquina_fondo = $this->htmlEscape($_item->getData('cocina_modulo_esquina_fondo'));
+                    
+                    $_modulo_alto = $this->htmlEscape($_item->getData('cocina_modulo_alto'));
+                    $_modulo_frente = $this->htmlEscape($_item->getData('cocina_modulo_frente'));
+                    $_modulo_fondo = $this->htmlEscape($_item->getData('cocina_modulo_fondo'));
+                    
+                    $_campana_alto = $this->htmlEscape($_item->getData('campana_alto'));
+                    $_campana_frente = $this->htmlEscape($_item->getData('campana_frente'));
+                    $_campana_fondo = $this->htmlEscape($_item->getData('campana_fondo')); 
+                    
+                    $_alacena_esquinera_alto = $this->htmlEscape($_item->getData('alacena_esquinada_alto'));
+                    $_alacena_esquinera_frente = $this->htmlEscape($_item->getData('alacena_esquinada_frente'));
+                    $_alacena_esquinera_fondo = $this->htmlEscape($_item->getData('alacena_esquinada_fondo')); 
+                    
+                    $_modulo_esquinero_alto = $this->htmlEscape($_item->getData('modulo_esquinado_alto'));
+                    $_modulo_esquinero_frente = $this->htmlEscape($_item->getData('modulo_esquinado_frente'));
+                    $_modulo_esquinero_fondo = $this->htmlEscape($_item->getData('modulo_esquinado_fondo')); 
+                    
+                    $_aparador_alto = $this->htmlEscape($_product->getData('aparador_alto')); 
+                    $_aparador_frente = $this->htmlEscape($_product->getData('aparador_frente')); 
+                    $_aparador_fondo = $this->htmlEscape($_product->getData('aparador_fondo')); 
+                    
+                    $_vitrina_alto = $this->htmlEscape($_product->getData('vitrina_alto')); 
+                    $_vitrina_frente = $this->htmlEscape($_product->getData('vitrina_frente')); 
+                    $_vitrina_fondo = $this->htmlEscape($_product->getData('vitrina_fondo'));
+                    
+                    $_barra_alto = $this->htmlEscape($_product->getData('barra_alto')); 
+                    $_barra_frente = $this->htmlEscape($_product->getData('barra_frente')); 
+                    $_barra_fondo = $this->htmlEscape($_product->getData('barra_fondo'));
+                    
+                    $_contrabarra_alto = $this->htmlEscape($_product->getData('contrabarra_alto')); 
+                    $_contrabarra_frente = $this->htmlEscape($_product->getData('contrabarra_frente')); 
+                    $_contrabarra_fondo = $this->htmlEscape($_product->getData('contrabarra_fondo'));
+                    
+                    $_modulo_central_alto = $this->htmlEscape($_product->getData('modulo_central_alto')); 
+                    $_modulo_central_frente = $this->htmlEscape($_product->getData('modulo_central_frente')); 
+                    $_modulo_central_fondo = $this->htmlEscape($_product->getData('modulo_central_fondo'));
+                    $_modulo_lateral_alto = $this->htmlEscape($_product->getData('modulo_lateral_alto')); 
+                    $_modulo_lateral_frente = $this->htmlEscape($_product->getData('modulo_lateral_frente')); 
+                    $_modulo_lateral_fondo = $this->htmlEscape($_product->getData('modulo_lateral_fondo'));
+                    
+                    $_modulo_puente_alto = $this->htmlEscape($_product->getData('modulo_puente_alto')); 
+                    $_modulo_puente_frente = $this->htmlEscape($_product->getData('modulo_puente_frente')); 
+                    $_modulo_puente_fondo = $this->htmlEscape($_product->getData('modulo_puente_fondo'));
+                    
+                    $_mesa_centro_alto = $this->htmlEscape($_product->getData('mesa_centro_alto')); 
+                    $_mesa_centro_frente = $this->htmlEscape($_product->getData('mesa_centro_frente')); 
+                    $_mesa_centro_fondo = $this->htmlEscape($_product->getData('mesa_centro_fondo'));
+                    
+                    $_mesa_lateral_alto = $this->htmlEscape($_product->getData('mesa_lateral_alto')); 
+                    $_mesa_lateral_frente = $this->htmlEscape($_product->getData('mesa_lateral_frente')); 
+                    $_mesa_lateral_fondo = $this->htmlEscape($_product->getData('mesa_lateral_fondo'));
+                    
+                    $_mesa_taburete_alto = $this->htmlEscape($_product->getData('mesa_taburete_alto')); 
+                    $_mesa_taburete_frente = $this->htmlEscape($_product->getData('mesa_taburete_frente')); 
+                    $_mesa_taburete_fondo = $this->htmlEscape($_product->getData('mesa_taburete_fondo'));
+                    
+                    $_taburete_alto = $this->htmlEscape($_product->getData('taburete_alto')); 
+                    $_taburete_frente = $this->htmlEscape($_product->getData('taburete_frente')); 
+                    $_taburete_fondo = $this->htmlEscape($_product->getData('taburete_fondo'));
+
+                    $_cristal_alto = $this->htmlEscape($_item->getData('cristal_alto'));
+                    $_cristal_frente = $this->htmlEscape($_item->getData('cristal_frente'));
+                    $_cristal_fondo = $this->htmlEscape($_item->getData('cristal_fondo'));
+
+                    $_pedestal_alto = $this->htmlEscape($_item->getData('pedestal_alto'));
+                    $_pedestal_frente = $this->htmlEscape($_item->getData('pedestal_frente'));
+                    $_pedestal_fondo = $this->htmlEscape($_item->getData('pedestal_fondo'));
+
+                    $_server_alto = $this->htmlEscape($_item->getData('server_alto'));
+                    $_server_frente = $this->htmlEscape($_item->getData('server_frente'));
+                    $_server_fondo = $this->htmlEscape($_item->getData('server_fondo'));
+
+                    $_cuna_alto = $this->htmlEscape($_item->getData('cuna_alto'));
+                    $_cuna_frente = $this->htmlEscape($_item->getData('cuna_frente'));
+                    $_cuna_fondo = $this->htmlEscape($_item->getData('cuna_fondo'));
+
+                    $_cambiador_alto = $this->htmlEscape($_item->getData('cambiador_alto'));
+                    $_cambiador_frente = $this->htmlEscape($_item->getData('cambiador_frente'));
+                    $_cambiador_fondo = $this->htmlEscape($_item->getData('cambiador_fondo'));
+
+                    $_macetero_ch_alto = $this->htmlEscape($_item->getData('macetero_ch_alto'));
+                    $_macetero_ch_frente = $this->htmlEscape($_item->getData('macetero_ch_frente'));
+                    $_macetero_ch_fondo = $this->htmlEscape($_item->getData('macetero_ch_fondo'));
+
+                    $_macetero_m_alto = $this->htmlEscape($_item->getData('macetero_m_alto'));
+                    $_macetero_m_frente = $this->htmlEscape($_item->getData('macetero_m_frente'));
+                    $_macetero_m_fondo = $this->htmlEscape($_item->getData('macetero_m_fondo'));
+
+                    $_macetero_g_alto = $this->htmlEscape($_item->getData('macetero_g_alto'));
+                    $_macetero_g_frente = $this->htmlEscape($_item->getData('macetero_g_frente'));
+                    $_macetero_g_fondo = $this->htmlEscape($_item->getData('macetero_g_fondo'));
+                    
+                    $attribute = $_item->getResource()->getAttribute('tiempo_entrega');
+                    if ($attribute){
+                        //echo $_tiempo_de_entrega_simple = $attribute ->getFrontend()->getValue($_item);
+                    }
+                    //$_tiempo_de_entrega_simple = $this->htmlEscape($_item->getData('tiempo_entrega'));
+                    //print_r($_item->getData());
+
+                ?>
+                Clic en la imagen para ver m&aacute;s vistas
+                </p>
+            </td>
+            <td>
+            <h4 class="title-item-grouped"><?php echo $this->htmlEscape($_item->getName()) ?></h4><br>
+            
+            <?php if ($this->helper('groupedoptions')->getCanShowProductPrice($this, $_product)): ?>
+                <?php if ($this->helper('groupedoptions')->getCanShowProductPrice($this, $_item)): ?>
+                    <div class="price-view">
+                    <?php echo $this->getPriceHtml($_item, true) ?>
+                    <?php echo $this->getTierPriceHtml($_item) ?>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+            <?php 
+                $storeId = Mage::app()->getStore()->getStoreId();
+                //if($storeId == "16" || $storeId == "17" || $storeId == "18"){}
+                //else{
+            ?>
+            <table>
+                <tr>
+                    <td class="shipping-time"><span class="left">Tiempo aproximado de entrega: <br><span id="shipping-time-<?php echo $id ?>"><?php if ($_tiempo_de_entrega){ echo $_tiempo_de_entrega[0];} else{echo $this->htmlEscape($_item->getData('tiempo_entrega'));} ?></span> d&iacute;as</span></td>      
+                </tr>
+                <tr>
+                    <td class="shipping-time"><span class="left small">*El tiempo de entrega puede variar por la demanda del producto y  ubicación de su domicilio. Generada su orden recibirá una llamada de nuestros asesores confirmando la fecha de entrega. </span></td>        
+                </tr>
+            <?php // endif; ?>
+            </table>    
+            <?php //} ?>
+            </td>
+            <td>
+                <table class="noborder medidas-table">
+                    <?php // if ($_item->isSuper() || $_item->getHasOptions() || $_item->isGrouped() ) : ?>
+                        <tr class="grouped-options-row">
+                        <!-- Display Product Options if available -->   
+                            <td colspan="3" class="grouped-options-cell padding-10-0-0">
+                            <?php echo $this->getChild('groupedoptions')->setProduct($_item)->toHtml(); 
+                                $color_count = 0;
+                                $size_count = 0;
+                            ?>
+                            <script type="text/javascript">
+                            <?php $m=0; ?>
+                                <?php foreach($simple_collection as $simple_product){ 
+                                    $_images = Mage::getModel('catalog/product')->load($simple_product->getId())->get();
+                                    
+                                    $color[$color_count] = $simple_product->getData('color');
+                                    $color_text = $simple_product->getAttributeText('color');
+                                    $color_alto[$color[$color_count]] =  $simple_product->getData('alto'); 
+                                    $color_frente[$color[$color_count]] =  $simple_product->getData('frente'); 
+                                    $color_fondo[$color[$color_count]] =  $simple_product->getData('fondo'); 
+                                    $price[$color[$color_count]] = Mage::helper('core')->currency($simple_product->getPrice());
+                                    $price1[$color[$color_count]] = Mage::helper('core')->currency($simple_product->getData('precio_d'));
+                                    $_id[$color[$color_count]] = $simple_product->getId();
+                                    $urlImg2[$color[$color_count]] = $simple_product->getMediaConfig()->getMediaUrl($simple_product->getData('image'));
+                                    //$urlImg2[$color[$color_count]] = $this->helper('catalog/image')->init($simple_product,'image');
+                                    $urlLink2[$color[$color_count]] = $simple_product->getProductUrl();
+                                    $_shipping_time2[$color[$color_count]] = $simple_product->getData('tiempo_entrega'); 
+                                    
+                                    $_size[$size_count] = $simple_product->getData('cabecera_size');
+                                    $_size_text = $simple_product->getAttributeText('cabecera_size');
+                                    $_id2[$_size[$size_count]] = $simple_product->getId();
+                                    $price2[$_size[$size_count]] = Mage::helper('core')->currency($simple_product->getData('precio_d'));
+                                    $price3[$color[$color_count]] = Mage::helper('core')->currency($simple_product->getPrice());
+                                    $_frente[$_size[$size_count]] = $simple_product->getData('frente'); 
+                                    $_fondo[$_size[$size_count]] = $simple_product->getData('fondo'); 
+                                    $_alto[$_size[$size_count]] = $simple_product->getData('alto');  
+                                    $urlImg3[$_size[$size_count]] = $simple_product->getMediaConfig()->getMediaUrl($simple_product->getData('image'));
+                                    //$urlImg3[$_size[$size_count]] = $this->helper('catalog/image')->init($simple_product,'image');
+                                    $_shipping_time[$_size[$size_count]] = $simple_product->getData('tiempo_entrega');
+                                    //echo "|shipping: ".$simple_product->getData('tiempo_entrega')."| ";
+
+                                    $_modulo_central_configurable_count[$size_count] = $simple_product->getData('modulo_central_configurable');  
+                                    $_modulo_central_configurable = $simple_product->getAttributeText('modulo_central_configurable');  
+                                    $_id3[$_modulo_central_configurable_count[$size_count]] = $simple_product->getId();
+                                    $_modulo_central_configurable_frente[$_modulo_central_configurable_count[$size_count]] = $simple_product->getData('modulo_central_configurable');
+                                    $_modulo_central_configurable_alto[$_modulo_central_configurable_count[$size_count]] = $simple_product->getData('alto');  
+                                    $_modulo_central_configurable_fondo[$_modulo_central_configurable_count[$size_count]] = $simple_product->getData('fondo');  
+                                    $urlImg4[$_modulo_central_configurable_count[$size_count]] = $simple_product->getMediaConfig()->getMediaUrl($simple_product->getData('image'));
+                                    
+                                    $_modulo_cocina_count[$size_count] = $simple_product->getData('cocina_alacena');  
+                                    $_modulo_cocina[$_modulo_cocina_count[$size_count]] = $simple_product->getAttributeText('cocina_alacena');  
+                                    $_id5[$_modulo_cocina_count[$size_count]] = $simple_product->getId();
+                                    $_modulo_cocina_frente[$_modulo_cocina_count[$size_count]] = $simple_product->getAttributeText('cocina_alacena');
+                                    $_modulo_cocina_alto[$_modulo_cocina_count[$size_count]] = $simple_product->getData('alto');  
+                                    $_modulo_cocina_fondo[$_modulo_cocina_count[$size_count]] = $simple_product->getData('fondo');  
+                                    $urlImg5[$_modulo_cocina_count[$size_count]] = $simple_product->getMediaConfig()->getMediaUrl($simple_product->getData('image'));
+                                    
+                                    $_modulo_cocina_configurable_count[$size_count] = $simple_product->getData('cocina_modulo');  
+                                    $_modulo_cocina_configurable[$_modulo_cocina_configurable_count[$size_count]] = $simple_product->getAttributeText('cocina_modulo');  
+                                    $_id6[$_modulo_cocina_configurable_count[$size_count]] = $simple_product->getId();
+                                    $_modulo_cocina_configurable_frente[$_modulo_cocina_configurable_count[$size_count]] = $simple_product->getAttributeText('cocina_modulo');
+                                    $_modulo_cocina_configurable_alto[$_modulo_cocina_configurable_count[$size_count]] = $simple_product->getData('alto');  
+                                    $_modulo_cocina_configurable_fondo[$_modulo_cocina_configurable_count[$size_count]] = $simple_product->getData('fondo');  
+                                    $urlImg6[$_modulo_cocina_configurable_count[$size_count]] = $simple_product->getMediaConfig()->getMediaUrl($simple_product->getData('image'));
+
+                                    $color_count++;    
+                                    $size_count++;    
+                                }
+                                ?>
+                                jQuery(document).ready(function($) {
+                                    
+                                //$_id_atributos_configurables = ["92","209", "276"]
+                                    $( "select[name='super_attribute[<?php echo $id ?>][92]']" ).focus(function(){
+                                        $("option[value='']").attr("disabled","disabled");
+                                    
+                                    $("input[name='super_group[<?php echo $id ?>]']").attr("disabled","disabled");
+
+                                    $( "select[name='super_attribute[<?php echo $id ?>][92]']" ).change(function () {
+                                        $(".hidden-super-attribute-select").removeClass("validation-failed required-entry");
+                                        $(".hidden-super-attribute-select").addClass("validation-passed");
+                                        $(".validation-advice").css("display","none");
+                                        $("input[name='super_group[<?php echo $id ?>]']").removeAttr("disabled");
+                                                
+                                        var n = $(this).val();
+                                        
+                                        switch(n)
+                                           {
+                                            <?php foreach($color as $color_num){ ?>
+                                                case '<?php echo $color_num ?>':
+                                                    $(".<?php echo $id ?>").addClass("hidden");
+                                                    $("#product-<?php echo $_id[$color_num] ?>").removeClass("hidden");
+                                                    $("#image-<?php echo $_id[$color_num] ?>").attr("src","<?php echo $urlImg2[$color_num]; ?>");
+                                                    $("#product-<?php echo $_id[$color_num] ?>").attr("href","<?php echo $urlImg2[$color_num]; ?>");
+                                                    <?php if($price1[$color_num]!="$ 0.00"): ?>
+                                                    $("#old-price-<?php echo $id ?>").html('<span class="price"><?php echo $price1[$color_num] ?></span>');
+                                                    <?php endif ?>
+                                                    $("select[name='product[<?php echo $id ?>]'] option[value='$color_num']").attr("selected",true);
+                                                    $("#hidden-attribute-92-<?php echo $id ?>").attr("value","$color_num");
+                                                    $("#size-frente-<?php echo $id ?>").html("<?php echo $color_frente[$color_num] ?>cm");
+                                                    $("#size-fondo-<?php echo $id ?>").html("<?php echo $color_fondo[$color_num] ?>cm");
+                                                    $("#size-alto-<?php echo $id ?>").html("<?php echo $color_alto[$color_num] ?>cm");
+                                                    $(".shipping-time").css("display","block");
+                                                    $("#shipping-time-<?php echo $id ?>").html("<?php echo $_shipping_time2[$color_num] ?>");
+                                                break;  
+                                            <?php } ?>
+                                           } 
+                                        });   
+                                                
+                                    });
+
+                                    $( "select[name='super_attribute[<?php echo $id ?>][209]']" ).focus(function(){
+                                        $("option[value='']").attr("disabled","disabled");
+                                    
+                                    $("input[name='super_group[<?php echo $id ?>]']").attr("disabled","disabled");
+
+                                    $( "select[name='super_attribute[<?php echo $id ?>][209]']" ).change(function () {
+                                        $(".hidden-super-attribute-select").removeClass("validation-failed required-entry");
+                                        $(".hidden-super-attribute-select").addClass("validation-passed");
+                                        $(".validation-advice").css("display","none");
+                                        $("input[name='super_group[<?php echo $id ?>]']").removeAttr("disabled");
+                                                
+                                        var m = $(this).val();
+                                        
+                                        switch(m)
+                                           {
+                                            <?php foreach($_size as $size_num){ ?>
+                                                case '<?php echo $size_num ?>':
+                                                    $(".<?php echo $id ?>").addClass("hidden");
+                                                    $("#product-<?php echo $_id2[$size_num] ?>").removeClass("hidden");
+                                                    $("#image-<?php echo $_id2[$size_num] ?>").attr("src","<?php echo $urlImg3[$size_num]; ?>");
+                                                    $("#product-<?php echo $_id2[$size_num] ?>").attr("href","<?php echo $urlImg3[$size_num]; ?>");
+                                                    <?php if($price2[$size_num]!="$ 0.00"): ?>
+                                                     $("#old-price-<?php echo $id ?>").html('<span class="price"><?php echo $price2[$size_num] ?></span>'); 
+                                                     <?php endif ?>
+                                                    $("select[name='product[<?php echo $id ?>]'] option[value='<?php echo $size_num ?>']").attr("selected",true);
+                                                    $("#hidden-attribute-209-<?php echo $id ?>").attr("value","<?php echo $size_num ?>");
+                                                    $("#size-frente-<?php echo $id ?>").html("<?php echo $_frente[$size_num] ?>");
+                                                    $("#size-fondo-<?php echo $id ?>").html("<?php echo $_fondo[$size_num] ?>");
+                                                    $(".shipping-time").css("display","block");
+                                                    $("#shipping-time-<?php echo $id ?>").html("<?php echo $_shipping_time[$size_num] ?>");
+                                                    <?php //print_r($_shipping_time); ?>
+                                                break;  
+                                            <?php } ?>
+                                           } 
+                                        });
+                                    });
+
+                                    $( "select[name='super_attribute[<?php echo $id ?>][276]']" ).focus(function(){
+                                    $("option[value='']").attr("disabled","disabled");
+                                    
+                                    $("input[name='super_group[<?php echo $id ?>]']").attr("disabled","disabled");
+
+                                    $( "select[name='super_attribute[<?php echo $id ?>][276]']" ).change(function () {
+                                        $(".hidden-super-attribute-select").removeClass("validation-failed required-entry");
+                                        $(".hidden-super-attribute-select").addClass("validation-passed");
+                                        $(".validation-advice").css("display","none");
+                                        $("input[name='super_group[<?php echo $id ?>]']").removeAttr("disabled");
+                                                
+                                        var m2= $(this).val();
+                                        
+                                        switch(m2)
+                                           {
+                                            <?php foreach($_modulo_central_configurable_count as $size_num){ ?>
+                                                case '<?php echo $size_num ?>':
+                                                    $(".<?php echo $id ?>").addClass("hidden");
+                                                    $("#product-<?php echo $_id3[$size_num] ?>").removeClass("hidden");
+                                                    $("#image-<?php echo $_id3[$size_num] ?>").attr("src","<?php echo $urlImg4[$size_num]; ?>");
+                                                    $("#product-<?php echo $_id3[$size_num] ?>").attr("href","<?php echo $urlImg4[$size_num]; ?>");
+                                                    $("select[name='product[<?php echo $id ?>]'] option[value='<?php echo $size_num ?>']").attr("selected",true);
+                                                    $("#hidden-attribute-276-<?php echo $id ?>").attr("value","<?php echo $size_num ?>");
+                                                    $("#size-frente-<?php echo $id ?>").html("<?php echo $_modulo_central_configurable_frente[$size_num] ?>");
+                                                    $("#size-alto-<?php echo $id ?>").html("<?php echo $_modulo_central_configurable_alto[$size_num] ?>");
+                                                    $("#size-fondo-<?php echo $id ?>").html("<?php echo $_modulo_central_configurable_fondo[$size_num] ?>");
+                                                break;  
+                                            <?php } ?>
+                                           } 
+                                        });
+                                    });
+                                    
+                                    /* Alacena Configurable */
+                                    $( "select[name='super_attribute[<?php echo $id ?>][237]']" ).focus(function(){
+                                    $("option[value='']").attr("disabled","disabled");
+                                    
+                                    $("input[name='super_group[<?php echo $id ?>]']").attr("disabled","disabled");
+
+                                    $( "select[name='super_attribute[<?php echo $id ?>][237]']" ).change(function () {
+                                        $(".hidden-super-attribute-select").removeClass("validation-failed required-entry");
+                                        $(".hidden-super-attribute-select").addClass("validation-passed");
+                                        $(".validation-advice").css("display","none");
+                                        $("input[name='super_group[<?php echo $id ?>]']").removeAttr("disabled");
+                                                
+                                        var m3= $(this).val();
+                                        
+                                        switch(m3)
+                                           {
+                                            <?php foreach($_modulo_cocina_count as $_modulo_cocina_size){ ?>
+                                                case '<?php echo $_modulo_cocina_size ?>':
+                                                    $(".<?php echo $id ?>").addClass("hidden");
+                                                    $("#product-<?php echo $_id5[$_modulo_cocina_size] ?>").removeClass("hidden");
+                                                    $("#image-<?php echo $_id5[$_modulo_cocina_size] ?>").attr("src","<?php echo $urlImg5[$_modulo_cocina_size]; ?>");
+                                                    $("#product-<?php echo $_id5[$_modulo_cocina_size] ?>").attr("href","<?php echo $urlImg5[$_modulo_cocina_size]; ?>");
+                                                    $("select[name='product[<?php echo $id ?>]'] option[value='<?php echo $_modulo_cocina_count[$_modulo_cocina_size] ?>']").attr("selected",true);
+                                                    $("#hidden-attribute-237-<?php echo $id ?>").attr("value","<?php echo $_modulo_cocina_count[$_modulo_cocina_size] ?>");
+                                                    $("#size-frente-<?php echo $id ?>").html("<?php echo $_modulo_cocina_frente[$_modulo_cocina_size] ?>");
+                                                    $("#size-alto-<?php echo $id ?>").html("<?php echo $_modulo_cocina_alto[$_modulo_cocina_size] ?>cm");
+                                                    $("#size-fondo-<?php echo $id ?>").html("<?php echo $_modulo_cocina_fondo[$_modulo_cocina_size] ?>cm");
+                                                break;  
+                                            <?php } ?>
+                                           } 
+                                        });
+                                    });
+                                    
+                                    /* Módulo Cocina Configurable */
+                                    $( "select[name='super_attribute[<?php echo $id ?>][238]']" ).focus(function(){
+                                    $("option[value='']").attr("disabled","disabled");
+                                    
+                                    $("input[name='super_group[<?php echo $id ?>]']").attr("disabled","disabled");
+
+                                    $( "select[name='super_attribute[<?php echo $id ?>][238]']" ).change(function () {
+                                        $(".hidden-super-attribute-select").removeClass("validation-failed required-entry");
+                                        $(".hidden-super-attribute-select").addClass("validation-passed");
+                                        $(".validation-advice").css("display","none");
+                                        $("input[name='super_group[<?php echo $id ?>]']").removeAttr("disabled");
+                                                
+                                        var m4= $(this).val();
+                                        
+                                        switch(m4)
+                                           {
+                                            <?php foreach($_modulo_cocina_configurable_count as $_modulo_cocina_size){ ?>
+                                                case '<?php echo $_modulo_cocina_size ?>':
+                                                    $(".<?php echo $id ?>").addClass("hidden");
+                                                    $("#product-<?php echo $_id6[$_modulo_cocina_size] ?>").removeClass("hidden");
+                                                    $("#image-<?php echo $_id6[$_modulo_cocina_size] ?>").attr("src","<?php echo $urlImg6[$_modulo_cocina_size]; ?>");
+                                                    $("#product-<?php echo $_id6[$_modulo_cocina_size] ?>").attr("href","<?php echo $urlImg6[$_modulo_cocina_size]; ?>");
+                                                    $("select[name='product[<?php echo $id ?>]'] option[value='<?php echo $_modulo_cocina_configurable[$_modulo_cocina_size] ?>']").attr("selected",true);
+                                                    $("#hidden-attribute-238-<?php echo $id ?>").attr("value","<?php echo $_modulo_cocina_configurable[$_modulo_cocina_size] ?>");
+                                                    $("#size-frente-<?php echo $id ?>").html("<?php echo $_modulo_cocina_configurable_frente[$_modulo_cocina_size] ?>");
+                                                    $("#size-alto-<?php echo $id ?>").html("<?php echo $_modulo_cocina_configurable_alto[$_modulo_cocina_size] ?>cm");
+                                                    $("#size-fondo-<?php echo $id ?>").html("<?php echo $_modulo_cocina_configurable_fondo[$_modulo_cocina_size] ?>cm");
+                                                break;  
+                                            <?php } ?>
+                                           } 
+                                        });
+                                    });
+
+                                });
+                            </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="padding0">
+                            
+                                <table class="medidas-table">
+                                  <tbody>
+                                    <?php 
+                                    switch ($attSetName) {
+                                        case 'Default':
+                                    ?>
+                                    <tr>
+                                      <td>
+                                        <table class="medidas-table">
+                                        <tbody>
+                                        <tr class="border-bottom">
+                                            <th class="border-bottom display-cell">Alto</th>
+                                            <th class="border-bottom display-cell">Frente</th>
+                                            <th class="border-bottom display-cell">Fondo</th>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="a-center data"><?php echo $this->htmlEscape($_item->getData('alto')) ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $this->htmlEscape($_item->getData('frente')) ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $this->htmlEscape($_item->getData('fondo')) ?>&nbsp;cm</td>
+                                        </tr>
+                                        </tbody>
+                                        </table>
+                                    </td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'Comedores simples':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Mesa</td>
+                                        <td class="a-center data"><?php echo $_mesa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Silla</td>
+                                        <td class="a-center data"><?php echo $_silla_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_silla_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_silla_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'sala modular 2 piezas':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Love</td>
+                                        <td class="a-center data"><?php echo $_love_alto_simple ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Chaise</td>
+                                        <td class="a-center data"><?php echo $_chaise_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_chaise_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_chaise_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'sala modular love love esquinero':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Love Derecho</td>
+                                        <td class="a-center data"><?php echo $_love_derecho_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_derecho_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_derecho_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Love Izquierdo</td>
+                                        <td class="a-center data"><?php echo $_love_izquierdo_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_izquierdo_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_izquierdo_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Esquinero</td>
+                                        <td class="a-center data"><?php echo $_esquinero_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'sala modular sofa love':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sof&aacute;</td>
+                                        <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Love</td>
+                                        <td class="a-center data"><?php echo $_love_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'recamara 4 piezas':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Cabecera</td>
+                                        <td class="a-center data"><?php echo $_cabecera_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cabecera_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cabecera_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">C&oacute;moda</td>
+                                        <td class="a-center data"><?php echo $_comoda_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_comoda_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_comoda_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Marco c/luna</td>
+                                        <td class="a-center data"><?php echo $_marco_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_marco_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_marco_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Bur&oacute;</td>
+                                        <td class="a-center data"><?php echo $_buro_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_buro_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_buro_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'cocinas':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Alacena</td>
+                                        <td class="a-center data"><?php echo $_alacena_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">M&oacute;dulo</td>
+                                        <td class="a-center data"><?php echo $_modulo_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Porta Campana</td>
+                                        <td class="a-center data"><?php echo $_campana_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_campana_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_campana_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'cocinas con escuadra':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Alacena</td>
+                                        <td class="a-center data"><?php echo $_alacena_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">M&oacute;dulo</td>
+                                        <td class="a-center data"><?php echo $_modulo_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Porta Campana</td>
+                                        <td class="a-center data"><?php echo $_campana_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_campana_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_campana_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Alacena Esquinera</td>
+                                        <td class="a-center data"><?php echo $_alacena_esquinera_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_esquinera_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_esquinera_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">M&oacute;dulo Esquinero</td>
+                                        <td class="a-center data"><?php echo $_modulo_esquinero_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_esquinero_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_esquinero_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'aparador y vitrina':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Aparador</td>
+                                        <td class="a-center data"><?php echo $_aparador_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_aparador_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_aparador_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Vitrina</td>
+                                        <td class="a-center data"><?php echo $_vitrina_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_vitrina_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_vitrina_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                <?php        
+                                        break;
+
+                                        case 'cantinas':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Barra</td>
+                                        <td class="a-center data"><?php echo $_barra_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_barra_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_barra_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Contrabarra</td>
+                                        <td class="a-center data"><?php echo $_contrabarra_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_contrabarra_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_contrabarra_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                <?php        
+                                       break; 
+
+                                       case 'centro de entretenimiento':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">M&oacute;dulo Central</td>
+                                        <td class="a-center data"><?php echo $_modulo_central_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_central_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_central_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">M&oacute;dulo Lateral</td>
+                                        <td class="a-center data"><?php echo $_modulo_lateral_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_lateral_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_lateral_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">M&oacute;dulo Puente</td>
+                                        <td class="a-center data"><?php echo $_modulo_puente_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_puente_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_puente_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                             <?php        
+                                        break;
+
+                                        case 'mesa centro y lateral':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Mesa Centro</td>
+                                        <td class="a-center data"><?php echo $_mesa_centro_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_centro_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_centro_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Mesa Lateral</td>
+                                        <td class="a-center data"><?php echo $_mesa_lateral_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_lateral_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_lateral_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                             <?php        
+                                        break;
+
+                                        case 'mesa y taburete':
+                                    ?>
+                                        <tr class="border-bottom">
+                                            <th>&nbsp;</th>
+                                            <th class="border-bottom">Alto</th>
+                                            <th class="border-bottom">Frente</th>
+                                            <th class="border-bottom">Fondo</th>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">Mesa</td>
+                                            <td class="a-center data"><?php echo $_mesa_taburete_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_mesa_taburete_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_mesa_taburete_fondo ?>&nbsp;cm</td>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">Taburete</td>
+                                            <td class="a-center data"><?php echo $_taburete_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_taburete_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_taburete_fondo ?>&nbsp;cm</td>
+                                        </tr>
+                                    <?php        
+                                            break;
+
+                                            case 'modulo esquinero y alacena esquinera':
+                                    ?>
+                                        <tr class="border-bottom">
+                                            <th>&nbsp;</th>
+                                            <th class="border-bottom">Alto</th>
+                                            <th class="border-bottom">Frente</th>
+                                            <th class="border-bottom">Fondo</th>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">M&oacute;dulo</td>
+                                            <td class="a-center data"><?php echo $_modulo_esquinero_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_modulo_esquinero_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_modulo_esquinero_fondo ?>&nbsp;cm</td>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">Alacena</td>
+                                            <td class="a-center data"><?php echo $_alacena_esquinera_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_alacena_esquinera_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_alacena_esquinera_fondo ?>&nbsp;cm</td>
+                                        </tr>
+                                    <?php        
+                                            break;
+
+                                            case 'sofa love seat y sillon':
+                                    ?>
+                                        <tr class="border-bottom">
+                                            <th>&nbsp;</th>
+                                            <th class="border-bottom">Alto</th>
+                                            <th class="border-bottom">Frente</th>
+                                            <th class="border-bottom">Fondo</th>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">Sof&aacute;</td>
+                                            <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">Love Seat</td>
+                                            <td class="a-center data"><?php echo $_love_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_love_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_love_fondo ?>&nbsp;cm</td>
+                                        </tr>                                        
+                                        <tr class="medidas">    
+                                            <td class="label">Sill&oacute;n</td>
+                                            <td class="a-center data"><?php echo $_sillon_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_sillon_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_sillon_fondo ?>&nbsp;cm</td>
+                                        </tr>
+                                    <?php        
+                                            break;
+
+                                            case 'sofa y chaise longue':
+                                    ?>
+                                        <tr class="border-bottom">
+                                            <th>&nbsp;</th>
+                                            <th class="border-bottom">Alto</th>
+                                            <th class="border-bottom">Frente</th>
+                                            <th class="border-bottom">Fondo</th>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">Sof&aacute;</td>
+                                            <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">Chaise Long</td>
+                                            <td class="a-center data"><?php echo $_chaise_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_chaise_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_chaise_fondo ?>&nbsp;cm</td>
+                                        </tr>                                        
+                                    <?php        
+                                            break;
+
+                                         case 'cabecera y buros':
+                                    ?>
+                                        <tr class="border-bottom">
+                                            <th>&nbsp;</th>
+                                            <th class="border-bottom">Alto</th>
+                                            <th class="border-bottom">Frente</th>
+                                            <th class="border-bottom">Fondo</th>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">Cabecera</td>
+                                            <td class="a-center data"><?php echo $_cabecera_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_cabecera_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_cabecera_fondo ?>&nbsp;cm</td>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">Bur&oacute;</td>
+                                            <td class="a-center data"><?php echo $_buro_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_buro_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_buro_fondo ?>&nbsp;cm</td>
+                                        </tr>                                        
+                                    <?php        
+                                            break;
+
+                                            case 'comoda y luna':
+                                    ?>
+                                        <tr class="border-bottom">
+                                            <th>&nbsp;</th>
+                                            <th class="border-bottom">Alto</th>
+                                            <th class="border-bottom">Frente</th>
+                                            <th class="border-bottom">Fondo</th>
+                                        </tr>
+                                        <tr class="medidas">    
+                                            <td class="label">C&oacute;moda</td>
+                                            <td class="a-center data"><?php echo $_comoda_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_comoda_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_comoda_fondo ?>&nbsp;cm</td>
+                                        </tr>
+                                        <tr class="medidas">   
+                                            <td class="label">Marco con luna</td>
+                                            <td class="a-center data"><?php echo $_marco_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_marco_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_marco_fondo ?>&nbsp;cm</td>
+                                        </tr>                                        
+                                    <?php        
+                                            break;
+                                            
+                                            case 'cocina 1.70m agrupada':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">   
+                                        <td class="label">Alacena</td>
+                                        <td class="a-center data"><?php echo $_cocina170_alacena_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina170_alacena_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina170_alacena_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">   
+                                        <td class="label">Tarja</td>
+                                        <td class="a-center data"><?php echo $_cocina170_tarja_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina170_tarja_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina170_tarja_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">   
+                                        <td class="label">Porta Campana</td>
+                                        <td class="a-center data"><?php echo $_cocina170_campana_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina170_campana_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina170_campana_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+                                        
+                                        case 'cocina escuadra agrupada':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Alacena 120cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_alacena120_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_alacena120_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_alacena120_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">M&oacute;dulo 120cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_modulo120_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_modulo120_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_modulo120_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Porta Campana</td>
+                                        <td class="a-center data"><?php echo $_cocina200_portacampana_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_portacampana_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_portacampana_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Alacena 80cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_alacena80_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_alacena80_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_alacena80_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">M&oacute;dulo 80cm</td>
+                                        <td class="a-center data"><?php echo $_cocina_modulo80_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina_modulo80_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina_modulo80_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">M&oacute;dulo Esquinero</td>
+                                        <td class="a-center data"><?php echo $_cocina_modulo_esquina_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina_modulo_esquina_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina_modulo_esquina_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Alacena Esquinera</td>
+                                        <td class="a-center data"><?php echo $_alacena_esquinera_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_esquinera_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_esquinera_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+                                        
+                                        case 'cocina 2m agrupada':
+                                ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Alacena 120cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_alacena120_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_alacena120_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_alacena120_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">M&oacute;dulo 120cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_modulo120_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_modulo120_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_modulo120_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Porta Campana</td>
+                                        <td class="a-center data"><?php echo $_cocina200_portacampana_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_portacampana_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cocina200_portacampana_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'cubierta y pedestal':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Cubierta</td>
+                                        <td class="a-center data"><?php echo $_cristal_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cristal_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cristal_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Pedestal</td>
+                                        <td class="a-center data"><?php echo $_pedestal_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_pedestal_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_pedestal_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'comedor 7 piezas':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Mesa</td>
+                                        <td class="a-center data"><?php echo $_mesa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Silla</td>
+                                        <td class="a-center data"><?php echo $_silla_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_silla_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_silla_fondo ?>&nbsp;cm</td>
+                                    </tr>                                    
+                                    <tr class="medidas">    
+                                        <td class="label">Banca</td>
+                                        <td class="a-center data"><?php echo $_banca_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_banca_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_banca_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Server</td>
+                                        <td class="a-center data"><?php echo $_server_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_server_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_server_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'mesa 4 sillas y banca':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Mesa</td>
+                                        <td class="a-center data"><?php echo $_mesa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Silla</td>
+                                        <td class="a-center data"><?php echo $_silla_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_silla_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_silla_fondo ?>&nbsp;cm</td>
+                                    </tr>                                    
+                                    <tr class="medidas">    
+                                        <td class="label">Banca</td>
+                                        <td class="a-center data"><?php echo $_banca_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_banca_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_banca_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'sala modular 4 piezas':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sof&aacute;</td>
+                                        <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Chaise Long</td>
+                                        <td class="a-center data"><?php echo $_chaise_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_chaise_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_chaise_fondo ?>&nbsp;cm</td>
+                                    </tr>                                    
+                                    <tr class="medidas">    
+                                        <td class="label">Esquinero</td>
+                                        <td class="a-center data"><?php echo $_esquinero_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sill&oacute;n sin brazos</td>
+                                        <td class="a-center data"><?php echo $_sillon_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break; 
+
+                                        case 'sala modular 6 piezas':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sof&aacute; brazo izquierdo</td>
+                                        <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+                                    </tr>                               
+                                    <tr class="medidas">    
+                                        <td class="label">Esquinero</td>
+                                        <td class="a-center data"><?php echo $_esquinero_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sill&oacute;n</td>
+                                        <td class="a-center data"><?php echo $_sillon_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                     <tr class="medidas">    
+                                        <td class="label">Sof&aacute; brazo derecho</td>
+                                        <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+                                    </tr>   
+
+                                    <?php        
+                                        break; 
+
+                                        case 'sala modular':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sof&aacute; Brazo Izquierdo</td>
+                                        <td class="a-center data"><?php echo $_sofa_izquierdo_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_izquierdo_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_izquierdo_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Esquinero</td>
+                                        <td class="a-center data"><?php echo $_esquinero_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sill&oacute;n sin brazos</td>
+                                        <td class="a-center data"><?php echo $_sillon_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sof&aacute; Brazo Derecho</td>
+                                        <td class="a-center data"><?php echo $_sofa_derecho_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_derecho_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_derecho_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+                                        
+                                        case 'sala U':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sof&aacute; Brazo Izquierdo</td>
+                                        <td class="a-center data"><?php echo $_sofa_izquierdo_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_izquierdo_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_izquierdo_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Esquinero</td>
+                                        <td class="a-center data"><?php echo $_esquinero_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sof&aacute;n sin brazos</td>
+                                        <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sill&oacute;n sin brazos</td>
+                                        <td class="a-center data"><?php echo $_sillon_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sof&aacute; Brazo Derecho</td>
+                                        <td class="a-center data"><?php echo $_sofa_derecho_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_derecho_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_derecho_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'sala chaise power':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sill&oacute;n Brazo Izquierdo</td>
+                                        <td class="a-center data"><?php echo $_sillon_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sill&oacute;n sin brazos</td>
+                                        <td class="a-center data"><?php echo $_sillon_sin_brazos_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_sin_brazos_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_sin_brazos_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                     <tr class="medidas">    
+                                        <td class="label">Consola</td>
+                                        <td class="a-center data"><?php echo $_consola_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_consola_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_consola_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Esquinero</td>
+                                        <td class="a-center data"><?php echo $_esquinero_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sill&oacute;n Reclinable</td>
+                                        <td class="a-center data"><?php echo $_sillon_reclinable_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_reclinable_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_reclinable_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                     <tr class="medidas">    
+                                            <td class="label">Chaise C/Power</td>
+                                            <td class="a-center data"><?php echo $_chaise_alto ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_chaise_frente ?>&nbsp;cm</td>
+                                            <td class="a-center data"><?php echo $_chaise_fondo ?>&nbsp;cm</td>
+                                        </tr> 
+                                    <?php        
+                                        break;
+
+                                        case 'sala L':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sof&aacute; Brazo Derecho</td>
+                                        <td class="a-center data"><?php echo $_sofa_derecho_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_derecho_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_derecho_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Chaise Long</td>
+                                        <td class="a-center data"><?php echo $_chaise_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_chaise_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_chaise_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'set cuna':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Cuna</td>
+                                        <td class="a-center data"><?php echo $_cuna_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cuna_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cuna_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Cambiador</td>
+                                        <td class="a-center data"><?php echo $_cambiador_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cambiador_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cambiador_fondo ?>&nbsp;cm</td>
+                                    </tr>                                    
+                                    <tr class="medidas">    
+                                        <td class="label">C&oacute;moda</td>
+                                        <td class="a-center data"><?php echo $_comoda_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_comoda_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_comoda_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'macetero':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Macetero CH</td>
+                                        <td class="a-center data"><?php echo $_macetero_ch_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_macetero_ch_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_macetero_ch_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Macetero M</td>
+                                        <td class="a-center data"><?php echo $_macetero_m_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_macetero_m_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_macetero_m_fondo ?>&nbsp;cm</td>
+                                    </tr>                                    
+                                    <tr class="medidas">    
+                                        <td class="label">Macetero G</td>
+                                        <td class="a-center data"><?php echo $_macetero_g_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_macetero_g_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_macetero_g_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'sofa sillon 2 chaise':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sof&aacute; sin brazo</td>
+                                        <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Sill&oacute;n</td>
+                                        <td class="a-center data"><?php echo $_sillon_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sillon_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Chaise Long</td>
+                                        <td class="a-center data"><?php echo $_chaise_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_chaise_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_chaise_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'mesa silla banca':
+                                    ?>
+                                    <tr class="border-bottom">
+                                        <th>&nbsp;</th>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Mesa</td>
+                                        <td class="a-center data"><?php echo $_mesa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Silla</td>
+                                        <td class="a-center data"><?php echo $_silla_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_silla_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_silla_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr class="medidas">    
+                                        <td class="label">Banca</td>
+                                        <td class="a-center data"><?php echo $_banca_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_banca_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_banca_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+                                    }
+                                    ?>
+                                  </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </table>
+            </td>
+            <?php if ($_product->isSaleable()): ?>
+            <?php if($storeId=="16" || $storeId=="17" || $storeId=="18"){}
+                else{ ?>
+            <td class="a-center">
+            <?php if ($_item->isSaleable()) : ?>
+                <input type="text" name="super_group[<?php echo $_item->getId() ?>]" maxlength="12" value="<?php echo $_item->getQty()*1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+            <?php else: ?>
+                <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+            <?php endif; ?>
+            </td>
+                <?php } ?>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    <?php else: ?>
+       <tr>
+           <td colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>"><?php echo $this->__('No options of this product are available.') ?></td>
+       </tr>
+    <?php endif; ?>
+    </tbody>
+</table>
+<script type="text/javascript">decorateTable('super-product-table')</script>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {    
+        $("a.image-gallery").fancybox();
+    });
+</script>
+<script>
+    jQuery(function() {
+        var spinner = jQuery( ".qty" ).spinner({min: 0, max: 99}); 
+        var spinner2 = jQuery( "#qty" ).spinner({min: 0, max: 99}); 
+    });
+</script>
+
+

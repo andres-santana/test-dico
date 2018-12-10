@@ -1,0 +1,38 @@
+<?php
+/* @var $this Mage_Catalog_Block_Product_Compare_Sidebar */
+$_helper = $this->helper('catalog/product_compare');
+$deleteAllUrl = $_helper->getClearListUrl();
+
+$refererUrl = Mage::registry('referrer_url');
+if (empty($refererUrl)) {
+    $refererUrl = Mage::getBaseUrl();
+}
+$params = $this->getRequest()->getParams();
+if(!empty($params['isAjax'])){
+    $deleteAllUrl = $this->getUrl(
+        'catalog/product_compare/clear',
+        array(
+            Mage_Core_Controller_Front_Action::PARAM_NAME_URL_ENCODED => $this->helper('core/url')->getEncodedUrl($refererUrl)
+        )
+    );
+}
+
+if(empty($params['isAjax'])){
+    ob_start();
+}
+?>
+<?php
+$_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
+?>
+
+<?php
+if(empty($params['isAjax'])){
+    $queldorei_blocks = Mage::registry('queldorei_blocks');
+    if ( !$queldorei_blocks ) {
+        $queldorei_blocks = array();
+    } else {
+        Mage::unregister('queldorei_blocks');
+    }
+    $queldorei_blocks['block_compare'] = ob_get_clean();
+    Mage::register('queldorei_blocks', $queldorei_blocks);
+}

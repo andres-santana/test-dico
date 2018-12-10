@@ -1,0 +1,513 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Grouped product data template
+ *
+ * @see Mage_Catalog_Block_Product_View_Media
+ * @see Mage_Catalog_Block_Product_View_Type_Grouped
+ */
+?>
+<?php $this->setPreconfiguredValue(); ?>
+<?php $_product = $this->getProduct(); 
+    $helper = $this->helper('shoppersettings/image');
+list($defaultImgX, $defaultImgY) = $helper->getDefaultSize();
+list($imgX, $imgY) = $helper->getMainSize();
+if ( $imgX > 300 ) {
+    $imgX = 300;
+    $imgY = $helper->calculateHeight($imgX);
+}
+
+$product_img_box_width = $defaultImgX;
+if ( $defaultImgX != $imgX ) {
+    $product_img_box_width = $imgX;
+}
+//add image border
+$product_img_box_width += 18;
+
+$thumbX = 98;
+$thumbY = $helper->calculateHeight($thumbX);
+?>
+<?php $_associatedProducts = $this->getAssociatedProducts(); ?>
+<?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
+<?php if ($this->helper('groupedoptions')->isProductAvailable($_product) && $_hasAssociatedProducts): ?>
+    <p class="availability in-stock"><?php // echo $this->__('Availability:') ?> <span><?php //echo $this->__('In stock') ?></span></p>
+<?php else: ?>
+    <p class="availability out-of-stock"><?php //echo $this->__('Availability:') ?> <span><?php //echo $this->__('Out of stock') ?></span></p>
+<?php endif; ?>
+<?php echo $this->getChildHtml('product_type_data_extra') ?>
+<table class="data-table grouped-items-table" id="super-product-table">
+    <col />
+    <col />
+    <col width="1" />
+    <thead>
+        <tr>
+            <th style="width:30%;">Imagen</th>
+            <th style="width:24%;">Descripci&oacute;n</th>
+            <th>Caracter&iacute;sticas</th>
+            <?php if ($this->helper('groupedoptions')->getCanShowProductPrice($this, $_product)): ?>
+            <th class="a-center" style="width:8%;"><?php echo $this->__('Price') ?></th>
+            <?php endif; ?>
+            <?php if ($_product->isSaleable()): ?>
+            <th class="a-center" style="width:6%;"><?php echo $this->__('Qty') ?></th>
+            <?php endif; ?>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if ($_hasAssociatedProducts): ?>
+    <?php foreach ($_associatedProducts as $_item): ?>
+        <?php $_finalPriceInclTax = $this->helper('tax')->getPrice($_item, $_item->getFinalPrice(), true) ?>
+        <tr>
+            <td>
+            <p class="product-image">
+                <?php 
+                
+                    $id = $_item->getId();
+                    $urlImg[] = null;
+                    $urlLink[] = null;
+                    $conf = Mage::getModel('catalog/product_type_configurable')->setProduct($_item);
+                    $simple_collection = $conf->getUsedProductCollection()->addAttributeToSelect('*')->addFilterByRequiredOptions();
+                    $n = 0;
+                    foreach($simple_collection as $simple_product){
+                        $color[$n] = $simple_product->getData('color');
+                        $urlImg[$color[$n]] = $this->helper('catalog/image')->init($simple_product, 'small_image')->resize(360,177);
+                        $urlLink[$color[$n]] = $simple_product->getProductUrl(); 
+                        $_images = Mage::getModel('catalog/product')->load($simple_product->getId())->getMediaGalleryImages();
+                        if($_images){     
+                            $i=0; 
+                            foreach($_images as $_image){
+                                $urlImgTumb[$n][$i] = $this->helper('catalog/image')->init($simple_product, 'thumbnail', $_image->getFile());  
+                                $urlImgAlt[$n][$i] = $this->htmlEscape($_image->getLabel()); 
+                                $urlImgTitle[$n][$i] = $this->htmlEscape($_image->getLabel());
+                                $i++;
+                            }
+                        } 
+                        $n++;
+                    }
+                    $productId = $_item->getId(); 
+                    $attSet = Mage::getModel('catalog/product')->load($productId)->getAttributeSetId(); 
+                    $attSetName = Mage::getModel('eav/entity_attribute_set')->load($attSet)->getAttributeSetName();
+                    $_mesa_alto = $this->htmlEscape($_item->getData('mesa_alto'));
+                    $_mesa_frente = $this->htmlEscape($_item->getData('mesa_frente'));
+                    $_mesa_fondo = $this->htmlEscape($_item->getData('mesa_fondo'));
+                    $_silla_alto = $this->htmlEscape($_item->getData('silla_alto'));
+                    $_silla_frente = $this->htmlEscape($_item->getData('silla_frente'));
+                    $_silla_fondo = $this->htmlEscape($_item->getData('silla_fondo'));
+                    $_love_alto = $this->htmlEscape($_item->getData('love_alto'));
+                    $_love_frente = $this->htmlEscape($_item->getData('love_frente'));
+                    $_love_fondo = $this->htmlEscape($_item->getData('love_fondo'));
+                    $_chaise_alto = $this->htmlEscape($_item->getData('chaise_alto'));
+                    $_chaise_frente = $this->htmlEscape($_item->getData('chaise_frente'));
+                    $_chaise_fondo = $this->htmlEscape($_item->getData('chaise_fondo'));
+                    $_sofa_alto = $this->htmlEscape($_item->getData('sofa_alto'));
+                    $_sofa_frente = $this->htmlEscape($_item->getData('sofa_frente'));
+                    $_sofa_fondo = $this->htmlEscape($_item->getData('sofa_fondo'));
+                    $_chaise_alto = $this->htmlEscape($_item->getData('chaise_alto')); 
+                    $_cabecera_alto = $this->htmlEscape($_item->getData('cabecera_alto'));
+                    $_cabecera_frente = $this->htmlEscape($_item->getData('cabecera_frente'));
+                    $_cabecera_fondo = $this->htmlEscape($_item->getData('cabecera_fondo')); 
+                    $_comoda_alto = $this->htmlEscape($_item->getData('comoda_alto'));
+                    $_comoda_frente = $this->htmlEscape($_item->getData('comoda_frente'));
+                    $_comoda_fondo = $this->htmlEscape($_item->getData('comoda_fondo')); 
+                    $_marco_alto = $this->htmlEscape($_item->getData('marco_alto'));
+                    $_marco_frente = $this->htmlEscape($_item->getData('marco_frente'));
+                    $_marco_fondo = $this->htmlEscape($_item->getData('marco_fondo')); 
+                    $_buro_alto = $this->htmlEscape($_item->getData('buro_alto'));
+                    $_buro_frente = $this->htmlEscape($_item->getData('buro_frente'));
+                    $_buro_fondo = $this->htmlEscape($_item->getData('buro_fondo')); 
+                    $_love_derecho_alto = $this->htmlEscape($_item->getData('love_derecho_alto'));
+                    $_love_derecho_frente = $this->htmlEscape($_item->getData('love_derecho_frente'));
+                    $_love_derecho_fondo = $this->htmlEscape($_item->getData('love_derecho_fondo')); 
+                    $_love_izquierdo_alto = $this->htmlEscape($_item->getData('love_izquierdo_alto'));
+                    $_love_izquierdo_frente = $this->htmlEscape($_item->getData('love_izquierdo_frente'));
+                    $_love_izquierdo_fondo = $this->htmlEscape($_item->getData('love_izquierdo_fondo')); 
+                    $_esquinero_alto = $this->htmlEscape($_item->getData('esquinero_alto'));
+                    $_esquinero_frente = $this->htmlEscape($_item->getData('esquinero_frente'));
+                    $_esquinero_fondo = $this->htmlEscape($_item->getData('esquinero_fondo')); 
+                    $_alacena_alto = $this->htmlEscape($_item->getData('alacena_alto'));
+                    $_alacena_frente = $this->htmlEscape($_item->getData('alacena_frente'));
+                    $_alacena_fondo = $this->htmlEscape($_item->getData('alacena_fondo')); 
+                    $_modulo_alto = $this->htmlEscape($_item->getData('cocina_modulo_alto'));
+                    $_modulo_frente = $this->htmlEscape($_item->getData('cocina_modulo_frente'));
+                    $_modulo_fondo = $this->htmlEscape($_item->getData('cocina_modulo_fondo'));
+                    $_campana_alto = $this->htmlEscape($_item->getData('campana_modulo_alto'));
+                    $_campana_frente = $this->htmlEscape($_item->getData('campana_modulo_frente'));
+                    $_campana_fondo = $this->htmlEscape($_item->getData('campana_modulo_fondo')); 
+                    $_alacena_esquinera_alto = $this->htmlEscape($_item->getData('alacena_esquinada_alto'));
+                    $_alacena_esquinera_frente = $this->htmlEscape($_item->getData('alacena_esquinada_frente'));
+                    $_alacena_esquinera_fondo = $this->htmlEscape($_item->getData('alacena_esquinada_fondo')); 
+                    $_modulo_esquinero_alto = $this->htmlEscape($_item->getData('modulo_esquinado_alto'));
+                    $_modulo_esquinero_frente = $this->htmlEscape($_item->getData('modulo_esquinado_frente'));
+                    $_modulo_esquinero_fondo = $this->htmlEscape($_item->getData('modulo_esquinado_fondo')); 
+
+                if($_item->getTypeId() == "configurable"):
+                ?>  
+                <!--    <a href="<?php echo $urlLink[$color[$n-1]] ?>" title="totle<?php echo $this->htmlEscape($_item->getName()) ?>" id="product-<?php echo $id ?>">
+                    <img src="<?php echo $urlImg[$color[$n-1]] ?>" width="360" alt="" id="image-<?php echo $id ?>">
+                </a> -->    
+                <!-- <img src="<?php echo $urlImg[$color[$n-1]] ?>" width="360" alt="" id="image-<?php echo $id ?>"> -->
+                <div class="hover">
+                <?php if (Mage::getStoreConfig('shoppersettings/ajax/cart')) : //quick view button ?>
+                    <a href='<?php echo $this->getUrl('ajax/index/options',array('product_id'=>$_item->getId()));?>' data-fancybox-group="gallery" class='fancybox quick-view' id='fancybox<?php echo $_item->getId()?>'><?php echo $this->__('quick view')?></a>
+                <?php endif; ?>
+                <a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>" class="product-image">
+                    <?php echo $this->helper('shoppersettings')->getLabel($_product);  ?>
+                    <?php
+                    $_product->load('media_gallery');
+                    $back_img = $_product->getMediaGalleryImages()->getItemByColumnValue('label', 'back');
+                    if ( $back_img ) : ?>
+                        <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image', $back_img->getFile())->resize($imgX, $imgY) ?>" data-srcX2="<?php echo $this->helper('catalog/image')->init($_item, 'small_image', $back_img->getFile())->resize($imgX*2, $imgY*2) ?>" width="<?php echo $imgX; ?>" height="<?php echo $imgY; ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" />
+                    <?php else : ?>
+                        <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize($imgX, $imgY) ?>" data-srcX2="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize($imgX*2, $imgY*2) ?>" width="<?php echo $imgX; ?>" height="<?php echo $imgY; ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" />
+                    <?php endif; ?>
+                </a>
+                <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>">
+                    <?php echo $this->helper('shoppersettings/data')->priceFormat( $this->getPriceHtml($_product, true) ); ?>
+                </a>
+                <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                <a class="product-name" href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped; ?>"><?php echo $_helper->productAttribute($_product, $_product->getName() , 'name'); ?></a>
+                <?php if($_product->getRatingSummary()){ echo $this->getReviewsSummaryHtml($_product); } ?>
+                <div class="button-container">
+                    <?php if($_product->isSaleable()): ?>
+
+                        <?php if (Mage::getStoreConfig('shoppersettings/ajax/cart')) : ?>
+
+                            <?php if ( !($_product->getTypeInstance(true)->hasRequiredOptions($_product) || $_product->isGrouped()) ) { ?>
+                                <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart ajax-cart" data-url="<?php echo $this->getAddToCartUrl($_product); ?>" data-id="<?php echo $_product->getId(); ?>"><span><span><em></em><?php echo $this->__('Add to Cart') ?></span></span></button></p>
+                            <?php } else { ?>
+                                <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart show-options" data-id="<?php echo $_product->getId(); ?>"><span><span><em></em><?php echo $this->__('Add to Cart') ?></span></span></button></p>
+                            <?php }  ?>
+
+                        <?php else: ?>
+                            <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><em></em><?php echo $this->__('Add to Cart') ?></span></span></button></p>
+                        <?php endif; ?>
+
+                    <?php else: ?>
+                    <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                    <?php endif; ?>
+                </div>
+
+                <span class="ajax_loading" id='ajax_loading<?php echo $_product->getId()?>'><img src='<?php echo $this->getSkinUrl('images/ajax-loader.gif')?>'/></span>
+
+                <ul class="add-to-links">
+                    <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                    <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist" data-id="<?php echo $_product->getId(); ?>"><span>+</span><?php echo $this->__('Add to Wishlist') ?></a></li>
+                    <?php endif; ?>
+                    <?php if ($_compareUrl=$this->getAddToCompareUrl($_product)) : ?>
+                    <li><a href="<?php echo $_compareUrl ?>" class="link-compare" data-id="<?php echo $_product->getId(); ?>"><span>+</span><?php echo $this->__('Add to Compare') ?></a></li>
+                    <?php endif; ?>
+                </ul>
+
+            </div>
+                       
+                <?php else: ?>
+                    <!-- <a href="<?php echo $this->htmlEscape($_item->getProductUrl()) ?>" title="<?php $this->htmlEscape($_product->getName()) ?>">
+                        <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(360,177) ?>" width="360" alt="" id="image">
+                    </a> -->
+                        <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(360,177) ?>" width="360" alt="" id="image">
+                <?php endif ?>
+                </p>
+            </td>
+            <td>
+                <h4><?php echo $this->htmlEscape($_item->getName()) ?></h4><br>
+                <p><?php echo $this->htmlEscape($_item->getDescription()) ?></p>
+            </td>
+            <td>
+                <table class="noborder">
+                    <?php // if ($_item->isSuper() || $_item->getHasOptions() || $_item->isGrouped() ) : ?>
+                        <tr class="grouped-options-row">
+                        <!-- Display Product Options if available -->
+                            <td colspan="3" class="grouped-options-cell padding-10-0-0">
+                            <?php echo $this->getChild('groupedoptions')->setProduct($_item)->toHtml(); 
+                                $color_count = 0;
+                            ?>
+                            <script type="text/javascript">
+                                <?php foreach($simple_collection as $simple_product){ 
+                                    $color[$color_count] = $simple_product->getData('color');
+                                    $color_text = $simple_product->getAttributeText('color');   
+                                    $price[$color[$color_count]] = Mage::helper('core')->currency($simple_product->getPrice());
+                                    $urlImg2[$color[$color_count]] = $simple_product->getMediaConfig()->getMediaUrl($simple_product->getData('image'));
+                                    //$urlImg2[$color] = $this->helper('catalog/image')->init($simple_product,'small_image')->resize(360,177);
+                                    $urlLink2[$color[$color_count]] = $simple_product->getProductUrl();
+                                    $color_count++;    
+                                }
+                                ?>
+                                jQuery(document).ready(function($) {
+                                    $( "select[name='super_attribute[<?php echo $id ?>][92]']" ).focus(function(){
+                                        $("option[value='']").attr("disabled","disabled");
+                                    
+                                    $("input[name='super_group[<?php echo $id ?>]']").attr("disabled","disabled");
+
+                                    $( "select[name='super_attribute[<?php echo $id ?>][92]']" ).change(function () {
+                                        $(".hidden-super-attribute-select").removeClass("validation-failed required-entry");
+                                        $(".hidden-super-attribute-select").addClass("validation-passed");
+                                        $(".validation-advice").css("display","none");
+                                        $("input[name='super_group[<?php echo $id ?>]']").removeAttr("disabled");
+                                                
+                                        var n = $(this).val();
+                                        
+                                        switch(n)
+                                           {
+                                            <?php foreach($color as $color_num){ ?>
+                                                case '<?php echo $color_num ?>':
+                                                    $("#image-<?php echo $id ?>").attr("src","<?php echo $urlImg2[$color_num]; ?>");
+                                                    $("#product-<?php echo $id ?>").attr("href","<?php echo $urlLink2[$color_num]; ?>");
+                                                    $("#product-price-<?php echo $id ?>").html('<span class="price"><?php echo $price[$color_num] ?></span>');
+                                                    $("select[name='product[<?php echo $id ?>]'] option[value='$color_num']").attr("selected",true);
+                                                    $("#hidden-attribute-92-<?php echo $id ?>").attr("value","$color_num");
+                                                break;  
+                                            <?php } ?>
+                                           } 
+                                        });   
+                                                
+                                    });
+                                });
+                            </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="padding0">
+                                <strong>Medidas</strong>
+                                <table>
+                                <tr class="border-bottom">
+                                        <?php if($attSetName!="Default"): ?>
+                                            <th>&nbsp;</th>
+                                        <?php endif ?>
+                                        <th class="border-bottom">Alto</th>
+                                        <th class="border-bottom">Frente</th>
+                                        <th class="border-bottom">Fondo</th>
+                                    </tr>
+                                  <tbody>
+                                    <?php 
+                                    switch ($attSetName) {
+                                        case 'Default':
+                                    ?>
+                                    <tr>
+                                      <td class="paddingt-10"><?php echo $this->htmlEscape($_item->getData('alto')) ?>&nbsp;cm</td>
+                                      <td class="paddingt-10"><?php echo $this->htmlEscape($_item->getData('frente')) ?>&nbsp;cm</td>
+                                      <td class="paddingt-10"><?php echo $this->htmlEscape($_item->getData('fondo')) ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'Comedores simples':
+                                    ?>
+                                    <tr>   
+                                        <td class="label">Mesa</td>
+                                        <td class="a-center data"><?php echo $_mesa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_mesa_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">Silla</td>
+                                        <td class="a-center data"><?php echo $_silla_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_silla_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_silla_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'sala modular 2 piezas':
+                                    ?>
+                                    <tr>   
+                                        <td class="label">Love</td>
+                                        <td class="a-center data"><?php echo $_love_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">Chaise</td>
+                                        <td class="a-center data"><?php echo $_chaise_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_chaise_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_chaise_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'sala modular love love esquinero':
+                                ?>
+                                    <tr>   
+                                        <td class="label">Love Derecho</td>
+                                        <td class="a-center data"><?php echo $_love_derecho_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_derecho_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_derecho_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">Love Izquierdo</td>
+                                        <td class="a-center data"><?php echo $_love_izquierdo_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_izquierdo_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_izquierdo_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">Esquinero</td>
+                                        <td class="a-center data"><?php echo $_esquinero_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_esquinero_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'sala modular sofa love':
+                                ?>
+                                    <tr>   
+                                        <td class="label">Sof&aacute;</td>
+                                        <td class="a-center data"><?php echo $_sofa_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_sofa_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">Love</td>
+                                        <td class="a-center data"><?php echo $_love_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_love_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'recamara 4 piezas':
+                                ?>
+                                    <tr>   
+                                        <td class="label">Cabecera</td>
+                                        <td class="a-center data"><?php echo $_cabecera_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cabecera_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cabecera_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">C&oacute;moda</td>
+                                        <td class="a-center data"><?php echo $_comoda_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_comoda_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_comoda_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">Marco c/luna</td>
+                                        <td class="a-center data"><?php echo $_marco_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_marco_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_marco_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">Bur&oacute;</td>
+                                        <td class="a-center data"><?php echo $_buro_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_buro_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_buro_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'cocinas':
+                                ?>
+                                    <tr>   
+                                        <td class="label">Alacena</td>
+                                        <td class="a-center data"><?php echo $_alacena_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">M&oacute;dulo</td>
+                                        <td class="a-center data"><?php echo $_modulo_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">Porta Campana</td>
+                                        <td class="a-center data"><?php echo $_campana_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_campana_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_campana_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+
+                                        case 'cocinas con escuadra':
+                                ?>
+                                    <tr>   
+                                        <td class="label">Alacena</td>
+                                        <td class="a-center data"><?php echo $_cabecera_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cabecera_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_cabecera_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">M&oacute;dulo</td>
+                                        <td class="a-center data"><?php echo $_comoda_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_comoda_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_comoda_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">Porta Campana</td>
+                                        <td class="a-center data"><?php echo $_marco_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_marco_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_marco_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">Alacena Esquinera</td>
+                                        <td class="a-center data"><?php echo $_alacena_esquinera_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_esquinera_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_alacena_esquinera_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <tr>   
+                                        <td class="label">M&oacute;dulo Esquinero</td>
+                                        <td class="a-center data"><?php echo $_modulo_esquinero_alto ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_esquinero_frente ?>&nbsp;cm</td>
+                                        <td class="a-center data"><?php echo $_modulo_esquinero_fondo ?>&nbsp;cm</td>
+                                    </tr>
+                                    <?php        
+                                        break;
+                                    }
+                                    ?>
+                                  </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    <?php // endif; ?>
+                </table>
+            </td>
+            <?php if ($this->helper('groupedoptions')->getCanShowProductPrice($this, $_product)): ?>
+            <td class="a-right">
+                <?php if ($this->helper('groupedoptions')->getCanShowProductPrice($this, $_item)): ?>
+                <?php echo $this->getPriceHtml($_item, true) ?>
+                <?php echo $this->getTierPriceHtml($_item) ?>
+                <?php endif; ?>
+            </td>
+            <?php endif; ?>
+            <?php if ($_product->isSaleable()): ?>
+            <td class="a-center">
+            <?php if ($_item->isSaleable()) : ?>
+                <input type="text" name="super_group[<?php echo $_item->getId() ?>]" maxlength="12" value="<?php echo $_item->getQty()*1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+            <?php else: ?>
+                <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+            <?php endif; ?>
+            </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    <?php else: ?>
+       <tr>
+           <td colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>"><?php echo $this->__('No options of this product are available.') ?></td>
+       </tr>
+    <?php endif; ?>
+    </tbody>
+</table>
+<script type="text/javascript">decorateTable('super-product-table')</script>
+
+

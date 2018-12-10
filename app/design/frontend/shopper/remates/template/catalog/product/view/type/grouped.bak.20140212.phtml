@@ -1,0 +1,267 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Grouped product data template
+ *
+ * @see Mage_Catalog_Block_Product_View_Media
+ * @see Mage_Catalog_Block_Product_View_Type_Grouped
+ */
+?>
+<?php $this->setPreconfiguredValue(); ?>
+<?php $_product = $this->getProduct(); ?>
+<?php $_associatedProducts = $this->getAssociatedProducts(); ?>
+<?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
+<?php /* if ($_product->isAvailable() && $_hasAssociatedProducts): ?>
+    <p class="availability availability-grouped in-stock"><?php echo $this->__('Disponibilidad:') ?> <span><?php echo $this->__('In stock') ?></span></p>
+<?php else: ?>
+    <p class="availability availability-grouped out-of-stock"><?php echo $this->__('Disponibilidad:') ?> <span><?php echo $this->__('Out of stock') ?></span></p>
+<?php endif; ?>
+<?php if (Mage::getStoreConfig('shoppersettings/labels/sku')): ?>
+<p class="sku-grouped"><?php echo $this->__('SKU:') ?> <span><?php echo $_product->getSku() ?></span></p>
+<?php endif; */?>
+<?php echo $this->getChildHtml('product_type_data_extra') ?>
+<table class="data-table grouped-items-table noborder border-bottom" id="super-product-table">
+    <col />
+    <col />
+    <col width="1" />
+    <thead>
+        <tr>
+            <th></th>
+            <th colspan="2"><?php /* echo $this->__('Product Name') */ ?></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if ($_hasAssociatedProducts): ?>
+    <?php foreach ($_associatedProducts as $_item): ?>
+        <?php $_finalPriceInclTax = $this->helper('tax')->getPrice($_item, $_item->getFinalPrice(), true) ?>
+        <tr>
+            <td class="border-bottom" style="width:360px; height:177px;">
+                <p class="product-image">
+                    <?php 
+                    if($_item->getTypeId() == "configurable"):
+                        $id = $_item->getId();
+                        $urlImg[] = null;
+                        $urlLink[] = null;
+                        $conf = Mage::getModel('catalog/product_type_configurable')->setProduct($_item);
+                        $simple_collection = $conf->getUsedProductCollection()->addAttributeToSelect('*')->addFilterByRequiredOptions();
+                        $n = 0;
+                        foreach($simple_collection as $simple_product){
+                        /* echo $simple_product->getSku() . " - " . $simple_product->getName() . " - " . Mage::helper('core')->currency($simple_product->getPrice()) . " - " . $this->htmlEscape($simple_product->getData('color')) . "<br>";*/
+                                             $urlImg[$n] = $this->helper('catalog/image')->init($_item, 'small_image')->resize(360,177);
+                                            //$urlImg[$n] = $simple_product->getMediaConfig()->getMediaUrl($simple_product->getData('image'));
+                                            $urlLink[$n] = $simple_product->getProductUrl();
+                                    ?>
+                                            
+                                    <?php 
+                                        $n++;
+                                        }
+                                    ?>  
+                                    <a href="<?php echo $urlLink[0] ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>" id="product-<?php echo $id ?>">
+                                        <img src="<?php echo $urlImg[0] ?>" width="360" alt="" id="image-<?php echo $id ?>">
+                                    </a>
+                                    <?php
+                                        else:
+                                    ?>  
+                                    <a href="<?php echo $this->htmlEscape($_item->getProductUrl()) ?>" title="<?php $this->htmlEscape($_product->getName()) ?>">
+                                        <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(360,177) ?>" width="360" alt="" id="image">
+                                    </a>
+                                    <?php
+                                        endif                                  
+                                    ?>
+
+                    </a>
+                </p>
+            </td>
+            <td colspan="2" class="border-bottom">
+                <table class="noborder">
+                    <tbody>
+                    <tr>
+                        <td class="paddingt-0">
+                            <table class="margin-left">
+                                <tr>
+                                    <td class="paddingt-0"><h2><?php echo $this->htmlEscape($_item->getName()) ?></h2></td>
+                                </tr>        
+                                <tr>
+                                    <td>
+                                    <?php echo $this->htmlEscape($_item->getDescription()) ?> <br><br>
+                                    C&oacute;digo: <span class="codigo"><?php echo $this->htmlEscape($_item->getData('sku')) ?></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="w100 paddingt-0">
+                        <strong>Medidas</strong>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="paddingb-8">Alto&nbsp;&nbsp;</th>
+                                    <th class="paddingb-8">Frente</th>
+                                    <th class="paddingb-8">Fondo&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="paddingt-10"><?php echo $this->htmlEscape($_item->getData('alto')) ?></td>
+                                    <td class="paddingt-10"><?php echo $this->htmlEscape($_item->getData('frente')) ?></td>
+                                    <td class="paddingt-10"><?php echo $this->htmlEscape($_item->getData('fondo')) ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table>
+                                <thead>
+                                    <tr class="">
+                                    <?php if($_item->getTypeId() == "configurable"): 
+                                        $id = $_item->getId();
+                                    ?>
+                                    <div class="product-options" id="product-options-wrapper">
+                                        <dl class="last">
+                                            <dt class="paddingb-5"><label class="required"><em>*</em>Color</label></dt>
+                                                <dd class="last noborderdd">
+                                                    <div class="input-box">
+                                                        <select name="super_product[<?php echo $id ?>]" id="product-<?php echo $id ?>" class="super-attribute-select validate-select">
+                                                        <option value="selecciona">Seleccione una opci&oacute;n</option>
+                                                            <?php foreach($simple_collection as $simple_product){ 
+                                                                
+                                                                $color = $simple_product->getData('color');
+                                                                $color_text = $simple_product->getAttributeText('color');   
+                                                                $price[$color] = Mage::helper('core')->currency($simple_product->getPrice());
+                                                                $urlImg2[$color] = $simple_product->getMediaConfig()->getMediaUrl($simple_product->getData('image'));
+                                                                //$urlImg2[$color] = $this->helper('catalog/image')->init($simple_product,'small_image')->resize(360,177);
+                                                                $urlLink2[$color] = $simple_product->getProductUrl();    
+                                                                ?>
+
+                                                            <option value="<?php echo $color; ?>"> <?php echo $color_text ?></option>
+                                                            
+                                                            <?php }?>
+                                                        </select>
+                                                        <input type="hidden" id="hidden-attribute-92" name="super_attribute[92]" class="hidden-super-attribute-select required-entry product-<?php echo $id ?>" value>
+                                                    </div>
+                                                </dd>
+                                                </dl>
+                                    </div>
+                                    <?php  
+                                        
+                                        
+                                    ?>
+                                    <script type="text/javascript">
+                                        jQuery(document).ready(function($) {
+                                          $( "select[name='super_product[<?php echo $id ?>]']" ).focus(function(){
+                                            $("option[value='selecciona']").attr("disabled","disabled");
+                                          });   
+
+                                          $("input[name='super_group[<?php echo $id ?>]']").change(function(){
+                                            $(".qty").removeClass("validation-failed validate-greater-than-zero");
+                                        $(".qty").addClass("validation-passed");
+                                        $(this).addClass("validate-greater-than-zero");
+                                        $(".validation-advice").css("display","none");
+                                          });
+
+                                        $( "select[name='super_product[<?php echo $id ?>]']" ).change(function () {
+                                       $(".hidden-super-attribute-select").removeClass("validation-failed required-entry");
+                                        $(".hidden-super-attribute-select").addClass("validation-passed");
+                                        $(".validation-advice").css("display","none");
+                                        var n = $(this).val();
+                                        switch(n)
+                                        {
+                                        case '8':
+                                            $("#image-<?php echo $id ?>").attr("src","<?php echo $urlImg2[8]; ?>");
+                                            $("#product-<?php echo $id ?>").attr("href","<?php echo $urlLink2[8]; ?>");
+                                            $("#product-price-<?php echo $id ?>").html('<span class="price"><?php echo $price[8] ?></span>');
+                                             $("select[name='super_product[<?php echo $id ?>]'] option[value='8']").attr("selected",true);
+                                             $(".product-<?php echo $id ?>").attr("value","8");
+
+                                        break;
+      
+                                        case '9':
+                                        $("#image-<?php echo $id ?>").attr("src","<?php echo $urlImg2[9]; ?>");
+                                        $("#product-<?php echo $id ?>").attr("href","<?php echo $urlLink2[9]; ?>");
+                                        $("#product-price-<?php echo $id ?>").html('<span class="price"><?php echo $price[9] ?></span>');
+                                        $("select[name='super_product[<?php echo $id ?>]'] option[value='9']").attr("selected",true);
+                                        $(".product-<?php echo $id ?>").attr("value","9");
+                                        break;
+                                        }
+                                    });
+                                    });
+                                    </script>
+                                    <?php endif ?>
+                                    </tr>     
+                                </thead>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            
+            </td>
+            <?php if ($this->getCanShowProductPrice($_product)): ?>
+            <?php endif; ?>
+            <?php if ($_product->isSaleable()): ?>
+            <td class="a-center w200 border-bottom top24">
+            <table>
+                <thead>
+                    <tr>
+                        <?php if ($this->getCanShowProductPrice($_product)): ?>
+            <th class="a-right"><?php echo $this->__('Price') ?></th>
+            <?php endif; ?>
+            <?php if ($_product->isSaleable()): ?>
+            <th class="a-center"><?php echo $this->__('Qty') ?></th>
+            <?php endif; ?>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <?php if ($this->getCanShowProductPrice($_item)): ?>
+                <?php echo $this->getPriceHtml($_item, true) ?>
+                <?php echo $this->getTierPriceHtml($_item) ?>
+                <?php endif; ?> 
+                    </td>
+                    <td>
+                       <?php if ($_item->isSaleable()) : ?>
+                <input type="text" name="super_group[<?php echo $_item->getId() ?>]" maxlength="12" value="<?php echo $_item->getQty()*1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty validate-greater-than-zero" />
+            <?php else: ?>
+                <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+            <?php endif; ?> 
+                    </td>
+                </tr>
+            </table>
+
+            
+            </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    <?php else: ?>
+       <tr>
+           <td colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>"><?php echo $this->__('No options of this product are available.') ?></td>
+       </tr>
+    <?php endif; ?>
+    </tbody>
+</table>
+<script type="text/javascript">decorateTable('super-product-table')</script>
+
+

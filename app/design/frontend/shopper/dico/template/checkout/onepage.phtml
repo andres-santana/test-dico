@@ -1,0 +1,197 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<script type="text/javascript" src="<?php echo $this->getJsUrl('varien/accordion.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl('js/opcheckout.js') ?>"></script>
+<script
+  src="https://code.jquery.com/ui/1.8.16/jquery-ui.min.js"
+  integrity="sha256-ctmDClJZfVNK6PR+q7Ne7yDTQxgKLgZBe3qpeE/I5Aw="
+  crossorigin="anonymous"></script>
+
+<script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+ 
+<ul class="top-opc" id="checkoutTop">
+<?php $i=0; foreach($this->getSteps() as $_stepId => $_stepInfo): ?>
+<?php if (!$this->getChild($_stepId) || !$this->getChild($_stepId)->isShow()): continue; endif; $i++ ?>
+    <li id="top-opc-<?php echo $_stepId ?>" class="section<?php echo !empty($_stepInfo['allow'])?' allow':'' ?><?php echo !empty($_stepInfo['complete'])?' saved':'' ?>">
+        <span class="number"><?php echo $i ?></span>
+		<?php if($i==1): ?>
+			<?php if(!$this->isCustomerLoggedIn()): ?>
+				<h2>Registro</h2>
+			<?php else: ?>
+				<h2>Direcci&oacute;n de Registro</h2>
+			<?php endif; ?>
+		<?php else: ?>
+        <h2><?php echo $_stepInfo['label'] ?></h2>
+		<?php endif; ?>
+    </li>
+<?php endforeach ?>
+</ul>
+ 
+<div class="clear"></div>
+<div class="grid_12 row">
+    <div class="grid_2"></div>
+    <div class="grid_6"> 
+<ol class="opc" id="">
+<?php $i=0; foreach($this->getSteps() as $_stepId => $_stepInfo): ?>
+<?php if (!$this->getChild($_stepId) || !$this->getChild($_stepId)->isShow()): continue; endif; $i++ ?>
+    <li id="opc-<?php echo $_stepId ?>" class="section<?php echo !empty($_stepInfo['allow'])?' allow':'' ?><?php echo !empty($_stepInfo['complete'])?' saved':'' ?>">
+        <div class="grid_12">
+            <?php switch ($i) {
+                case 0:
+                    $title = "2.- Datos y dirección de envío";
+                    break;
+                
+                case 1:
+                $title = "2.- Datos y dirección de envío";
+                    break;
+
+                 case 2:
+                $title = "2.- Datos y dirección de envío";
+                    break;
+
+                case 3:
+                $title = "3.- Pago";
+                    break;
+
+                case 4:
+                $title = "3.- Pago";
+                    break;
+                default: 
+                $title ="";
+                break;
+            }
+            
+             ?>
+            <h1 style="display: none; color:#780024;" id="title-<?php echo $i; ?>"><?php echo  $title ?></h1>
+        </div>
+        <div id="checkout-step-<?php echo $_stepId ?>" class="step a-item grid_12" style="display:none;">
+            <?php echo $this->getChildHtml($_stepId) ?>
+        </div>
+    </li>
+<?php endforeach ?>
+</ol>
+</div>
+<div class="grid_4" style="float: right;" id="table-totals">
+    <div class="block block-checkout-register" style="margin-bottom: 0px;">
+    <div class="page-title-checkout">
+        <strong><span style="color: #780024;">Resumen</span></strong>
+    </div>
+    <div class="block-content">
+
+<?php $quote = Mage::helper('checkout')->getQuote(); //gets the cart contents ?>
+<?php /*?>
+<table style="width: 100%;">
+
+<?php foreach ($quote->getAllVisibleItems() as $item) { 
+    
+    ?>
+<tr><td style="width: 70%; padding-bottom: 10px;"><?php echo $item->getName(); ?></td>
+<td style="width: 5%; padding-bottom: 10px; text-align: right;">(<?php echo $item->getQty(); ?>)</td>
+<td style="text-align: right; padding-bottom: 10px; width: 25%;"><?php $floatQty = floatval($item->getQty());
+$total = $floatQty * $item->getPrice();
+echo $this->helper('checkout')->formatPrice($total, 2); //multiply the quantity by the price and convert/format ?></td>
+</tr>       
+<?php  
+} ?>
+<?php $totals = Mage::getSingleton('checkout/session')->getQuote()->getTotals(); //Total object
+
+$subtotal = round($totals["subtotal"]->getValue()); //Subtotal value
+$grandtotal = round($totals["grand_total"]->getValue()); //Grandtotal value
+$couponCode = Mage::getSingleton('checkout/session')->getQuote()->getCouponCode(); 
+
+$envio = $quote->getShippingAddress()->getShippingAmount();
+$address = $quote->getShippingAddress();
+
+$shippingPrices = array();
+foreach($address->getAllShippingRates() as $rate){
+    $shippingPrices[$rate->getCode()] = $rate->getPrice();
+}
+$envio_price = 0;
+if($shippingPrices):
+    $envio_price = $shippingPrices["tablerate_bestway"];
+endif;
+$descuento = $grandtotal - $subtotal - $envio_price;
+$gtotal = $subtotal + $descuento + $envio_price;
+
+//print_r($couponCode);
+ ?>
+<tfoot>
+<tr style="border-top: 1px solid #dadada;">
+<td style="padding-top:10px;">Subtotal</td>
+<td style="padding-top:10px;"></td>
+<td style="text-align: right; padding-top:10px;"><?php echo $this->helper('checkout')->formatPrice($subtotal); ?></td>
+</tr>
+<?php if($shippingPrices):?>
+<tr>
+<td>Envío</td>
+<td></td>
+<td style="text-align: right;"><?php echo $this->helper('checkout')->formatPrice($shippingPrices["tablerate_bestway"]) ?></td>
+</tr>
+<?php endif; ?>
+<?php if($descuento<0):?>
+<tr>
+<td>Descuentos </td>
+<td></td>
+<td style="text-align: right; padding-bottom: 10px;"><?php echo $this->helper('checkout')->formatPrice($descuento); ?></td>
+</tr>
+<?php endif; ?>
+<tr style="border-top: 1px solid #dadada;">
+<td style="padding-top:10px;"><strong>Total</strong></td>
+<td style="padding-top:10px;"></td>
+<td style="text-align: right; padding-top:10px;"><strong><?php echo $this->helper('checkout')->formatPrice($gtotal); ?></strong></td>
+</tr>
+</tfoot>
+<?php //echo $this->getChildHtml('totals'); ?>
+
+
+
+</table>
+
+      <?php */ ?>
+
+    </div>
+</div>
+
+<!--</div>-->
+<script type="text/javascript">
+//<![CDATA[
+    var accordion = new Accordion('checkoutSteps', '.step-title', true);
+    <?php if($this->getActiveStep()): ?>
+    accordion.openSection('opc-<?php echo $this->getActiveStep() ?>');
+    <?php endif ?>
+    var checkout = new Checkout(accordion,{
+        progress: '<?php echo $this->getUrl('checkout/onepage/progress') ?>',
+        review: '<?php echo $this->getUrl('checkout/onepage/review') ?>',
+        saveMethod: '<?php echo $this->getUrl('checkout/onepage/saveMethod') ?>',
+        failure: '<?php echo $this->getUrl('checkout/cart') ?>'}
+    );
+//]]>
+</script>
+<script>
+    fbq('track', 'InitiateCheckout');
+  </script>

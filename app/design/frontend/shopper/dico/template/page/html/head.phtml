@@ -1,0 +1,173 @@
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MVTPT8D');</script>
+<!-- End Google Tag Manager -->
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php
+$config = Mage::getStoreConfig('shoppersettings/appearance', Mage::app()->getStore()->getId());
+$config_slideshow = Mage::getStoreConfig('shopperslideshow', Mage::app()->getStore()->getId());
+?>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<?php if (Mage::getStoreConfig('shoppersettings/design/responsive')) : ?>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+
+<?php endif; ?>
+<meta http-equiv="Content-Type" content="<?php echo $this->getContentType() ?>" />
+<title><?php echo $this->getTitle() ?></title>
+<?php /* Open Graph Protocol for Facebook and SEO START */ ?>
+<?php if(Mage::registry('current_product')): ?>
+ <?php $product = Mage::registry('current_product'); ?>
+ <meta property="og:title" content="<?php echo ($product->getName()); ?>" />
+ <meta property="og:type" content="product" />
+ <meta property="og:image" content="<?php echo $this->helper('catalog/image')->init($product, 'thumbnail')->resize(200,200);?>" /> 
+ <meta property="og:url" content="<?php echo Mage::registry('product')->getProductUrl(); ?>" />
+ <meta property="og:description" content="<?php echo strip_tags(($product->getShortDescription())); ?>" />
+ <meta property="og:site_name" content="<?php echo Mage::app()->getStore()->getName(); ?>" />
+<?php elseif(Mage::registry('current_category')): ?>
+ <meta property="og:title" content="<?php echo $this->getTitle() ?>" />
+ <meta property="og:type" content="product.group" />
+ <meta property="og:url" content="<?php echo $this->helper('core/url')->getCurrentUrl();?>" />
+ <meta property="og:description" content="<?php echo strip_tags($this->getDescription()) ?>" />
+ <meta property="og:site_name" content="<?php echo Mage::app()->getStore()->getName(); ?>" />
+<?php elseif((Mage::getSingleton('cms/page')->getIdentifier() == 'home' &&
+ Mage::app()->getFrontController()->getRequest()->getRouteName() == 'cms')) : ?>
+ <meta property="og:title" content="<?php echo $this->getTitle() ?>" />
+ <meta property="og:type" content="website" />
+ <meta property="og:url" content="<?php echo $this->helper('core/url')->getCurrentUrl();?>" />
+ <meta property="og:description" content="<?php echo strip_tags($this->getDescription()) ?>" />
+ <meta property="og:site_name" content="<?php echo Mage::app()->getStore()->getName(); ?>" />
+<?php else: ?>
+ <meta property="og:title" content="<?php echo $this->getTitle() ?>" />
+ <meta property="og:type" content="article" />
+ <meta property="og:url" content="<?php echo $this->helper('core/url')->getCurrentUrl();?>" />
+ <meta property="og:description" content="<?php echo strip_tags($this->getDescription()) ?>" />
+ <meta property="og:site_name" content="<?php echo Mage::app()->getStore()->getName(); ?>" />
+<?php endif; ?>
+<?php /* Open Graph Protocol for Facebook and SEO END */ ?>
+<meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>" />
+<meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>" />
+<meta name="robots" content="<?php echo htmlspecialchars($this->getRobots()) ?>" />
+<link rel="icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
+<link rel="shortcut icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon" />
+<link rel="apple-touch-icon" href="<?php echo $this->getSkinUrl(); ?>apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="<?php echo $this->getSkinUrl(); ?>apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="<?php echo $this->getSkinUrl(); ?>apple-touch-icon-114x114.png" />
+ <link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl(); ?>css/minimalist.css">
+ <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+ <script type="text/javascript" src="/geo/source/jquery.fancybox.js?v=2.1.5"></script>
+         <script type="text/javascript" src="/geo/lib/jquery.cookie.js"></script>
+        <link rel="stylesheet" type="text/css" href="/geo/source/jquery.fancybox.css?v=2.1.5" media="screen" />
+        <script type="text/javascript" src="/geo/lib/jquery.cookie.js"></script>
+        <style type="text/css">
+            .fancybox-custom .fancybox-skin {
+                box-shadow: 0 0 50px #222;
+            }
+        </style>
+
+<!--[if lt IE 7]>
+<script type="text/javascript">
+//<![CDATA[
+    var BLANK_URL = '<?php echo $this->helper('core/js')->getJsUrl('blank.html') ?>';
+    var BLANK_IMG = '<?php echo $this->helper('core/js')->getJsUrl('spacer.gif') ?>';
+//]]>
+</script>
+<![endif]-->
+<?php echo $this->getCssJsHtml() ?>
+<?php if (Mage::helper('shopperslideshow/data')->isSlideshowEnabled() && $config_slideshow['config']['slider'] == 'revolution') : ?>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js') . 'queldorei/jquery.themepunch.plugins.min.js'; ?>"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl('js') . 'queldorei/jquery.themepunch.revolution.min.js'; ?>"></script>
+<?php endif; ?>
+<?php if ($config['enable_font']) :?>
+<link href='//fonts.googleapis.com/css?family=<?php echo str_replace(' ', '+', $config['font']); ?>:300,400,700' rel='stylesheet' type='text/css'>
+<?php if ($config['price_font'] != $config['font'] ) : ?>
+    <link href='//fonts.googleapis.com/css?family=<?php echo str_replace(' ', '+', $config['price_font']); ?>:300,400,700' rel='stylesheet' type='text/css'>
+    <?php endif; ?>
+<?php endif; ?>
+<?php
+$options_link = '?store='.Mage::app()->getStore()->getCode();
+if ($cat = Mage::registry('current_category')) {
+	$options_link .= '&cat='.$cat->getId();
+} else if ( $cat = Mage::app()->getRequest()->getParam('qvc') ) {
+	$options_link .= '&cat='.$cat;
+}
+?>
+<link href='<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, Mage::app()->getFrontController()->getRequest()->isSecure()) . 'options.css.php' . $options_link;  ?>' rel='stylesheet' type='text/css'>
+<?php echo $this->getChildHtml() ?>
+<?php echo $this->helper('core/js')->getTranslatorScript() ?>
+<?php echo $this->getIncludes() ?>
+<script type="text/javascript">
+    //<![CDATA[
+    var Shopper = {};
+    Shopper.url = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, Mage::app()->getFrontController()->getRequest()->isSecure()) ?>';
+    Shopper.store = '<?php echo Mage::app()->getStore()->getCode(); ?>';
+    Shopper.category = '<?php if ($cat = Mage::registry('current_category')) { echo $cat->getId(); }  ?>';
+    Shopper.price_circle = <?php echo Mage::getStoreConfig('shoppersettings/design/price_circle') ?>;
+    Shopper.fixed_header = <?php echo Mage::getStoreConfig('shoppersettings/design/fixed_header') ?>;
+    Shopper.totop = <?php echo Mage::getStoreConfig('shoppersettings/ajax/totop') ?>;
+    Shopper.responsive = <?php echo Mage::getStoreConfig('shoppersettings/design/responsive') ?>;
+    Shopper.quick_view = <?php echo Mage::getStoreConfig('shoppersettings/ajax/quick_view') ?>;
+    Shopper.shopby_num = '<?php echo Mage::getStoreConfig('shoppersettings/catalog/shopby_num') ?>';
+    Shopper.text = {};
+    Shopper.text.more = '<?php echo $this->__('more...') ?>';
+    Shopper.text.less = '<?php echo $this->__('less...') ?>';
+    Shopper.anystretch_bg = '';
+    <?php
+    $bg_image = '';
+    if (!empty($config['content_bg_img']) && $config['content_bg_img_mode'] == 'stretch') {
+        $bg_image = $config['content_bg_img'];
+    }
+
+    if ($current_category = Mage::registry('current_category')) {
+        $current_scheme = Mage::helper('shoppercategories')->getCategoryScheme($current_category->getId());
+        if ($current_scheme && !empty($current_scheme['content_bg_img'])) {
+            if ($current_scheme['content_bg_img_mode'] == 'stretch') {
+                $bg_image = str_replace('queldorei/shopper/', '', $current_scheme['content_bg_img']);
+            } else {
+                $bg_image = '';
+            }
+        }
+    }
+
+    $route = Mage::app()->getFrontController()->getRequest()->getRouteName();
+    $action = Mage::app()->getFrontController()->getRequest()->getActionName();
+    if ( ($route == 'customer' && ($action == 'login' || $action == 'forgotpassword' || $action == 'create')) && !empty($config['login_bg']) ) {
+        $bg_image = $config['login_bg'];
+    }
+
+    if ( !empty($bg_image) ) {
+        echo "Shopper.anystretch_bg = '".Mage::getBaseUrl('media') . 'queldorei/shopper/' . $bg_image ."'; ";
+    }
+    ?>
+    //]]>
+</script>
+
+

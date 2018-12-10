@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+
+.ias_loader {
+	text-align:center;
+	margin: 5px 0;
+}
+
+img#ajax-loader{
+	width: 128px;
+	height: 15px;
+}

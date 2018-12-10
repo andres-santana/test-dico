@@ -1,0 +1,175 @@
+@font-face{ 
+	font-family: 'RobotoLight';
+	src: url('fonts/roboto_light_ubasic/Roboto-Light-webfont.eot');
+	src: url('fonts/roboto_light_ubasic/Roboto-Light-webfont.eot?iefix') format('eot'),
+	     url('fonts/roboto_light_ubasic/Roboto-Light-webfont.woff') format('woff'),
+	     url('fonts/roboto_light_ubasic/Roboto-Light-webfont.ttf') format('truetype'),
+	     url('fonts/roboto_light_ubasic/Roboto-Light-webfont.svg#webfont') format('svg');
+}
+
+body{
+	font-family: 'RobotoLight', sans-serif !important;
+}
+
+.logo{
+	display: block;
+	width: 250px;
+	height: 28px;
+	background: transparent url('../../intro/images/logo.png') 0 0 no-repeat;
+	background-size: contain;
+	position: relative;
+    left: 50%;
+    margin-left: -100px;
+}
+
+.topbar{
+	border-top: #cbd1d6 3px solid;
+    border-bottom: #cbd1d6 3px solid;
+    color: #313945;
+    font-size: 16px;
+    padding: 10px 0;
+    text-align: center;
+    margin: 0 0 5px 0;
+    line-height: 25px;
+}
+
+.main-mg{
+	margin: 0 auto;
+    padding: 10px 0 10px;
+    width: 100%;
+}
+
+.aright {
+    text-align: right;
+}
+
+.maingeo .col1 .pf {
+    line-height: 15px;
+    margin-bottom: 15px;
+    color: #313945;
+    font-weight: 700;
+}
+
+.f15 {
+    font-size: 15px!important;
+}
+
+.f10 {
+    font-size: 10px!important;
+    font-weight: 300;
+}
+
+.suc-actual.col2 {
+    margin: 0 0 0 5%;
+}
+
+select.validate-select {
+    padding: 2px 8px;
+    height: 30px;
+    border: 1px solid #E8EAEC;
+    background: url(../images/dropdown_arrow2.png) right 5px no-repeat #fff;
+    -webkit-appearance: none;
+    -moz-appearance: none!important;
+    appearance: none!important;
+    font-weight: normal;
+    border-radius: 2px;
+}
+
+.selectP select {
+    text-indent: 1px;
+    width: 60px!important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 2px;
+    background: transparent url(dropdown_arrow.png) no-repeat 21px center!important;
+}
+
+.selectP.multsuc select {
+    border: auto;
+    width: 100%!important;
+    background: transparent url(dropdown_arrow.png) no-repeat 100% center!important;
+    border: auto!important;
+}
+
+.rec label {
+    font-size: 11px;
+    font-weight: 400;
+    position: relative;
+    top: -3px;
+}
+
+.rec {
+    margin: 5px 0 0;
+    float: left;
+    width: 100%;
+}
+
+.clear {
+    clear: both !important;
+}
+
+.maingeo form#geo-form .buttons-set {
+    width: 95%;
+    max-width: none;
+}
+
+.buttons-set {
+    clear: both;
+    padding-top: 10px;
+    border-top: 1px solid #ededed;
+    text-align: right;
+    float: left;
+}
+
+.aut {
+    font-size: 10px;
+    color: red;
+    clear: both;
+    display: block;
+    line-height: 13px;
+    text-align: justify;
+}
+p.required, .validation-advice {
+    color: red;
+    font-size: 12px;
+    text-transform: none;
+    display: none;
+}
+
+button{
+	background: #e42a18;
+    display: inline-block;
+    padding: 5px 15px;
+    border: 0;
+    color: #FFF;
+    font-size: 12px;
+    font-weight: 400;
+    font-family: Arial,sans-serif;
+    line-height: 19px;
+    text-align: center;
+    text-transform: none;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 85%;
+}
+.col-sm-6 {
+        width: 50%;
+        float: left;
+    }
+.selecciona-text{width: 44%;}
+.fancybox-inner}{height: 215px !important;}
+/*@media (min-width: 768px){ 
+	.col-sm-12 {
+    	width: 100%;
+    	float:left;
+	}
+ }*/
+/*@media (min-width: 768px){
+	.col-sm-6 {
+    	width: 50%;
+    	float: left;
+	}
+}*/

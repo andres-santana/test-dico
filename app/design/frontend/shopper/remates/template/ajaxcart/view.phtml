@@ -1,0 +1,30 @@
+<?php
+/*foreach($cartItems as $item)
+{
+    print_r($item->getOptionList());
+   echo "<br>";
+   $productid = $item->getProductId();
+   echo $productid;
+   echo "<br>";
+   $productsku = $item->getSku();
+   echo $productsku;
+   echo "<br>";
+   $productname = $item->getName();
+   echo $productname;
+   echo "<br>";
+   $productqty = $item->getQty();
+   echo $productqty;
+   echo "<br>";
+   $productfull = Mage::getModel('catalog/product')->loadByAttribute('sku',$productsku);
+   $productimg = Mage::helper('catalog/image')->init($productfull, 'thumbnail')->resize(116,90);
+   echo "<img src='".$productimg."'>";
+   echo "<br>";
+   $productprice2 = $item->getPrice();
+   $productprice = Mage::helper('core')->currency($productprice2, true, false);
+   echo $productprice;
+   echo "<br>";
+}*/
+
+  echo $this->getLayout()->createBlock('checkout/cart_sidebar')->setTemplate('checkout/cart/sidebar.phtml')->toHtml();
+//echo "AJAXCART"
+?>

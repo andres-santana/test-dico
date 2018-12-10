@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+    <modules>
+        <Lanot_Rule>
+            <version>1.0.1</version>
+        </Lanot_Rule>
+    </modules>
+
+    <global>
+        <helpers>
+            <lanot_rule>
+                <class>Lanot_Rule_Helper</class>
+            </lanot_rule>
+        </helpers>
+
+        <blocks>
+            <lanot_rule>
+                <class>Lanot_Rule_Block</class>
+            </lanot_rule>
+        </blocks>
+
+        <models>
+            <lanot_rule>
+                <class>Lanot_Rule_Model</class>
+            </lanot_rule>
+        </models>
+    </global>
+</config>

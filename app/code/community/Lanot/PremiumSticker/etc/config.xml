@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+
+    <modules>
+        <Lanot_PremiumSticker>
+            <version>2.2.7</version>
+        </Lanot_PremiumSticker>
+    </modules>
+
+    <global>
+        <helpers>
+            <lanot_premiumsticker>
+                <class>Lanot_PremiumSticker_Helper</class>
+            </lanot_premiumsticker>
+        </helpers>
+
+        <blocks>
+            <lanot_premiumsticker>
+                <class>Lanot_PremiumSticker_Block</class>
+            </lanot_premiumsticker>
+        </blocks>
+
+        <models>
+            <lanot_premiumsticker>
+                <class>Lanot_PremiumSticker_Model</class>
+                <resourceModel>lanot_premiumsticker_resource</resourceModel>
+            </lanot_premiumsticker>
+            <lanot_premiumsticker_resource>
+                <class>Lanot_PremiumSticker_Model_Mysql4</class>
+                <entities>
+                    <sticker><table>lanot_premiumsticker_sticker</table></sticker>
+                    <sticker_product><table>lanot_premiumsticker_sticker_product</table></sticker_product>
+                    <sticker_image><table>lanot_premiumsticker_sticker_image</table></sticker_image>
+                </entities>
+            </lanot_premiumsticker_resource>
+            <!-- REWRITE STICKER -->
+            <lanot_easysticker>
+                <rewrite>
+                    <observer>Lanot_PremiumSticker_Model_Observer</observer>
+                    <sticker>Lanot_PremiumSticker_Model_Sticker</sticker>
+                </rewrite>
+            </lanot_easysticker>
+            <!--/REWRITE STICKER -->
+        </models>
+
+        <resources>
+            <lanot_premiumsticker_setup>
+                <setup>
+                    <module>Lanot_PremiumSticker</module>
+                </setup>
+            </lanot_premiumsticker_setup>
+        </resources>
+    </global>
+
+    <admin>
+        <routers>
+            <lanot_premiumsticker>
+                <use>admin</use>
+                <args>
+                    <module>Lanot_PremiumSticker</module>
+                    <frontName>lanot_premiumsticker</frontName>
+                </args>
+            </lanot_premiumsticker>
+
+            <!-- REWRITE -->
+            <lanot_easysticker>
+                <args>
+                    <modules>
+                        <Lanot_PremiumSticker before="Lanot_EasySticker">Lanot_PremiumSticker</Lanot_PremiumSticker>
+                    </modules>
+                </args>
+            </lanot_easysticker>
+            <!--/REWRITE -->
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <lanot_premiumsticker>
+                    <file>lanot_premiumsticker.xml</file>
+                </lanot_premiumsticker>
+            </updates>
+        </layout>
+
+        <!-- ADMIN EVENTS -->
+        <events>
+            <!-- CATALOG PRODUCT SAVE -->
+            <catalog_product_save_after>
+                <observers>
+                    <lanot_premiumsticker>
+                        <class>lanot_premiumsticker/observer</class>
+                        <method>assignAllStickersToProduct</method>
+                    </lanot_premiumsticker>
+                </observers>
+            </catalog_product_save_after>
+            <!--/CATALOG PRODUCT SAVE -->
+
+            <!-- CATALOG IMPORT -->
+            <catalog_product_import_finish_before>
+                <observers>
+                    <lanot_premiumsticker>
+                        <class>lanot_premiumsticker/observer</class>
+                        <method>assignAllStickersToImportedProducts</method>
+                    </lanot_premiumsticker>
+                </observers>
+            </catalog_product_import_finish_before>
+            <!-- /CATALOG IMPORT -->
+
+            <!-- Additional Sticker Events -->
+            <easysticker_lanot_grid_prepare_collection>
+                <observers>
+                    <lanot_premiumsticker>
+                        <class>lanot_premiumsticker/observer</class>
+                        <method>prepareCollectionStatic</method>
+                    </lanot_premiumsticker>
+                </observers>
+            </easysticker_lanot_grid_prepare_collection>
+            <premiumsticker_dynamic_lanot_grid_prepare_collection>
+                <observers>
+                    <lanot_premiumsticker>
+                        <class>lanot_premiumsticker/observer</class>
+                        <method>prepareCollectionDynamic</method>
+                    </lanot_premiumsticker>
+                </observers>
+            </premiumsticker_dynamic_lanot_grid_prepare_collection>
+            <adminhtml_easysticker_edit_tab_main_prepare_form>
+                <observers>
+                    <lanot_premiumsticker>
+                        <class>lanot_premiumsticker/observer</class>
+                        <method>prepareForm</method>
+                    </lanot_premiumsticker>
+                </observers>
+            </adminhtml_easysticker_edit_tab_main_prepare_form>
+
+            <!-- Add Image column -->
+            <easysticker_lanot_grid_prepare_columns_before>
+                <observers>
+                    <lanot_premiumsticker>
+                        <class>lanot_premiumsticker/observer</class>
+                        <method>prepareImageColumn</method>
+                    </lanot_premiumsticker>
+                </observers>
+            </easysticker_lanot_grid_prepare_columns_before>
+            <premiumsticker_dynamic_lanot_grid_prepare_columns_before>
+                <observers>
+                    <lanot_premiumsticker>
+                        <class>lanot_premiumsticker/observer</class>
+                        <method>prepareImageColumn</method>
+                    </lanot_premiumsticker>
+                </observers>
+            </premiumsticker_dynamic_lanot_grid_prepare_columns_before>
+            <!-- /Add Image column -->
+
+            <!--/Additional Sticker Events -->
+        </events>
+        <!--/ADMIN EVENTS -->
+
+        <!-- translations -->
+        <translate>
+            <modules>
+                <Lanot_PremiumSticker>
+                    <files>
+                        <default>Lanot_PremiumSticker.csv</default>
+                    </files>
+                </Lanot_PremiumSticker>
+            </modules>
+        </translate>
+        <!-- translations -->
+    </adminhtml>
+
+</config>

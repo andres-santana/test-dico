@@ -1,0 +1,344 @@
+	/* To change the font, visit FontSquirell: http://www.fontsquirrel.com/fontface */
+@font-face {
+				
+	font-family: "TeXGyreAdventorRegular";
+	src: url("../fonts/texgyreadventor-regular-webfont.eot");
+	src: url("../fonts/texgyreadventor-regular-webfont.eot?#iefix") format("eot"),
+		 url("../fonts/texgyreadventor-regular-webfont.woff") format("woff"),
+		 url("../fonts/texgyreadventor-regular-webfont.ttf") format("truetype"),
+		 url("../fonts/texgyreadventor-regular-webfont.svg#webfontfuvdSzbb") format("svg");
+	font-weight: normal;
+	font-style: normal;
+			
+}
+
+body {
+			
+	margin: 0px;
+	padding: 0px;
+	background-size: cover;
+	background-position: 50% !important;
+	background-repeat:no-repeat;
+	background-attachment: fixed;
+				
+}
+/* ******************* */
+/* Begin footer styles */
+/* ******************* */	
+		
+footer {
+				
+	width: 100%;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+				
+	font-family: "TeXGyreAdventorRegular", Verdana, Geneva, sans-serif;
+	font-size: 18px;
+	color: #CCC;
+	padding: 0.9em 0 0.9em 0;
+	margin: 0;
+				
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.75);
+	display: block;
+	
+	/* Uncomment below to always hide the footer */
+	/*
+	display: none;
+	*/
+	
+}
+
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+footer{
+	display: none;
+}
+#info{
+	height:92.6% !important; 
+}
+}
+
+
+/* the audio section */
+footer audio {
+
+	float: left;
+	
+}
+
+/* floats the Flash Object if rendered */
+footer audio #flash-audio {
+
+	float: left;
+	
+}
+
+/* The music icon */
+footer .volume {
+	
+	float: left;
+	margin: 6px 9px 0 21px;
+	cursor: pointer;
+					
+}
+
+/* The category titles */			
+footer #categories p {
+	
+	float: left;
+	margin: 0 10px 0 10px;
+	cursor: default;
+	opacity: 0.6;
+				
+}
+
+/* The number, play/pause section */	
+footer #bg-images {
+			
+	position: fixed;
+	right: 15px;
+	display: none;
+					
+}
+
+/* The numbered lists */		
+footer #bg-images ul {
+			
+	list-style-type: none;
+	display: none;
+				
+}
+
+/* Each numbered item */		
+footer #bg-images ul, footer #bg-images ul li {
+			
+	float: left;
+	margin: 0 5px 0 5px;
+	padding: 0;
+				
+}
+
+/* The play-pause section */		
+footer #bg-images #play-pause {
+			
+	float: left;
+	margin: 0 5px 0 5px;
+				
+}
+
+/* The prev-next divs */		
+footer #bg-images .prev-next {
+			
+	float: left;
+	padding: 0 5px 0 5px;
+				
+}
+
+/* The prev-next buttons */	
+footer #bg-images .prev-next img {
+			
+	cursor: pointer;
+				
+}
+
+/* The play-pause buttons */
+footer #bg-images #play-pause .play-button, footer #bg-images #play-pause .pause-button {
+			
+	cursor: pointer;
+				
+}
+
+/* the preloader */
+#preloader {
+				
+	float: left;
+	background: url(../images/slideshow/preloader-bg.png) no-repeat;
+	background-position: 0 6px;
+	padding-left: 3px;
+	width: 15px;
+	height: 24px;
+	display: none;
+					
+}
+
+/* The info button and info text section */
+#info {
+			
+	position: fixed;
+top: 0;
+right: 0%;
+/* width: 22em; */
+width: 27em;
+margin-right: 0%;
+text-align: left;
+height: 100%;
+				
+}
+
+#info h2 {
+
+	text-align: center;
+	font-size: 2em;
+	margin-bottom: 1em;
+}
+
+/* The info button */	
+#info .info-button {
+			
+	cursor: pointer;
+				
+}
+
+/* The info text */	
+#info #info-text {
+	
+	position: relative;
+font-family: "TeXGyreAdventorRegular", Verdana, Geneva, sans-serif;
+font-size: 12px;
+font-weight: 100;
+line-height: 16px;
+color: #ffffff;
+margin: 0;
+display: none;
+padding: 15px 20px 15px 20px;
+background-color: rgb(51, 51, 51);
+background-color: rgba(51, 51, 51, 0.5);
+height: 99%;	
+				
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
+	overflow-y:auto;
+				
+}
+
+/* Info text title */			
+#info #info-text .company-name {
+			
+	font-size: 16px;
+	color: #F5F5F5;
+				
+}
+
+/* The info text links */	
+#info #info-text a, #info-text a:visited {
+			
+	color: rgba(255,255,255,0.8);
+	text-decoration: none;
+				
+}
+
+/* Info text links on mouse over */		
+#info #info-text a:hover {
+			
+	color: rgba(255,255,255,1);
+				
+}
+
+#pleca{
+
+	width: 100%;
+	height: 10px;
+	display: block;
+	background: #99042f;
+	border-bottom: 4px solid #E42A18;
+
+}
+
+#header{
+
+	width: 100%; 
+	height: 3em; 
+	display: block; 
+	background: transparent url(../images/logo.png) 50% no-repeat;
+	position: relative;
+	background-size:contain;
+	float:left;
+	left: 0px;
+
+}
+
+#selecciona{
+
+	color: #fff;
+	text-align: left;
+	text-shadow: 3px 3px 5px rgba(0, 0, 0, 1);
+	margin-left: 1%;
+	margin-bottom: 10px;
+
+}
+
+.col{
+
+	float: left;
+
+}
+
+.col a{
+	font-size: 1.3em;
+	line-height: 1.5em;
+}
+
+.col{ width: 27%; }
+.col1{ width: 100px; }
+.col2{ padding-left: 3em; }
+.col3{ width: 130px; }
+.col4{ width: 185px; }
+
+.strong{
+
+	color: #ffffff;
+
+}
+
+.ui-bar-a{background-color:transparent; background-image:none; border:none; color:#fafafa; }
+
+@media only screen and (max-width: 767px) {
+#info{width:100%; height:60.6%; top:115px;}
+#header{ background-color:#fff; height:3em;}
+#info #info-text {font-size:10px;}
+.col{width:30%;}
+footer{display:none;}
+}
+
+@media screen and (max-width: 800px) {
+	
+	/* The number, play/pause section */	
+	footer #bg-images {
+		
+		clear: both;
+		float: right;
+		margin-right: 15px;
+		position: static;
+						
+	}
+	
+	/* The music icon */
+	footer .volume {
+		
+		margin-left: 10px;
+						
+	}
+
+	#info #info-text { 
+
+		min-height: 180px;
+
+	}
+
+}
+.container{background-color:transparent; background-image:none;}
+.ui-footer{position:absolute !important;}
+.ui-select .ui-btn {
+  overflow: hidden;
+  width: 100%;
+  margin:0px;
+}
+.ui-select .ui-btn-icon-right .ui-btn-inner{background-color:#8c0527;}
+.ui-btn-inner{border: 1px solid #E42A18;}
+.ui-btn-up-c, .ui-btn-active, .ui-btn-down-c, .ui-btn-hover-c{color:#fff; text-shadow:none;}
+.ui-select{width:100%;}
+.ui-content{width:90%; position:relative; padding: 0 15px;}
+.ui-field-contain .ui-select {width:100%;}
+.cycle-bg-image{background-position: 50% !important;}

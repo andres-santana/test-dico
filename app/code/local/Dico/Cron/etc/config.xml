@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Dico_Cron>
+            <version>0.1.0</version>
+        </Dico_Cron>
+    </modules>
+    <frontend>
+        <routers>
+            <cron>
+                <use>standard</use>
+                <args>
+                    <module>Dico_Cron</module>
+                    <frontName>cron</frontName>
+                </args>
+            </cron>
+        </routers>
+    </frontend>
+</config>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+<default>
+</default>
+<webpay_index_index>
+	<reference name="content">
+		<block type="webpay/webpay" name="webpay" />
+	</reference>
+</webpay_index_index>
+ 
+<webpay_index_checkout>
+	<reference name="content">
+		<block type="webpay/webpay" name="webpay" />
+	</reference>
+</webpay_index_checkout>
+</layout>

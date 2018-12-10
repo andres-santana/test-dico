@@ -1,0 +1,103 @@
+<?php   
+	$_order = new Mage_Sales_Model_Order();
+	$orderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+	$_order->loadByIncrementId($orderId);
+	$webpay = Mage::getSingleton("webpay/standard");
+	$_total = $_order->getBaseGrandTotal();
+	$total = substr($_total, 0, -2);  
+	$_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+	$string = "<xml><tpPago>C</tpPago><amount>".$total."</amount><urlResponse>".$_url."webpay/payment/response/</urlResponse><referencia>".$orderId."</referencia><moneda>MXN</moneda>";
+    $encryptedstring = $webpay->StringToHexString($webpay->Salaa($string,'MEX01017290'));
+?>
+
+<center>
+<div id="innerwebpay">	
+	<iframe id="webpay" src="https://vip.e-pago.com.mx/pgs/WebPay?id_company=7290&amp;xmlm=5647586E6A376D4C4A384452524F43744E424152367737743330614565586F58305554677254515145657574623445783768725A37717176676448674E6E7A4D5A7A53314A4A626F364853680A4D77454F53325346586D703942632B313252304C396B7A507A554C33467971482B737376642B574158787A3041684D5346476D53364E625A36534F6F6B65396D423675574976596A3165594D0A65594B6942577156363246574951313274726F66494D53342B49345236716C6A432B6D4B48436536487944457550694F456570726B756C744D31734572773D3D&amp;xmlc=<?php echo $encryptedstring; ?>" width="100%" height="1100" seamless="seamless" frameborder="0" ></iframe>
+</div>
+</center>               
+<span id="value" style="opacity:0;">0</span>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	function getDate() {
+		var d = new Date();
+		var dia = d.getDate();
+		var mes = d.getMonth()+1;
+		var year = d.getFullYear();
+		switch(dia){
+			case 1:	dia="01"; break;
+			case 2:	dia="02"; break;
+			case 3:	dia="03"; break;
+			case 4: dia="04"; break;
+			case 5: dia="05"; break;
+			case 6: dia="06"; break;
+			case 7: dia="07"; break;
+			case 8: dia="08"; break;
+			case 9: dia="09"; break;
+		}
+		switch(mes){
+			case 1:	mes="01"; break;
+			case 2:	mes="02"; break;
+			case 3:	mes="03"; break;
+			case 4: mes="04"; break;
+			case 5: mes="05"; break;
+			case 6: mes="06"; break;
+			case 7: mes="07"; break;
+			case 8: mes="08"; break;
+			case 9: mes="09"; break;
+		}
+		var fecha = dia+"/"+mes+"/"+year;
+		return fecha;
+	}
+	var n=0;
+    function getRandValue(){
+        var fecha = getDate();
+		var referencia  = "<?php echo $orderId ?>";
+        var datos = {
+			"fecha" : fecha,
+			"referencia" : referencia
+		}
+		n++;
+		
+        jQuery.ajax({
+            type: "POST",
+            url: "/consulta/consultaonline.php",
+            data: datos,
+			dataType:"json",
+            success: function(data) {
+                //jQuery('#value').text(datos);
+				var response = data["response"];
+				var url = "<?php echo $_url2 ?>checkout/onepage/success/ccname/"+data['ccname']+"/ccnum/"+data['ccnum']+"/amount/"+data['amount']+"/type/"+data['type']+"/reference/"+data['reference']+"/aut/"+data['aut'];
+				
+				if(response=="approved"){
+						
+						jQuery("#webpay").css("display","none");
+						jQuery("<iframe src='"+url+"' frameborder='0' scrolling='no' id='webpay2' width='100%' style='min-height:1000px;' seamless ></iframe>").appendTo("#innerwebpay");
+						clearInterval(timer);
+				}
+
+				else{
+					
+					
+					if (n==3) {
+							clearInterval(timer);
+							window.location.href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, false); ?>";
+
+						}
+					else{
+						jQuery('#value').text("No data"+n);
+					}
+				}
+            }
+			
+        });
+  
+    }
+
+    var timer = setInterval(getRandValue, 120000);
+});
+</script>
+<script>
+             jQuery( document ).ready(function() {
+                fbq('track', 'AddPaymentInfo');
+             });
+             </script>

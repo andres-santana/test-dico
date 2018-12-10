@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+    
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>GalleryJack Help Documentation</title>
+    
+        <style type="text/css">
+        
+            body {
+            
+                margin: 0px;
+                padding: 0px;
+                font-family: Verdana, Geneva, sans-serif;
+                font-size: 14px;
+                color: #555555;
+                        
+            }
+                    
+            #left {
+                    
+                width: 250px;
+                background-color: #EEEEEE;
+                border-right: 1px solid #DDDDDD;
+                position: fixed;
+                height: 100%;
+                top: 0px;
+                left: 0px;
+                        
+            }
+                    
+            .logo {
+                    
+                margin: 30px 0 25px 10px;
+                        
+            }
+                    
+            #menu {
+                    
+                line-height: 1.2em;
+                        
+            }
+                    
+            #menu ul {
+                    
+                margin: 0px;
+                padding: 0px;
+                        
+            }
+                    
+            #menu ul li {
+                    
+                display: block;
+                margin: 0px;
+                padding: 0px;
+                list-style-type: none;
+                margin-bottom: 15px;
+                text-align: right;
+                        
+            }
+                    
+            #menu ul li a {
+                    
+                color: #444444;
+                font-weight: bold;
+                font-size: 12px;
+                text-decoration: none;
+                display: inline-block;
+                padding: 9px;
+                background-color: #DDDDDD;
+                outline: none;
+                text-shadow: 1px 1px 0 #EEEEEE;
+                border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
+                        
+            }
+                    
+            #menu ul li a:visited {
+                    
+                color: #333333;
+                        
+            }
+                    
+            #menu ul li a.first {
+				
+                background-color: #AAAAAA;	
+                color: #F9F9F9;
+                text-shadow: none;
+				
+            }
+                    
+            #right {
+                        
+                padding: 40px;
+                line-height: 22px;
+                        
+            }
+                    
+            #right img {
+                    
+                border: 1px solid #DDDDDD;
+                        
+            }
+                    
+            #right .page h2 {
+                    
+                margin: 0px;
+                padding: 20px;
+                background-color: #EEEEEE;
+                border: 1px solid #DDDDDD;
+                display: inline-block;
+                font-size: 18px;
+                color: #999999;
+                text-shadow: 1px 1px 0 #FFFFFF;
+                border-radius: 10px;
+                        
+            }
+                    
+            #right .page h3 {
+                    
+                margin: 0px;
+                font-size: 18px;
+                padding: 20px 0 0 20px;
+                color: #999999;
+                        
+            }
+                    
+            #right .page h4 {
+                        
+                font-size: 14px;
+                color: #999999;
+                        
+            }
+                    
+            #right .page {
+                        
+                position: absolute;
+                top: 40px;
+                left: 290px;
+                padding-bottom: 80px;
+                        
+            }
+                    
+            #right .page ul {
+                    
+                margin: 12px;
+                        
+            }
+                    
+            #right .page ul li {
+                    
+                padding-right: 40px;
+                margin-bottom: 12px;
+                font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                font-size: 14px;
+                            
+            }
+                    
+            #right .page p {
+                    
+                margin: 0px;
+                padding: 12px 20px 12px 20px;
+                font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                        
+            }
+                    
+            #right .page img.quote {
+                    
+                border: 0px;
+                margin-bottom: -1px;
+                padding-right: 5px;
+                        
+            }
+                    
+            #right .page img.quote2 {
+                    
+                border: 0px;
+                margin-bottom: -1px;
+                padding-left: 5px;
+                        
+            }
+            
+            #page1, #page2, #page3, #page4, #page5, #page6, #page7, #page8 {
+            
+                display: none;
+                
+            }
+        
+        </style>
+        
+        <script src="help_assets/jquery-1.6.2.min.js" type="text/javascript"></script>
+        
+        <script type="text/javascript">
+                
+            var pages = [], 
+			menus = [], 
+			count, 
+			isIE9 = false
+			css1 = {"background-color": "#DDDDDD", "color": "#444444", "text-shadow": "1px 1px 0 #EEEEEE"}, 
+			css2 = {"background-color": "#AAAAAA", "color": "#F9F9F9", "text-shadow": "none"};
+                
+            $(document).ready(function() {
+				
+                count = 0;
+                    
+                $("#menu ul li a").each(function() {
+                        
+                    $(this).data("id", count).click(changePage);
+                    menus[count] = $(this);
+                    count++;
+                        
+                });
+                    
+                var video;
+				count = 0;  
+				  
+                $(".page").each(function() {
+                        
+					if(count != 0) {
+						video = document.getElementById("video" + count);
+						$(video).bind("ended", vEnd);
+					}
+					
+                    pages[count] = $(this);
+                    count++;
+                        
+                });
+				
+				if(typeof attachEvent !== "undefined") {
+					
+					if(parseFloat(navigator.appVersion.split("MSIE")[1]) == 9) {
+								
+						isIE9 = true;
+						
+					}
+							
+				}
+        
+            });
+			
+			function vEnd(event) {
+				
+				event.target.currentTime = 0;
+				event.target.pause();
+				
+			}
+                
+            function changePage() {
+                
+                var id = parseInt($(this).data("id")), video;
+				
+                for(var i = 0; i < count; i++) {
+                        
+                    if(id != i) {
+						
+                        menus[i].css(css1);
+                        pages[i].css("display", "none");
+						
+						if(i != 0) {
+							
+							video = document.getElementById("video" + i);
+							
+							video.pause();
+							video.currentTime = 0;
+							
+						}
+						
+                    }
+                    else {
+						
+                        menus[i].css(css2);
+                        pages[i].css("display", "block");
+						
+						if(i != 0) {
+							
+							video = document.getElementById("video" + i);
+							video.play();
+							
+							if(!isIE9) video.pause();
+							
+						}
+						
+                    }
+                        
+                }
+                    
+            }
+        
+        </script>
+    
+    </head>
+    
+    <body>
+    
+        <div id="left">
+        
+            <img src="help_assets/logo.png" class="logo" width="224px" height="67" />
+            
+            <div id="menu">
+            
+                <ul>
+                
+                    <li><a class="first" href="#">Welcome to GalleryJack</a></li>
+                    <li><a href="#">Creating your Gallery</a></li>
+                    <li><a href="#">Custom Gallery Settings</a></li>
+                    <li><a href="#">Editing Display Elements</a></li>
+                    <li><a href="#">Setting up the Music</a></li>
+                    <li><a href="#">Editing the Info Section</a></li>
+                    <li><a href="#">Changing Fonts and Styles</a></li>
+                    <li><a href="#">SEO & Image Protection</a></li>
+                    <li><a href="#">Web Page Integration</a></li>
+                
+                </ul>
+            
+            </div>
+        
+        </div>
+        
+        <div id="right">
+            
+            <!-- ********** -->
+            <!-- BEGIN PAGE -->
+            <!-- ********** -->
+            <div class="page" id="page0">
+                
+                <h2>Welcome to GalleryJack!</h2><br />
+                
+                <h4><img class="quote" src="help_assets/quote.png" width="18" height="14" />Thank you for downloading GalleryJack, by <a href="http://codecanyon.net/user/CodingJack" target="_blank">CodingJack</a>.  Everything can be customized by editing the HTML and CSS files and this help document will assist you with editing these.  The JavaScript files do not need to be edited.<img class="quote2" src="help_assets/quote2.png" width="18" height="14" /></h4>
+                
+                    <h3>Have a Question?  Search the item's discussion page:</h3><br />
+    
+<script>
+(function() {
+  var cx = '013170324715308408920:3xtaued-wlu';
+  var gcse = document.createElement('script'); gcse.type = 'text/javascript';
+  gcse.async = true;
+  gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+      '//www.google.com/cse/cse.js?cx=' + cx;
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(gcse, s);
+})();
+</script>
+<gcse:search></gcse:search>
+
+<h3>Need this item customized?  <a href="mailto:support@codingjack.com">Contact CodingJack</a></h3><br />
+                
+                <h3>Special Notes</h3>
+                
+                <ul>
+                    <li>The HTML5 Audio with Flash fallback is optional.  The Flash does not need to be edited as it will extract the song settings from the HTML5 tags.  Only one song is supported.  Please contact me from the form on the link below if you need a more advanced music player as I am available for freelance projects.</li>
+                    <li>Eveything is editable and you don't have to use the footer, info or control assets.  Check out the menu link "Editing Display Elements" for more information.</li>
+                    <li>If your site doesn't use the "html5" doc-type, that's ok.  The gallery will still work.</li>
+                    <li>Autoplay Music is not available for iPhone or iPad.  Apple does not allow autoplay for HTML5 Audio and forces the user to click a button in order to activate music.  You can still use autoplay for your gallery, but it will be automatically diabled for the iPhone and iPad.</li>
+                    <li>You may notice that the transitions are slightly different for the "stretch" and the "fit" display modes.  When cross-fading "fit", because images are often different sizes the transition isn't as seemless as the "stretch" cross-fade.  To account for this, "fit" does not implement cross-fade.</li>
+                    <li>If only one category is used, the category title will be automatically hidden.</li>
+                </ul>
+                
+                <h3>API Calls</h3>
+                
+                	<p>There are 3 API calls you can make to get information about the gallery.
+                
+                	<ul>
+                    
+                    	<li><b>jQuery.bgSlideshow.getIsOn()</b> // returns the current image number in the current gallery (starts with an index of 0)</li>
+						<li><b>jQuery.bgSlideshow.getCatOn()</b> // returns the current category number (starts with an index of 0)</li>
+						<li><b>jQuery.bgSlideshow.getHash()</b> // returns the current deep-link url String</li>
+                        
+                    </ul>
+                
+                <h3>Additional Support</h3>
+                
+                <p>Feel free to contact from the form on <a href="http://codecanyon.net/user/CodingJack" target="_blank">this page</a> and I'll be glad to answer any questions you may have.</p>
+                
+                <h3>More Files from CodingJack</h3>
+                <br />
+                <p>
+                
+                <a href="http://activeden.net/item/blades-portfolio-xml-portfolio-gallery/184532" target="_blank"><img src="help_assets/portfolio.jpg" width="590" height="300" /></a><br /><br />
+                
+                <a href="http://activeden.net/item/q-creative-xml-website-template/103568" target="_blank"><img src="help_assets/theq.jpg" width="590" height="300" /></a><br /><br />
+                
+                <a href="http://activeden.net/item/canvas-xml-website-template/151775" target="_blank"><img src="help_assets/canvas.jpg" width="590" height="300" /></a><br /><br />
+                
+                <a href="http://activeden.net/item/chic-an-artists-gallery/107353" target="_blank"><img src="help_assets/chic.jpg" width="590" height="300" /></a>
+                </p>
+                
+            </div>
+            <!-- ******** -->
+            <!-- END PAGE -->
+            <!-- ******** -->
+            
+            <!-- ********** -->
+            <!-- BEGIN PAGE -->
+            <!-- ********** -->
+            <div class="page" id="page1">
+                
+                <h2>Creating your Gallery of Images</h2><br />
+                
+                <h4><img class="quote" src="help_assets/quote.png" width="18" height="14" />This video tutorial will walk you through how to set up your categories and category images.<img class="quote2" src="help_assets/quote2.png" width="18" height="14" /></h4>
+                
+                <p>
+                
+                	<video id="video1" controls width="640">  
+                    
+                        <source src="help_assets/videos/Creating_Your_Gallery.ogg" type="video/ogg" />  
+                        <source src="help_assets/videos/Creating_Your_Gallery.mp4" type="video/mp4" />  
+                        
+                        <b>This HTML5 video requires a modern web browser.  You can download the latest Firefox here: <a href="http://www.mozilla.com/">http://www.mozilla.com/</a> or play the video directly from the "help_assets" folder.</b>
+                    
+                	</video>
+                    
+                    <br /><i>Full-Screen is available in Safari and Firefox 4 (right-click for full-screen in FF4)</i>  
+                
+                </p>
+                
+            </div>
+            <!-- ******** -->
+            <!-- END PAGE -->
+            <!-- ******** -->
+            
+            <!-- ********** -->
+            <!-- BEGIN PAGE -->
+            <!-- ********** -->
+            <div class="page" id="page2">
+                
+                <h2>Custom Gallery Settings</h2><br />
+                
+                <h4><img class="quote" src="help_assets/quote.png" width="18" height="14" />This video tutorial will walk you through the background slideshow global settings.<img class="quote2" src="help_assets/quote2.png" width="18" height="14" /></h4>
+                
+                <p>
+                
+                	<video id="video2" controls width="640">  
+                    
+                        <source src="help_assets/videos/Custom_Gallery_Settings.ogg" type="video/ogg" />  
+                        <source src="help_assets/videos/Custom_Gallery_Settings.mp4" type="video/mp4" />  
+                        
+                        <b>This HTML5 video requires a modern web browser.  You can download the latest Firefox here: <a href="http://www.mozilla.com/">http://www.mozilla.com/</a> or play the video directly from the "help_assets" folder.</b>
+                    
+                	</video>
+                    
+                    <br /><i>Full-Screen is available in Safari and Firefox 4 (right-click for full-screen in FF4)</i>  
+                
+                </p>
+                
+            </div>
+            <!-- ******** -->
+            <!-- END PAGE -->
+            <!-- ******** -->
+            
+            <!-- ********** -->
+            <!-- BEGIN PAGE -->
+            <!-- ********** -->
+            <div class="page" id="page3">
+                
+                <h2>Editing Display Elements</h2><br />
+                
+                <h4><img class="quote" src="help_assets/quote.png" width="18" height="14" />This video tutorial will walk you through editing or removing display elements in the gallery.<img class="quote2" src="help_assets/quote2.png" width="18" height="14" /></h4>
+                
+                <p>
+                
+                	<video id="video3" controls width="640">  
+                    
+                        <source src="help_assets/videos/Editing_Display_Elements.ogg" type="video/ogg" />  
+                        <source src="help_assets/videos/Editing_Display_Elements.mp4" type="video/mp4" />  
+                        
+                        <b>This HTML5 video requires a modern web browser.  You can download the latest Firefox here: <a href="http://www.mozilla.com/">http://www.mozilla.com/</a> or play the video directly from the "help_assets" folder.</b>
+                    
+                	</video>
+                    
+                    <br /><i>Full-Screen is available in Safari and Firefox 4 (right-click for full-screen in FF4)</i>  
+                
+                </p>
+                
+            </div>
+            <!-- ******** -->
+            <!-- END PAGE -->
+            <!-- ******** -->
+            
+            <!-- ********** -->
+            <!-- BEGIN PAGE -->
+            <!-- ********** -->
+            <div class="page" id="page4">
+                
+                <h2>Setting up the Music</h2><br />
+                
+                <h4><img class="quote" src="help_assets/quote.png" width="18" height="14" />This video tutorial will explain the multiple audio files needed for HTML5 audio as well was editing custom music settings.<img class="quote2" src="help_assets/quote2.png" width="18" height="14" /></h4>
+                
+                <p>
+                
+                	<video id="video4" controls width="640">  
+                    
+                        <source src="help_assets/videos/Setting_up_the_Music.ogg" type="video/ogg" />  
+                        <source src="help_assets/videos/Setting_up_the_Music.mp4" type="video/mp4" />  
+                        
+                        <b>This HTML5 video requires a modern web browser.  You can download the latest Firefox here: <a href="http://www.mozilla.com/">http://www.mozilla.com/</a> or play the video directly from the "help_assets" folder.</b>
+                    
+                	</video>
+                    
+                    <br /><i>Full-Screen is available in Safari and Firefox 4 (right-click for full-screen in FF4)</i>  
+                
+                </p>
+                
+                <p><b>If your server won't play .ogg audio, add the following line of code to your server's .htaccess file:</b><br />
+                <code>AddType audio/ogg .ogg</code>
+                
+                </p>
+                
+            </div>
+            <!-- ******** -->
+            <!-- END PAGE -->
+            <!-- ******** -->
+            
+            <!-- ********** -->
+            <!-- BEGIN PAGE -->
+            <!-- ********** -->
+            <div class="page" id="page5">
+                
+                <h2>Editing the Info Section</h2><br />
+                
+                <h4><img class="quote" src="help_assets/quote.png" width="18" height="14" />This video will discuss editing / deleting the info section.<img class="quote2" src="help_assets/quote2.png" width="18" height="14" /></h4>
+                
+                <p>
+                
+                	<video id="video5" controls width="640">  
+                    
+                        <source src="help_assets/videos/Editing_the_Info_Section.ogg" type="video/ogg" />  
+                        <source src="help_assets/videos/Editing_the_Info_Section.mp4" type="video/mp4" />  
+                        
+                        <b>This HTML5 video requires a modern web browser.  You can download the latest Firefox here: <a href="http://www.mozilla.com/">http://www.mozilla.com/</a> or play the video directly from the "help_assets" folder.</b>
+                    
+                	</video>
+                    
+                    <br /><i>Full-Screen is available in Safari and Firefox 4 (right-click for full-screen in FF4)</i>  
+                
+                </p>
+                
+            </div>
+            <!-- ******** -->
+            <!-- END PAGE -->
+            <!-- ******** -->
+            
+            <!-- ********** -->
+            <!-- BEGIN PAGE -->
+            <!-- ********** -->
+            <div class="page" id="page6">
+                
+                <h2>Changing Fonts and Styles</h2><br />
+                
+                <h4><img class="quote" src="help_assets/quote.png" width="18" height="14" />This video explores the CSS file and editing the font used.<img class="quote2" src="help_assets/quote2.png" width="18" height="14" /></h4>
+                
+                <p>
+                
+                	<video id="video6" controls width="640">  
+                    
+                        <source src="help_assets/videos/Changing_Fonts_and_Styles.ogg" type="video/ogg" />  
+                        <source src="help_assets/videos/Changing_Fonts_and_Styles.mp4" type="video/mp4" />  
+                        
+                        <b>This HTML5 video requires a modern web browser.  You can download the latest Firefox here: <a href="http://www.mozilla.com/">http://www.mozilla.com/</a> or play the video directly from the "help_assets" folder.</b>
+                    
+                	</video>
+                    
+                    <br /><i>Full-Screen is available in Safari and Firefox 4 (right-click for full-screen in FF4)</i>  
+                
+                </p>
+                
+            </div>
+            <!-- ******** -->
+            <!-- END PAGE -->
+            <!-- ******** -->
+            
+            <!-- ********** -->
+            <!-- BEGIN PAGE -->
+            <!-- ********** -->
+            <div class="page" id="page7">
+                
+                <h2>SEO & Image Protection</h2><br />
+                
+                <h4><img class="quote" src="help_assets/quote.png" width="18" height="14" />This video discusses the SEO options available which can help protect your imagery.<img class="quote2" src="help_assets/quote2.png" width="18" height="14" /></h4>
+                
+                <p>
+                    
+                	<video id="video7" controls width="640">  
+                    
+                        <source src="help_assets/videos/SEO_and_Image_Protection.ogg" type="video/ogg" />  
+                        <source src="help_assets/videos/SEO_and_Image_Protection.mp4" type="video/mp4" />  
+                        
+                        <b>This HTML5 video requires a modern web browser.  You can download the latest Firefox here: <a href="http://www.mozilla.com/">http://www.mozilla.com/</a> or play the video directly from the "help_assets" folder.</b>
+                    
+                	</video>  
+                	
+                    <br /><i>Full-Screen is available in Safari and Firefox 4 (right-click for full-screen in FF4)</i>
+                    
+                </p>
+                
+            </div>
+            <!-- ******** -->
+            <!-- END PAGE -->
+            <!-- ******** -->
+            
+             <!-- ********** -->
+            <!-- BEGIN PAGE -->
+            <!-- ********** -->
+            <div class="page" id="page8">
+                
+                <h2>Web Page Integration</h2><br />
+                
+                <h4><img class="quote" src="help_assets/quote.png" width="18" height="14" />This video will show how to add the gallery to an existing webpage.<img class="quote2" src="help_assets/quote2.png" width="18" height="14" /></h4>
+                
+                <p>
+                
+                	<video id="video8" controls width="640">  
+                    
+                        <source src="help_assets/videos/Web_Page_Integration.ogg" type="video/ogg" />  
+                        <source src="help_assets/videos/Web_Page_Integration.mp4" type="video/mp4" />  
+                        
+                        <b>This HTML5 video requires a modern web browser.  You can download the latest Firefox here: <a href="http://www.mozilla.com/">http://www.mozilla.com/</a> or play the video directly from the "help_assets" folder.</b>
+                    
+                	</video>  
+                    
+                    <br /><i>Full-Screen is available in Safari and Firefox 4 (right-click for full-screen in FF4)</i>
+                
+                </p>
+                
+            </div>
+            <!-- ******** -->
+            <!-- END PAGE -->
+            <!-- ******** -->
+        
+        </div>
+    
+    </body>
+    
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

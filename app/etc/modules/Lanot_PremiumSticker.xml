@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Lanot_PremiumSticker>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Lanot_EasySticker />
+                <Lanot_Rule />
+            </depends>
+        </Lanot_PremiumSticker>
+    </modules>
+</config>

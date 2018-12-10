@@ -1,0 +1,449 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<?php
+$_helper = $this->helper('catalog/output');
+$_product = $this->getProduct();
+$enable_upsell =  Mage::getStoreConfig('shoppersettings/labels/enable_upsell');
+$replace_upsell =  Mage::getStoreConfig('shoppersettings/labels/replace_upsell');
+
+$helper = $this->helper('shoppersettings/image');
+list($defaultImgX, $defaultImgY) = $helper->getDefaultSize();
+list($imgX, $imgY) = $helper->getMainSize();
+if ( $imgX > 800 ) {
+    $imgX = 800;
+    $imgY = $helper->calculateHeight($imgX);
+}
+
+$product_img_box_width = $defaultImgX;
+if ( $defaultImgX != $imgX ) {
+    $product_img_box_width = $imgX;
+}
+//add image border
+$product_img_box_width += 18;
+?>
+<?php
+if (!$_category = Mage::registry('current_category')) {
+    $_product = Mage::getSingleton( 'catalog/product' )->load( $_product->getId() );
+    $categories=$_product->getCategoryIds();
+    $_category = Mage::getModel('catalog/category')->load($categories[0]);
+}
+if ($_category) {
+echo '<div class="product-category-title">'.$_category->getName().'</div>';
+}
+ ?>
+
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+<?php echo $this->getChildHtml('global_messages') ?>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class='banner-pview'><?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('bannertop_pview')->toHtml() ?></div>
+<div class="product-view">
+    <div class="product-essential">
+    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+
+        <div class="product-img-box" style="width:<?php echo $product_img_box_width; ?>px">
+            <?php echo $this->helper('shoppersettings')->getLabel($_product);  ?>
+            <?php echo $this->getChildHtml('media') ?>
+        </div>
+
+        <div class="product-shop">
+            <?php
+            $output = '';
+            switch ($replace_upsell) {
+                case 'always':
+                    $output = $this->getChildHtml('queldorei_product_additional');
+                    break;
+                case 'never':
+                    if ($enable_upsell) $output = $this->getChildHtml('upsell_products');
+                    break;
+                case 'only':
+                    if ($enable_upsell) $output = $this->getChildHtml('upsell_products');
+                    if ( empty($output) ) $output = $this->getChildHtml('queldorei_product_additional');
+                    break;
+            }
+            if(!empty($output)){
+                //echo '<div class="product-additional">'.$output.'</div>';
+            }
+            ?>
+            <div class="product-shop-info">
+                <div class="product-name">
+                    <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                </div>
+                <?php /* echo $this->getReviewsSummaryHtml($_product, false, true) */ ?>
+
+                <?php echo $this->getChildHtml('alert_urls') ?>
+                <?php echo $this->getTierPriceHtml() ?>
+                <?php echo $this->getChildHtml('extrahint') ?>
+                <?php $_product = $this->getProduct() ?>
+
+                <?php echo $this->getChildHtml('product_type_data_extra') ?>
+                <?php if ($_product->getTypeId() == 'bundle') : ?>
+                <?php else: echo $this->getPriceHtml($_product); ?>
+                <?php endif; ?>
+				
+                <?php if ($_product->isAvailable()): ?>
+                    <p class="availability in-stock">&nbsp;</p>
+                <?php else: ?>
+                    <p class="availability out-of-stock">&nbsp;</p>
+                <?php endif; ?>
+                <?php if (Mage::getStoreConfig('shoppersettings/labels/sku')): ?>
+                    <p class="sku"><?php echo $this->__('SKU:') ?> <span><?php echo $_product->getSku() ?></span></p>
+                <?php endif; ?>
+                <?php if ($_product->getData('incluye')):?>
+                    <p class="incluye"><strong>Incluye: </strong><?php echo $this->htmlEscape($_product->getData('incluye')); ?></p>
+                <?php endif ?>
+				<?php if ($_product->getData('tiempo_entrega')):?>
+                    <p class="incluye"><strong>Tiempo de entrega: </strong><?php echo $this->htmlEscape($_product->getData('tiempo_entrega')); ?> d&iacute;as</p>
+                <?php endif ?>
+                
+                <div class="clear"></div>
+
+                <?php if ($_product->getDescription()):?>
+                <div class="short-description">
+                    <div class="std"><?php // echo  $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description') ?>
+                        <!-- ADDITIONAL -->
+                        <?php 
+                            if(!$_product->isGrouped()){
+                                echo $this->getChildHtml('product_additional_data');    
+                            }
+                            else{
+                                echo  $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description');
+                            }
+                        ?>
+                        <!-- ADDITIONAL -->
+                    </div>
+                </div>
+                <?php endif;?>
+				<?php $cat_id = Mage::getModel('catalog/layer')->getCurrentCategory()->getId();
+                      //$category = Mage::getModel('catalog/category')->load($cat_id);
+                      $categoryIds = $_product->getCategoryIds();
+                      if(count($categoryIds) ){
+                            $firstCategoryId = $categoryIds[0];
+                            $category = Mage::getModel('catalog/category')->load($firstCategoryId);
+                            //$category->getName();
+                        
+                      if ($category->getName() == "Colchones" || $category->getName() == "Por confort" || $category->getName() == "Por marca" || $category->getName() == "Por tamaño" || $category->getName() == "Por Precio" || $category->getName() == "Firme" || $category->getName() == "Flex" || $category->getName() == "Semi Flex" || $category->getName() == "Spring Air"  || $category->getName() == "Sealy" || $category->getName() == "America" || $category->getName() == "Restonic" || $category->getName() == "Individual" || $category->getName() == "Matrimonial" || $category->getName() == "Queen Size" || $category->getName() == "King Size"): ?>
+							<div><h4>Tama&ntilde;os</h4>Coloca el cursor sobre la imagen para verla completa.</div>
+							<div><img src="http://cloudfront.dico.com.mx/media/catalogo/colchones/medidas-colchon.jpg" id="colchones-size" alt="Tamaño colchones" width="auto" height="220"></div>
+							<script>
+								jQuery(document).ready(function() {
+									jQuery('#colchones-size').tooltipster({
+										content: jQuery('<img src="http://cloudfront.dico.com.mx/media/catalogo/colchones/medidas-colchon.jpg" alt="Tamaño Colchones"/>'),
+										interactive: true,
+										contentAsHTML: true,
+										position: 'left'
+									});
+								});
+							</script>
+				<?php endif; 
+                    }
+                ?>
+                <?php $url=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA); 
+                $attribute = $this->htmlEscape($_product->getData('color_agrupado'));  
+                $colores= explode(",", $attribute);
+                 if($attribute):
+                echo "Colores disponibles<br><br>";
+                echo '<div style="width:100%; height: 70px;"><ul>';
+                    foreach ($colores as $option) {
+                        $color = explode("_", $option);
+                ?>
+                <li style="float:left; width:55px; height:82px; padding: 0 5px;"><div style="width:40px; heigth:32px; float:left;"><img id="<?php echo $option ?>" class="tooltip2" src="<?php echo $url ?>catalogo/colores/<?php echo $option ?>.jpg" width="55px" height="50px" alt="<?php echo $option ?>"></div><div style="width:55px; height:18px; text-align:center;"><?php echo $color[1]; ?></div></li>
+                    <script>
+                                jQuery(document).ready(function() {
+                                    jQuery('#<?php echo $option ?>').tooltipster({
+                                        content: jQuery('<img src="<?php echo $url ?>catalogo/colores/<?php echo $option ?>_descripcion.jpg" alt="<?php echo $option ?>" width="400px" />'),
+                                        interactive: true,
+                                        contentAsHTML: true,
+                                    });
+                                });
+                            </script>
+                <?php      
+                    }
+                ?>
+                 
+                <?php 
+                echo '</ul></div>';
+                endif;
+                ?>
+
+                
+                
+                
+              
+
+                <?php echo $this->getChildHtml('other');?>
+
+                <?php if(!$_product->isGrouped()): ?>
+                <div class="qty-container clearfix">
+                    <label for="qty"><?php echo $this->__('Qty') ?>:</label>
+                    <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty validate-greater-than-zero validate-number"/>
+                     <?php if(!$_product->isGrouped()): ?>
+                    <div class="add-to-box f-right">
+                        <?php if($_product->isSaleable()): ?>
+                        <?php  if(!$_product->isConfigurable()): 
+                                    echo $this->getChildHtml('addtocart');
+                                endif;
+                        ?>
+                        <?php endif; ?>
+                    </div>
+                    <?php //echo $this->getChildHtml('extra_buttons') ?>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
+
+                <?php if (!$this->hasOptions()):?>
+                    <?php  if(!$_product->isGrouped()): ?>
+                    <div class="add-to-box">
+                        <?php if($_product->isSaleable()): ?>
+                        <?php //echo $this->getChildHtml('addtocart') ?>
+                        <?php endif; ?>
+                    </div>
+                    <?php //echo $this->getChildHtml('extra_buttons') ?>
+                    <?php endif;  ?>
+                <?php endif; ?>
+
+                <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                    <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                <?php endif;?>
+
+                <div class="clear"></div>
+                <?php //echo $this->getChildHtml('addto') ?>
+                <div class="clear"></div>
+                <?php /* echo $this->getChildHtml('shopper_product_addthis') */ ?>
+
+            </div>
+        </div>
+        <div class="clear"></div>
+        <?php echo $this->getChildHtml('product_type_data') ?>
+        <div class="clear"></div>
+
+        <?php if (!$this->hasOptions()):?>
+            <?php if($_product->isGrouped()): ?>
+            <div class="add-to-box2">
+            <?php if($_product->isSaleable()): ?>
+            <?php echo $this->getChildHtml('addtocart') ?>
+            <?php endif; ?>
+            </div>
+            <?php echo $this->getChildHtml('extra_buttons') ?>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <div class="clearer"></div>
+        
+        <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+            <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+        <?php endif;?>
+    </form>
+    <script type="text/javascript">
+    //<![CDATA[
+
+        <?php if ( !Mage::getStoreConfig('shoppersettings/ajax/cart', Mage::app()->getStore()->getId())) : ?>
+
+        var productAddToCartForm = new VarienForm('product_addtocart_form');
+        productAddToCartForm.submit = function(button, url) {
+            if (this.validator.validate()) {
+                var form = this.form;
+                var oldUrl = form.action;
+
+                if (url) {
+                    form.action = url;
+                }
+                var e = null;
+                try {
+                    this.form.submit();
+                } catch (e) {
+                }
+                this.form.action = oldUrl;
+                if (e) {
+                    throw e;
+                }
+
+                if (button && button != 'undefined') {
+                    button.disabled = true;
+                }
+            }
+        }.bind(productAddToCartForm);
+
+        <?php else : ?>
+
+        function setAjaxData(data,iframe){
+            //showMessage(data.message);
+            if (data.status != 'ERROR' && jQuery('.cart-top-container').length) {
+                jQuery('.cart-top-container').replaceWith(data.cart_top);
+            }
+        }
+
+        function showMessage(message)
+        {
+            jQuery('body').append('<div class="alert-container"><div class="alert"></div></div>');
+            var $alert = jQuery('.alert');
+			var $alert_container = jQuery('.alert-container');
+            $alert.slideDown(400);
+            $alert.html(message).append('<button></button>');
+            jQuery('button').click(function () {
+				$alert.slideUp(300);
+                $alert_container.slideUp(400);
+            });
+            $alert.slideDown('400', function () {
+                setTimeout(function () {
+                    $alert.slideUp('400', function () {
+                        jQuery(this).slideUp(400, function(){ jQuery(this).detach(); })
+                    });
+                }, 3000000)
+            });
+			$alert_container.slideDown('400', function () {
+                setTimeout(function () {
+                    $alert_container.slideUp('400', function () {
+                        jQuery(this).slideUp(400, function(){ jQuery(this).detach(); })
+                    });
+                }, 3000000)
+            });
+        }
+
+        var productAddToCartForm = new VarienForm('product_addtocart_form');
+        productAddToCartForm.submit = function (button, url) {
+            if (this.validator.validate()) {
+                var form = this.form;
+                var oldUrl = form.action;
+                if (url) {
+                    form.action = url;
+                }
+                var e = null;
+                // Start of our new ajax code
+                if (!url) {
+                    url = jQuery('#product_addtocart_form').attr('action');
+                }
+                url = url.replace("checkout/cart", "ajax/index"); // New Code
+                var data = jQuery('#product_addtocart_form').serialize();
+                data += '&isAjax=1';
+                jQuery('#ajax_loading'+ jQuery('#product_addtocart_form').find("[name='product']").val() ).css('display', 'block');
+                try {
+                    jQuery.ajax({
+                        url:url,
+                        dataType:'jsonp',
+                        type:'post',
+                        data:data,
+                        success:function (data) {
+                            jQuery('#ajax_loading'+ jQuery('#product_addtocart_form').find("[name='product']").val() ).css('display', 'none');
+                            setAjaxData(data, true);
+                            showMessage(data.message);
+                        }
+                    });
+                } catch (e) {
+                }
+                // End of our new ajax code
+                this.form.action = oldUrl;
+
+                if (e) {
+                    throw e;
+                }
+            }
+        }.bind(productAddToCartForm);
+
+        <?php endif; ?>
+
+        productAddToCartForm.submitLight = function(button, url){
+            if(this.validator) {
+                var nv = Validation.methods;
+                delete Validation.methods['required-entry'];
+                delete Validation.methods['validate-one-required'];
+                delete Validation.methods['validate-one-required-by-name'];
+                if (this.validator.validate()) {
+                    if (url) {
+                        this.form.action = url;
+                    }
+                    this.form.submit();
+                }
+                Object.extend(Validation.methods, nv);
+            }
+        }.bind(productAddToCartForm);
+    //]]>
+    </script>
+	<script type="text/javascript">
+		function resizeIframe(iframe) {
+			iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";
+		}
+</script>  
+	<script>
+		jQuery(document).ready(function($) {
+			$('.btn-cart').click(function(){
+				$('.qty').val('0');
+			})
+		});
+	</script>
+    </div>
+
+    
+
+    <?php
+    $output = '';
+    switch ($replace_upsell) {
+        case 'always':
+            break;
+        case 'never':
+            if ($enable_upsell) $output = $this->getChildHtml('upsell_products2');
+            break;
+        case 'only':
+            if ($enable_upsell) $output = $this->getChildHtml('upsell_products2');
+            break;
+    }
+    if(!empty($output)){
+        echo $output;
+    }
+    ?>
+
+    <?php
+    $after_tabs_block = Mage::getModel('cms/block')
+        ->setStoreId( Mage::app()->getStore()->getId() )
+        ->load('shopper_after_tabs');
+    if($after_tabs_block->getIsActive()){
+        echo '<div class="after-tabs-block additional-block">'.$this->getLayout()->createBlock('cms/block')->setBlockId('shopper_after_tabs')->toHtml().'</div>';
+    }
+    ?>
+
+    <!-- RELATED -->
+    <?php echo $this->getChildHtml('content_related') ?>
+    <!-- RELATED -->
+	<script>
+		jQuery(function() {
+			var spinner = jQuery( ".qty" ).spinner({min: 0, max: 99}); 
+			var spinner2 = jQuery( "#qty" ).spinner({min: 0, max: 99}); 
+		});
+	</script>
+</div>

@@ -1,0 +1,219 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<?php 
+
+    Mage::getSingleton('core/session')->setWebpaySuccess(0); 
+    $_response = $this->getRequest()->getParam('response');
+    $_ccname = $this->getRequest()->getParam('ccname');
+    $_ccnum = $this->getRequest()->getParam('ccnum');
+    $_amount_string = $this->getRequest()->getParam('amount');
+    $_amount = Mage::helper('core')->currency($_amount_string, true, false);
+    $_type_string = $this->getRequest()->getParam('type');
+    $_reference = $this->getRequest()->getParam('reference');
+    $_aut = $this->getRequest()->getParam('aut');
+    $_error_string = $this->getRequest()->getParam('error');
+
+    $webpay = Mage::getSingleton("webpay/standard");
+    $_type= $webpay->Salaa($webpay->HexStringToString($_type_string),'MEX01017290');
+    //$_type= $webpay->Salaa($webpay->HexStringToString($_type_string),'MEX002B919');
+    $_error= $webpay->Salaa($webpay->HexStringToString($_error_string),'MEX01017290');
+    //$_error= $webpay->Salaa($webpay->HexStringToString($_error_string),'MEX002B919'); 
+    
+    //$_SESSION['refresh'] = $_reference;
+    if($_response):
+?>
+<?php switch ($_response) {
+    case 'denied': ?>
+        <div class="page-title">
+            <h1 id="success-title"><?php  echo $this->__('TRANSACCION DECLINADA/DENEGADA') ?></h1>
+            <center><h3>No se ha realizado ning&uacute;n cargo a su tarjeta, la operaci&oacute;n fue declinada por su banco emisor. <br> Por favor intenta con otra forma de pago</h3></center>
+        </div>
+        <hr>
+        <div class="col2-set">
+            <div class="col-1">
+                <div class="box">
+                    <div class="box-title"><h2>Datos de operaci&oacute;n</h2></div>
+                    <div class="box-content">
+						<?php if($_ccname): ?>
+							<p class="capitalize">Nombre: <?php echo $_ccname ?></p> 
+						<?php endif; ?>
+						<?php if($_type): ?>
+							<p class="capitalize">Forma de pago: <?php echo $_type ?></p> 
+						<?php endif; ?>
+						<?php if($_ccnum): ?>
+							<p>No. Tarjeta: ************<?php echo $_ccnum ?></p> 
+						<?php endif; ?>
+                        <?php if($_amount_string): ?>
+							<p>Importe: <?php echo $_amount ?> MXN</p> 
+						<?php endif; ?>
+						<?php if($_reference): ?>
+							<p>No. Referencia: <?php echo $_reference ?></p>
+						<?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+		<div class="buttons-set">
+			<button type="button" class="button" title="<?php echo $this->__('Volver a realizar el proceso de compra') ?>" onclick="window.top.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo $this->__('Volver a realizar el proceso de compra') ?></span></span></button>
+		</div>
+<?php
+            
+    break;
+
+	case 'unauthenticated': ?>
+        <div class="page-title">
+            <h1 id="success-title"><?php  echo $this->__('TRANSACCION DECLINADA/DENEGADA') ?></h1>
+            <center><h3>No se ha realizado ning&uacute;n cargo a su tarjeta, no se ha autenticado de forma correcta. <?php echo $_error; ?> <br />Por favor vuelve a iniciar el proceso. </h3></center>
+        </div>
+        <hr>
+        <div class="col2-set">
+            <div class="col-1">
+                <div class="box">
+                    <div class="box-title"><h2>Datos de operaci&oacute;n</h2></div>
+                    <div class="box-content">
+						<?php if($_ccname): ?>
+							<p class="capitalize">Nombre: <?php echo $_ccname ?></p> 
+						<?php endif; ?>
+						<?php if($_type): ?>
+							<p class="capitalize">Forma de pago: <?php echo $_type ?></p> 
+						<?php endif; ?>	
+						<?php if($_ccnum): ?>	
+							<p>No. Tarjeta: ************<?php echo $_ccnum ?></p> 
+                        <?php endif; ?>
+						<?php if($_amount_string): ?>
+							<p>Importe: <?php echo $_amount ?> MXN</p> 
+						<?php endif; ?>
+						<?php if($_reference): ?>
+							<p>No. Referencia: <?php echo $_reference ?></p>
+						<?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+		<div class="buttons-set">
+			<button type="button" class="button" title="<?php echo $this->__('Volver a realizar el proceso de compra') ?>" onclick="window.top.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo $this->__('Volver a realizar el proceso de compra') ?></span></span></button>
+		</div>
+<?php
+            
+    break;
+        
+    case 'error':  ?>
+        <div class="page-title">
+            <h1 id="success-title"><?php  echo $this->__('ERROR EN LA TRANSACCION') ?></h1>
+            <center><h3>No se ha realizado ning&uacute;n cargo a su tarjeta. <?php echo $_error ?>.</h3></center>
+        </div>
+        <hr>
+        <div class="col2-set">
+            <div class="col-1">
+                <div class="box">
+                    <div class="box-title"><h2>Datos de operaci&oacute;n</h2></div>
+                    <div class="box-content">
+						<?php if($_ccname): ?>
+							<p class="capitalize">Nombre: <?php echo $_ccname ?></p> 
+						<?php endif; ?>
+						<?php if($_type): ?>
+							<p class="capitalize">Forma de pago: <?php echo $_type ?></p> 
+						<?php endif; ?>	
+						<?php if($_ccnum): ?>	
+							<p>No. Tarjeta: ************<?php echo $_ccnum ?></p> 
+						<?php endif; ?>	
+						<?php if($_amount_string): ?>	
+							<p>Importe: <?php echo $_amount ?> MXN</p> 
+						<?php endif; ?>
+						<?php if($_reference): ?>
+							<p>No. Referencia: <?php echo $_reference ?></p>
+						<?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+		<div class="buttons-set">
+			<button type="button" class="button" title="<?php echo $this->__('Volver a realizar el proceso de compra') ?>" onclick="window.top.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo $this->__('Volver a realizar el proceso de compra') ?></span></span></button>
+		</div>
+<?php
+            break; 
+    } ?>
+    
+    
+
+<script type="text/javascript">
+      window.parent.scrollTo(0,0);
+</script>
+<?php
+/* $RequestSignature = md5($_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING'].print_r($_POST, true));
+
+if ($_SESSION['LastRequest'] == $RequestSignature)
+{ ?>
+<script type="text/javascript">
+    alert('Esta operacion no esta permitida');
+</script>
+<?php
+}
+else
+{
+  $_SESSION['LastRequest'] = $RequestSignature;
+}*/
+else:
+?>
+<div class="page-title">
+            <h1 id="success-title"><?php  echo $this->__('TRANSACCION NO COMPLETADA') ?></h1>
+            <center><h3>No se ha realizado ning&uacute;n cargo a su tarjeta,  Se ha cancelado la operación <br> Por favor intenta con otra forma de pago</h3></center>
+        </div>
+        <hr>
+        <div class="buttons-set">
+            <button type="button" class="button" title="<?php echo $this->__('Volver a realizar el proceso de compra') ?>" onclick="window.top.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo $this->__('Volver a realizar el proceso de compra') ?></span></span></button>
+        </div>
+        <script type="text/javascript">
+            window.location.href= window.location.origin;
+        </script>
+<?php endif; ?>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+
+  if (window.history && window.history.pushState) {
+
+    window.history.pushState('forward', null, './#forward');
+
+    $(window).on('popstate', function() {
+      alert('Esta operacion no esta permitida');
+    });
+
+  }
+   $(window).bind('beforeunload',function(){
+
+     //save info somewhere
+
+    return 'Esta operacion no esta permitida';
+
+});
+});
+</script>

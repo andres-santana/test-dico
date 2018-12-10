@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Muebles Dico</title>
+    <link href="../media/favicon/default/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./css/ps2.css" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="./js/scripts.js"></script>
+</head>
+<body style="background-color:#ffffff">
+    <div class="container">
+        <div id="menu" style="display: none;" class="">
+            <nav id="nav" role="navigation" data-ng-controller="progressController" style="display: block;">
+                <ul id="navLinks">
+            <li><svg id="SvgjsSvg1007" xmlns="http://www.w3.org/2000/svg" version="1.1" width="180" height="90" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon id="GenderHex" points="76,62.5 45,80 15,62.5 15,27.5 45,10 76,27.5" class="initHex progress-gender" data-nav="Gender"></polygon><text id="SvgjsText1010" font-family="Helvetica, Arial, sans-serif"><tspan id="nBtn0" y="51" x="40" data-nav="Gender" class="initNavNumbers pointer" fill="#ffffff">1</tspan></text><text id="SvgjsText1013" font-family="Helvetica, Arial, sans-serif"><tspan id="navBtnText0" y="51" x="100" class="initNavText unselected-nav pointer selected-nav" data-nav="Gender">Género</tspan></text><defs id="SvgjsDefs1008"></defs></svg></li><li><svg id="SvgjsSvg1016" xmlns="http://www.w3.org/2000/svg" version="1.1" width="180" height="90" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon id="AgeHex" points="76,62.5 45,80 15,62.5 15,27.5 45,10 76,27.5" class="initHex init-progress-age" data-nav="Age"></polygon><text id="SvgjsText1019" font-family="Helvetica, Arial, sans-serif"><tspan id="nBtn1" y="51" x="40" data-nav="Age" class="initNavNumbers">2</tspan></text><text id="SvgjsText1022" font-family="Helvetica, Arial, sans-serif"><tspan id="navBtnText1" y="51" x="100" class="initNavText unselected-nav" data-nav="Age">Edad</tspan></text><defs id="SvgjsDefs1017"></defs></svg></li><li><svg id="SvgjsSvg1025" xmlns="http://www.w3.org/2000/svg" version="1.1" width="180" height="90" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon id="PositionHex" points="76,62.5 45,80 15,62.5 15,27.5 45,10 76,27.5" class="initHex init-progress-position" data-nav="Position"></polygon><text id="SvgjsText1028" font-family="Helvetica, Arial, sans-serif"><tspan id="nBtn2" y="51" x="40" data-nav="Position" class="initNavNumbers">3</tspan></text><text id="SvgjsText1031" font-family="Helvetica, Arial, sans-serif"><tspan id="navBtnText2" y="51" x="100" class="initNavText unselected-nav" data-nav="Position">Posición</tspan></text><defs id="SvgjsDefs1026"></defs></svg></li><li><svg id="SvgjsSvg1034" xmlns="http://www.w3.org/2000/svg" version="1.1" width="180" height="90" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon id="HeightHex" points="76,62.5 45,80 15,62.5 15,27.5 45,10 76,27.5" class="initHex init-progress-height" data-nav="Height"></polygon><text id="SvgjsText1037" font-family="Helvetica, Arial, sans-serif"><tspan id="nBtn3" y="51" x="40" data-nav="Height" class="initNavNumbers">4</tspan></text><text id="SvgjsText1040" font-family="Helvetica, Arial, sans-serif"><tspan id="navBtnText3" y="51" x="100" class="initNavText unselected-nav" data-nav="Height">Altura</tspan></text><defs id="SvgjsDefs1035"></defs></svg></li><li><svg id="SvgjsSvg1043" xmlns="http://www.w3.org/2000/svg" version="1.1" width="180" height="90" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon id="WeightHex" points="76,62.5 45,80 15,62.5 15,27.5 45,10 76,27.5" class="initHex init-progress-weight" data-nav="Weight"></polygon><text id="SvgjsText1046" font-family="Helvetica, Arial, sans-serif"><tspan id="nBtn4" y="51" x="40" data-nav="Weight" class="initNavNumbers">5</tspan></text><text id="SvgjsText1049" font-family="Helvetica, Arial, sans-serif"><tspan id="navBtnText4" y="51" x="100" class="initNavText unselected-nav" data-nav="Weight">Peso</tspan></text><defs id="SvgjsDefs1044"></defs></svg></li><li><svg id="SvgjsSvg1052" xmlns="http://www.w3.org/2000/svg" version="1.1" width="180" height="90" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon id="SizesHex" points="76,62.5 45,80 15,62.5 15,27.5 45,10 76,27.5" class="initHex init-progress-sizes" data-nav="Sizes"></polygon><text id="SvgjsText1055" font-family="Helvetica, Arial, sans-serif"><tspan id="nBtn5" y="51" x="40" data-nav="Sizes" class="initNavNumbers">6</tspan></text><text id="SvgjsText1058" font-family="Helvetica, Arial, sans-serif"><tspan id="navBtnText5" y="51" x="100" class="initNavText unselected-nav" data-nav="Sizes">Tallas</tspan></text><defs id="SvgjsDefs1053"></defs></svg></li><li><svg id="SvgjsSvg1061" xmlns="http://www.w3.org/2000/svg" version="1.1" width="180" height="90" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon id="PainHex" points="76,62.5 45,80 15,62.5 15,27.5 45,10 76,27.5" class="initHex init-progress-pain" data-nav="Pain"></polygon><text id="SvgjsText1064" font-family="Helvetica, Arial, sans-serif"><tspan id="nBtn6" y="51" x="40" data-nav="Pain" class="initNavNumbers">7</tspan></text><text id="SvgjsText1067" font-family="Helvetica, Arial, sans-serif"><tspan id="navBtnText6" y="51" x="100" class="initNavText unselected-nav" data-nav="Pain">Dolencias</tspan></text><defs id="SvgjsDefs1062"></defs></svg></li></ul><svg id="SvgjsSvg1000" xmlns="http://www.w3.org/2000/svg" version="1.1" width="180" height="630" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 180 630"><line id="SvgjsLine1006" x1="45" y1="45" x2="45" y2="585" class="initNavLine"></line><defs id="SvgjsDefs1001"></defs></svg></nav>
+        </div>
+        <div id="content" class="welcome-bg-color">
+            <div id="bg" class="welcome-bg">
+                <div class="prompts" id="q1">
+                    <h1 id="page-title" title="Bienvenido">Bienvenido</h1>
+                    <p id="page-info">Estos 7 pasos simples nos permitirán calcular el mejor soporte para mantener tu cuerpo alineado mientras descansas.</p><div id="page-input"><p>Para comenzar ingresa tu nombre:</p><input type="text" id="name" maxlength="20" autocomplete="off"></div>
+                    <input id="cBtn" class="cBtnq1" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q2">
+                    <h1 id="page-title" title="Pareja">Pareja</h1>
+                    <p id="page-info"><span class="coupleName1"></span>, estas preguntas sobre tu pareja nos permitirán hacer una estadística para el mejor soporte de ambos.</p><div id="page-input"><p>¿Duermes con pareja?</p><div class="radio"><input id="yesBtn" type="radio" name="radioInputCouple" value="2"><label for="yesBtn">Sí</label><input id="noBtn" type="radio" name="radioInputCouple" value="1"><label for="noBtn">No</label></div><p>Si tu respuesta fue sí, ingresa el nombre de tu pareja:</p><input type="text" id="textInput" class="coupleName"></div>
+                    <input id="cBtn" class="cBtnq2" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q3">
+                    <h1 id="page-title" title="Género">Género</h1>
+                    <p id="page-info"><span class="coupleName1"></span>, los hombres y las mujeres tienen formas diferentes. Conocer tu género ayuda a nuestro sistema de diagnóstico a analizar tu tipo de cuerpo y recomendar el soporte que te queda mejor.</p><div id="page-input"><p>Selecciona tu género:</p><div class="radio"><input id="femaleBtn" type="radio" name="radioInputGender" value="1"><label for="femaleBtn">Mujer</label><input id="maleBtn" type="radio" name="radioInputGender" value="2"><label for="maleBtn">Hombre</label></div></div>
+                    <input id="cBtn" class="cBtnq3" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q3couple">
+                    <h1 id="page-title" title="Género">Género</h1>
+                    <p id="page-info"></p><div id="page-input"><p><span class="coupleName1"></span>, selecciona el g&eacute;nero de <span class="coupleName2"></span>:</p><div class="radio"><input id="femaleBtn2" type="radio" name="radioInputGender2" value="1"><label for="femaleBtn2">Mujer</label><input id="maleBtn2" type="radio" name="radioInputGender2" value="2"><label for="maleBtn2">Hombre</label></div></div>
+                    <input id="cBtn" class="cBtnq3couple" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q4">
+                    <h1 id="page-title" title="Edad">Edad</h1>
+                    <p id="page-info"><span class="coupleName1"></span>, tu cuerpo cambia cada seis a ocho años, las articulaciones pierden su flexibilidad, disminuye el tono muscular, la circulación sanguínea disminuye. Necesitaremos tu edad para calcular tu nivel ideal de soporte.</p><div id="page-input"><p>Selecciona tu rango de edad:</p><div class="radio"><input id="ageBtn1" type="radio" name="radioInputAge" value="1"><label for="ageBtn1">Menos de 25</label><input id="ageBtn2" type="radio" name="radioInputAge" value="2"><label for="ageBtn2">26 a 40</label><input id="ageBtn3" type="radio" name="radioInputAge" value="3"><label for="ageBtn3">41 a 55</label><input id="ageBtn4" type="radio" name="radioInputAge" value="2"><label for="ageBtn4">56 a 70</label><input id="ageBtn5" type="radio" name="radioInputAge" value="2"><label for="ageBtn5">Más de 70</label></div></div>
+                    <input id="cBtn" class="cBtnq4" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q4couple">
+                    <h1 id="page-title" title="Edad">Edad</h1>
+                    <p id="page-info"></p><div id="page-input"><p><span class="coupleName1"></span>, selecciona el rango de edad de <span class="coupleName2"></span>:</p><div class="radio"><input id="ageBtn11" type="radio" name="radioInputAge2" value="1"><label for="ageBtn11">Menos 25</label><input id="ageBtn22" type="radio" name="radioInputAge2" value="2"><label for="ageBtn22">26 a 40</label><input id="ageBtn33" type="radio" name="radioInputAge2" value="3"><label for="ageBtn33">41 a 55</label><input id="ageBtn44" type="radio" name="radioInputAge2" value="2"><label for="ageBtn44">56 a 70</label><input id="ageBtn55" type="radio" name="radioInputAge2" value="2"><label for="ageBtn55">Menos de 70</label></div></div>
+                    <input id="cBtn" class="cBtnq4couple" type="button" value="Continuar">
+                </div>
+                <div class="prompts"  style="display:none;" id="q5">
+                    <h1 id="page-title" title="Posición">Posición</h1>
+                    <p id="page-info"><span class="coupleName1"></span>, conocer tu posición preferida para dormir es muy importante en la determinación de tu soporte ideal, y también ayuda a identificar el espesor de la almohada que mantendrá tu columna vertebral correctamente alineada.</p><div id="page-input"><p>Selecciona la posición en la que normalmente te quedas dormido(a):</p><div class="radio"><input id="backBtn" type="radio" name="radioInputPosition" value="1"><label for="backBtn">De espalda o boca arriba</label><input id="stomachBtn" type="radio" name="radioInputPosition" value="3"><label for="stomachBtn">Boca abajo</label><input id="sideBtn" type="radio" name="radioInputPosition" value="2"><label for="sideBtn">De lado</label></div></div>
+                    <input id="cBtn" class="cBtnq5" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q5couple">
+                    <h1 id="page-title" title="Posición">Posición</h1>
+                    <p id="page-info"></p><div id="page-input"><p><span class="coupleName1"></span>, selecciona la posición preferida para dormir de <span class="coupleName2"></span>:</p><div class="radio"><input id="backBtn2" type="radio" name="radioInputPosition2" value="0"><label for="backBtn2">Espalda o boca arriba</label><input id="stomachBtn2" type="radio" name="radioInputPosition2" value="1"><label for="stomachBtn2">Boca abajo</label><input id="sideBtn2" type="radio" name="radioInputPosition2" value="2"><label for="sideBtn2">De lado</label></div></div>
+                    <input id="cBtn" class="cBtnq5couple" type="button" value="Continuar">
+                </div>
+                <div class="prompts"  style="display:none;" id="q6">
+                    <h1 id="page-title" title="Altura">Altura</h1>
+                    <p id="page-info"><span class="coupleName1"></span>, conocer tu altura le ayudará a nuestro sistema para analizar tu distribución general de peso y formar así un perfil basado en tu tipo de cuerpo específico.</p><div id="page-input"><p>Selecciona tu rango de altura:</p><div class="radio"><input id="heightBtn1" type="radio" name="radioInputHeight" value="1"><label for="heightBtn1">Menos de 1.40m</label><input id="heightBtn2" type="radio" name="radioInputHeight" value="2"><label for="heightBtn2">1.40m - 1.52m</label><input id="heightBtn3" type="radio" name="radioInputHeight" value="2"><label for="heightBtn3">1.53m - 1.68m</label><input id="heightBtn4" type="radio" name="radioInputHeight" value="3"><label for="heightBtn4">1.69m - 1.84m</label><input id="heightBtn5" type="radio" name="radioInputHeight" value="3"><label for="heightBtn5">1.85m - 1.98m</label><input id="heightBtn6" type="radio" name="radioInputHeight" value="4"><label for="heightBtn6">Más de 1.98m</label></div></div>
+                    <input id="cBtn" class="cBtnq6" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q6couple">
+                    <h1 id="page-title" title="Welcome">Altura</h1>
+                    <p id="page-info"></p><div id="page-input"><p><span class="coupleName1"></span>, selecciona el rango de altura de <span class="coupleName2"></span>:</p><div class="radio"><input id="heightBtn11" type="radio" name="radioInputHeight2" value="1"><label for="heightBtn11">Menos de 1.40m</label><input id="heightBtn22" type="radio" name="radioInputHeight2" value="2"><label for="heightBtn22">1.40m - 1.52m</label><input id="heightBtn33" type="radio" name="radioInputHeight2" value="2"><label for="heightBtn33">1.53m - 1.69m</label><input id="heightBtn44" type="radio" name="radioInputHeight2" value="3"><label for="heightBtn44">1.70m - 1.83m</label><input id="heightBtn55" type="radio" name="radioInputHeight2" value="3"><label for="heightBtn55">1.84m - 1.98m</label><input id="heightBtn66" type="radio" name="radioInputHeight2" value="4"><label for="heightBtn66">Más de 1.98m</label></div></div>
+                    <input id="cBtn" class="cBtnq6couple" type="button" value="Continuar">
+                </div>
+                <div class="prompts"  style="display:none;" id="q7">
+                    <h1 id="page-title" title="Peso">Peso</h1>
+                    <p id="page-info"><span class="coupleName1"></span>, el rango de peso es un factor crítico en la determinación de la cantidad de soporte postural necesario.</p><div id="page-input"><p>Selecciona tu rango de peso:</p><div class="radio"><input id="weightBtn1" type="radio" name="radioInputWeight" value="1"><label for="weightBtn1">Menos de 45Kg</label><input id="weightBtn2" type="radio" name="radioInputWeight" value="1"><label for="weightBtn2">45Kg ~ 56Kg</label><input id="weightBtn3" type="radio" name="radioInputWeight" value="2"><label for="weightBtn3">57Kg ~ 68Kg</label><input id="weightBtn4" type="radio" name="radioInputWeight" value="4"><label for="weightBtn4">69Kg ~ 79Kg</label><input id="weightBtn5" type="radio" name="radioInputWeight" value="5"><label for="weightBtn5">80Kg ~ 90Kg</label><input id="weightBtn6" type="radio" name="radioInputWeight" value="6"><label for="weightBtn6">91Kg ~ 102Kg</label><input id="weightBtn7" type="radio" name="radioInputWeight" value="7"><label for="weightBtn7">103Kg ~ 113Kg</label><input id="weightBtn8" type="radio" name="radioInputWeight" value="8"><label for="weightBtn8">Más de 113Kg</label></div></div>
+                    <input id="cBtn" class="cBtnq7" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q7couple">
+                    <h1 id="page-title" title="Peso">Peso</h1>
+                    <p id="page-info"></p><div id="page-input"><p><span class="coupleName1"></span>, selecciona el rango de peso de <span class="coupleName2"></span>:</p><div class="radio"><input id="weightBtn11" type="radio" name="radioInputWeight2" value="1"><label for="weightBtn11">Menos de 45Kg</label><input id="weightBtn22" type="radio" name="radioInputWeight2" value="2"><label for="weightBtn22">45Kg ~ 56Kg</label><input id="weightBtn33" type="radio" name="radioInputWeight2" value="3"><label for="weightBtn33">57Kg ~ 69Kg</label><input id="weightBtn44" type="radio" name="radioInputWeight2" value="4"><label for="weightBtn44">70Kg ~ 79Kg</label><input id="weightBtn55" type="radio" name="radioInputWeight2" value="5"><label for="weightBtn55">80Kg ~ 90Kg</label><input id="weightBtn66" type="radio" name="radioInputWeight2" value="6"><label for="weightBtn66">91Kg ~ 102Kg</label><input id="weightBtn77" type="radio" name="radioInputWeight2" value="7"><label for="weightBtn77">103Kg ~ 113Kg</label><input id="weightBtn88" type="radio" name="radioInputWeight2" value="8"><label for="weightBtn88">Más de 113Kg</label></div></div>
+                    <input id="cBtn" class="cBtnq7couple" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q8">
+                    <h1 id="page-title" title="Tallas">Tallas</h1>
+                    <p id="page-info"><span class="coupleName1"></span>, diferentes personas que usan la misma talla, pueden tener un peso totalmente diferente. La comprensión de la distribución total del peso ayuda a calcular tu perfil ideal de soporte.</p><div id="page-input"><div class="clothingSizes"><p>Selecciona tu talla de cintura:</p><div class="radio"><input id="pantBtn1" type="radio" name="pantInput" value="1"><label for="pantBtn1">Menos de 28</label><input id="pantBtn2" type="radio" name="pantInput" value="2"><label for="pantBtn2">28 - 31</label><input id="pantBtn3" type="radio" name="pantInput" value="2"><label for="pantBtn3">32 - 35</label><input id="pantBtn4" type="radio" name="pantInput" value="3"><label for="pantBtn4">36 - 40</label><input id="pantBtn5" type="radio" name="pantInput" value="3"><label for="pantBtn5">41 - 44</label><input id="pantBtn6" type="radio" name="pantInput" value="4"><label for="pantBtn6">Más de 44</label></div></div><div class="clothingSizes"><p>Selecciona tu talla de camisa/blusa:</p><div class="radio"><input id="shirtBtn1" type="radio" name="shirtInput" value="1"><label for="shirtBtn1">XS</label><input id="shirtBtn2" type="radio" name="shirtInput" value="2"><label for="shirtBtn2">S</label><input id="shirtBtn3" type="radio" name="shirtInput" value="3"><label for="shirtBtn3">M</label><input id="shirtBtn4" type="radio" name="shirtInput" value="3"><label for="shirtBtn4">L</label><input id="shirtBtn5" type="radio" name="shirtInput" value="4"><label for="shirtBtn5">XL</label><input id="shirtBtn6" type="radio" name="shirtInput" value="6"><label for="shirtBtn6">XXL</label></div></div></div>
+                    <input id="cBtn" class="cBtnq8" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q8couple">
+                    <h1 id="page-title" title="Tallas">Tallas</h1>
+                    <p id="page-info"></p><div id="page-input"><div class="clothingSizes"><p><span class="coupleName1"></span>, selecciona la talla de cintura de <span class="coupleName2"></span>:</p><div class="radio"><input id="pantBtn11" type="radio" name="pantInput2" value="1"><label for="pantBtn11">Menos de 28</label><input id="pantBtn22" type="radio" name="pantInput2" value="2"><label for="pantBtn22">28 - 31</label><input id="pantBtn33" type="radio" name="pantInput2" value="2"><label for="pantBtn33">32 - 35</label><input id="pantBtn44" type="radio" name="pantInput2" value="3"><label for="pantBtn44">36 - 40</label><input id="pantBtn55" type="radio" name="pantInput2" value="3"><label for="pantBtn55">41 - 44</label><input id="pantBtn66" type="radio" name="pantInput2" value="4"><label for="pantBtn66">Más de 44</label></div></div><div class="clothingSizes"><p>selecciona la talla de camisa/blusa de <span class="coupleName2">:</p><div class="radio"><input id="shirtBtn11" type="radio" name="shirtInput2" value="1"><label for="shirtBtn11">XS</label><input id="shirtBtn22" type="radio" name="shirtInput2" value="2"><label for="shirtBtn22">S</label><input id="shirtBtn33" type="radio" name="shirtInput2" value="3"><label for="shirtBtn33">M</label><input id="shirtBtn44" type="radio" name="shirtInput2" value="3"><label for="shirtBtn44">L</label><input id="shirtBtn55" type="radio" name="shirtInput2" value="4"><label for="shirtBtn55">XL</label><input id="shirtBtn66" type="radio" name="shirtInput2" value="6"><label for="shirtBtn66">XXL</label></div></div></div>
+                    <input id="cBtn" class="cBtnq8couple" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q9">
+                    <h1 id="page-title" title="Dolencias">Dolencias</h1>
+                    <p id="page-info"><span class="coupleName1"></span>, saber dónde experimentas los dolores y molestias es esencial para recomendar los colchones y almohadas que proporcionarán el mejor soporte postural y de alivio de presión para tu cuerpo.</p><div id="page-input"><p>Selecciona las áreas en las que experimentas <br> molestias (elige las que correspondan):</p><div><input id="painBtn1" type="checkbox" name="checkInputPain" value="Nuca"><label for="painBtn1">Nuca</label><input id="painBtn2" type="checkbox" name="checkInput" value="Hombros"><label for="painBtn2">Hombros</label><input id="painBtn3" type="checkbox" name="checkInput" value="Cadera"><label for="painBtn3">Cadera</label><input id="painBtn4" type="checkbox" name="checkInput" value="Espalda Media"><label for="painBtn4">Espalda media</label><input id="painBtn5" type="checkbox" name="checkInput" value="Espalda Baja"><label for="painBtn5">Espalda baja</label><input id="painBtn6" type="checkbox" name="checkInput" value="Otros"><label for="painBtn6">Otros</label></div></div>
+                    <input id="cBtn" class="cBtnq9" type="button" value="Continuar">
+                </div>
+                <div class="prompts" style="display:none;" id="q9couple">
+                    <h1 id="page-title" title="Dolencias">Dolencias</h1>
+                    <p id="page-info"></p><div id="page-input"><p><span class="coupleName1"></span>, selecciona las áreas en las que <span class="coupleName2"></span> experimenta <br> molestias (elige las que correspondan):</p><div><input id="painBtn11" type="checkbox" name="checkInputPain2" value="Nuca"><label for="painBtn11">Nuca</label><input id="painBtn22" type="checkbox" name="checkInput2" value="Hombros"><label for="painBtn22">Hombros</label><input id="painBtn33" type="checkbox" name="checkInput2" value="Cadera"><label for="painBtn33">Cadera</label><input id="painBtn44" type="checkbox" name="checkInput2" value="Espalda Media"><label for="painBtn44">Espalda media</label><input id="painBtn55" type="checkbox" name="checkInput2" value="Espalda Baja"><label for="painBtn55">Espalda baja</label><input id="painBtn66" type="checkbox" name="checkInput2" value="Otros"><label for="painBtn66">Otros</label></div></div>
+                    <input id="cBtn" class="cBtnq9couple" type="button" value="Continuar">
+                </div>
+                <div  class="prompts" style="display:none;" id="q10">
+                    <h1 id="page-title" title="Resultados">¡Tus resultados están listos!</h1>
+                    <p id="page-info">Hemos encontrado productos que responden a sus necesidades de soporte postural. Simplemente haz clic en 'Resultados' para visualizarlos en la pantalla.</p><div id="page-input"></div>
+                    <input id="cBtn" class="cBtnq10" type="button" value="Resultados">
+                </div>
+                <div  class="prompts" style="display:none;" id="flex">
+                    <p id="single1" class="singleon"><span class="coupleName1"></span>, tu nivel de soporte sugerido es:</p>
+                    <p id="couple1" class="coupleoff"><span class="coupleName1"></span> y <span class="coupleName2"></span>, su nivel de soporte sugerido es:</p>
+                    <p style="font-size: 2em;text-align: center;">"Flex"</p>
+                    <p id="page-info"></p><div id="page-input"></div>
+                    <input id="cBtn" style="margin-left:140px;" class="cBtnq11" type="button" value="Comenzar de nuevo">
+                </div>
+                <div  class="prompts" style="display:none;" id="semiflex">
+                   <p id="single2" class="singleon"><span class="coupleName1"></span>, tu nivel de soporte sugerido es:</p>
+                    <p id="couple2" class="coupleoff"><span class="coupleName1"></span> y <span class="coupleName2"></span>, su nivel de soporte sugerido es:</p>
+                    <p style="font-size: 2em;text-align: center;">"Semiflex"</p>
+                    <p id="page-info"></p><div id="page-input"></div>
+                    <input id="cBtn" style="margin-left:140px;" class="cBtnq11" type="button" value="Comenzar de nuevo">
+                </div>
+                <div  class="prompts" style="display:none;" id="firme">
+                    <p id="single3" class="singleon"><span class="coupleName1"></span>, tu nivel de soporte sugerido es:</p>
+                    <p id="couple3" class="coupleoff"><span class="coupleName1"></span> y <span class="coupleName2"></span>, su nivel de soporte sugerido es:</p>
+                    <p style="font-size: 2em;text-align: center;">"Firme"</p>
+                    <p id="page-info"></p><div id="page-input"></div>
+                    <input id="cBtn" style="margin-left:140px;" class="cBtnq11" type="button" value="Comenzar de nuevo">
+                </div>
+            </div>
+        </div>
+        <div id="logo">
+        </div>
+    </div>
+</body>
+</html>

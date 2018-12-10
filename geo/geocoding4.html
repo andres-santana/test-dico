@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+<title>Proper Title</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    $.get("https://ipinfo.io?token=52069d575a9689", function (response) {
+    $("#ip").html("IP: " + response.ip);
+    $("#city").html("Location: " + response.city + ", " + response.region);
+    $("#details").html(JSON.stringify(response, null, 4));
+    var state = response.region;
+
+    if(state != '') {
+        if(state.match(/^Distrito Federal.*$/)){
+            url = "http://dico.com.mx/df/";
+        }
+        if(state.match(/^Mexico.*$/)){
+            url = "http://dico.com.mx/df/";
+        }
+        if(state.match(/^Estado de M.*$/)){
+            url = "http://dico.com.mx/df/";
+        }
+        if(state.match(/^Puebla.*$/)){
+            url = "http://dico.com.mx/df/";
+        }
+        if(state.match(/^Hidalgo.*$/)){
+            url = "http://dico.com.mx/df/";
+        }
+        if(state.match(/^Morelos.*$/)){
+            url = "http://dico.com.mx/df/";
+        }
+        if(state.match(/^Quer.*$/)){
+            url = "http://dico.com.mx/df/";
+        }
+        if(state.match(/^Guerrero.*$/)){
+            url = "http://dico.com.mx/oriente/";
+        }
+        if(state.match(/^Campeche.*$/)){
+            url = "http://dico.com.mx/sureste/";
+        }
+        if(state.match(/^Quintana.*$/)){
+            url = "http://dico.com.mx/sureste/";
+        }
+        if(state.match(/^Yucat.*$/)){
+            url = "http://dico.com.mx/sureste/";
+        }
+        if(state.match(/^Aguascalientes.*$/)){
+            url = "http://bajio.dico.com.mx";
+        }
+        if(state.match(/^Guanajuato.*$/)){
+            url = "http://bajio.dico.com.mx";
+        }
+        if(state.match(/^San Luis.*$/)){
+            url = "http://bajio.dico.com.mx";
+        }
+        if(state.match(/^Jalisco.*$/)){
+            url = "http://bajio.dico.com.mx";
+        }
+        if(state.match(/^Colima.*$/)){
+            url = "http://bajio.dico.com.mx";
+        }
+        if(state.match(/^Michoac.*$/)){
+            url = "http://bajio.dico.com.mx";
+        }
+        if(state.match(/^Zacatecas.*$/)){
+            url = "http://bajio.dico.com.mx";
+        }
+        if(state.match(/^Nayarit.*$/)){
+            url = "http://bajio.dico.com.mx";
+        }
+        if(state.match(/^Sinaloa.*$/)){
+            url = "http://bajio.dico.com.mx/pacifico/";
+        }
+        if(state.match(/^Sonora.*$/)){
+            url = "http://bajio.dico.com.mx/pacifico/";
+        }
+        if(state.match(/^Baja California Sur.*$/)){
+            url = "http://bajio.dico.com.mx/noroeste/";
+         }
+        if(state.match(/^.*California$/)){
+            url = "http://tiendas.dico.com.mx/norte/";
+        }
+        if(state.match(/^Tabasco.*$/)){
+            url = "http://tiendas.dico.com.mx/norte/";
+        }
+        if(state.match(/^Veracruz.*$/)){
+            url = "http://dico.com.mx/suroeste/";
+        }
+        if(state.match(/^Chiapas.*$/)){
+            url = "http://dico.com.mx/suroeste/";
+        }
+        if(state.match(/^Oaxaca.*$/)){
+            url = "http://dico.com.mx/suroeste/";
+        }
+                    
+                    window.location = url;
+    }
+}, "jsonp");
+
+})
+</script>
+</head>
+    
+<body>
+
+<div id="result"></div>
+Cargando...
+</body>
+</html>

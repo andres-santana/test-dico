@@ -1,0 +1,335 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<?php if ($this->getOrderId()):
+
+    Mage::getSingleton('core/session')->setWebpaySuccess(0); 
+
+  $_order = Mage::getModel('sales/order')->loadByIncrementId($this->getOrderId());
+    $_payment_method = $_order->getPayment()->getMethodInstance()->getCode();
+    $_amount_string = $_order->getGrandTotal();
+    $_amount = Mage::helper('core')->currency($_amount_string, true, false);
+    $_sub_amount_string = $_order->getSubtotal();
+    $_sub_amount = Mage::helper('core')->currency($_sub_amount_string, true, false);
+    $envio = $_order->getShippingAmount();
+	$envio = Mage::helper('core')->currency($envio, true, false);
+	$discount = $_order->getDiscountAmount();
+    $urlweb = Mage::getBaseUrl();
+    
+	if ($discount!=0):
+	$discount = Mage::helper('core')->currency($discount, true, false);
+	else:
+	$discount = null;
+	endif;
+    if ($_payment_method != "webpay") :
+        Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('webpay/payment/success', array('order' => $this->getOrderId())));
+        
+
+    else:
+
+    
+    $_ccname = $this->getRequest()->getParam('ccname');
+    $_ccnum = $this->getRequest()->getParam('ccnum');
+    $_amount_string = $this->getRequest()->getParam('amount');
+    $_amount = Mage::helper('core')->currency($_amount_string, true, false);
+    $_type_string = $this->getRequest()->getParam('type');
+    $_reference = $this->getRequest()->getParam('reference');
+    $_aut = $this->getRequest()->getParam('aut');
+
+    $webpay = Mage::getSingleton("webpay/standard");
+    $_type= $webpay->Salaa($webpay->HexStringToString($_type_string),'MEX01017290');
+    //$_type= $webpay->Salaa($webpay->HexStringToString($_type_string),'MEX002B919');
+
+    $_SESSION['refresh'] = $_reference;
+    
+?>
+    
+    <div class="page-title">
+        <h1 id="success-title"><?php echo $this->__('¡Tu compra ha sido exitosa, muchas gracias por tu preferencia!') ?></h1>
+
+</div>
+
+<div>
+    <p><?php echo $this->__('Estimado Cliente') ?></p>
+    <p><?php echo $this->__('<span class="success-message">Tu solicitud de pedido con número %s', sprintf('<a href="%s" target="_parent" style="color:#000000; font-size:20px; font-weight:bold;">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))).'</span> fue concluida correctamente. ' ?><?php echo $this->__('Usted recibirá un correo electrónico confirmando el pedido y los detalles de su compra.') ?></p>
+	<?php 
+			if (!$_order->getCustomerIsGuest()) { 
+	?>
+	<p><?php echo $this->__('Clic <a href="%s" onclick="this.target=\'_blank\'" class="print">aquí para imprimir</a> una copia de tu pedido.', $this->getPrintUrl()) ?></p><br/>
+	<?php } ?>
+    <p><?php echo 'Tu compra fue todo un éxito. ¡Prepárate para pasar buenos momentos en casa con Muebles Dico!' ?><p/><br/>
+<?php /*if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :*/?>
+<?php //if ($this->getCanViewOrder()):?>
+    <p>
+        <?php echo $this->getChildHtml() ?>
+    </p>
+</div>
+<hr>
+<?php 
+ 
+     $orderObj = Mage::getModel('sales/order')->loadByIncrementId($this->getOrderId());
+    $orderItems = $orderObj->getAllVisibleItems();
+?>
+        <div class="col2-set">
+            <div class="col-1">
+                <div class="box">
+                    <div class="box-title"><h2>Datos de pago</h2></div>
+                    <div class="box-content">
+                        <p class="capitalize">Nombre: <?php echo $_ccname ?></p> 
+                        <p class="capitalize">Forma de pago: <?php echo $_type ?></p> 
+                        <p>No. Tarjeta: ************<?php echo $_ccnum ?></p> 
+                        <p>Importe: <?php echo $_amount ?> MXN</p> 
+                        <p>No. Referencia: <?php echo $_reference ?></p>
+                        <p>No. Autorizaci&oacute;n: <?php echo $_aut ?></p>
+						<?php $_date = $_order->getCreatedAtStoreDate()->toString(Varien_Date::DATETIME_INTERNAL_FORMAT); ?>
+                        <p>Fecha de operaci&oacute;n: <?php echo $_date ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="box">
+                    <div class="box-title"><h2>Direcci&oacute;n de env&iacute;o</h2></div>
+                    <div class="box-content">
+                        <address>
+                            <?php 
+                             $_shippingAddress = $orderObj->getShippingAddress();
+                             $_name = $_shippingAddress->getFirstname() . '&nbsp;' . $_shippingAddress->getLastname();
+                             $_address =  $_shippingAddress->getStreetFull();
+                            ?>
+                            <p class="capitalize">Nombre: <?php echo $_name ?></p> 
+                            <p class="capitalize">Direcci&oacute;n: <?php echo $_address ?></p> 
+                            <p class="capitalize">Ciudad: <?php echo $_shippingAddress->getCity() ?></p> 
+                            <p class="capitalize">Estado: <?php echo $_shippingAddress->getRegion() ?></p> 
+                            <p class="capitalize">CP. <?php echo $_shippingAddress->getPostcode() ?></p>
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+<table class="data-table grouped-items-table" >
+    <thead>
+        <tr class="first">
+            <th class="w55pc">Nombre del Producto</th>
+            <th class="a-center">D&iacute;as de entrega</th>
+            <th class="a-center w15pc">SKU</th>
+            <th class="a-right w10pc">Precio</th>
+            <th class="a-right w10pc">Cantidad</th>
+            <th class="a-right w10pc">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <script type="text/javascript">
+        var content_ids = new Array();
+    </script>
+    <?php
+        foreach($orderItems as $items){
+            $_product = Mage::getModel('catalog/product')->load($items->getProductId());
+            $product_small_image_path = Mage::helper('catalog/image')->init($_product, 'small_image')->resize(360,177);
+    ?>
+    <script type="text/javascript">
+        content_ids.push('<?php echo $items->getProductId() ?>')
+    </script>
+        <tr>
+            <td>
+                <h3 class="product-name"><?php echo $items->getName();?></h3>
+                <?php if($_options = $items->getItemOptions()): ?>
+                    <dl class="item-options">
+                    <?php foreach ($_options as $_option) : ?>
+                        <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                        <?php if (!$this->getPrintStatus()): ?>
+                            <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+                            <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>>
+                                <?php echo $_formatedOptionValue['value'] ?>
+                                <?php if (isset($_formatedOptionValue['full_view'])): ?>
+                                <div class="truncated_full_value">
+                                    <dl class="item-options">
+                                        <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                                        <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
+                                    </dl>
+                                </div>
+                                <?php endif; ?>
+                            </dd>
+                        <?php else: ?>
+                            <dd>
+                                <?php echo nl2br($this->escapeHtml( (isset($_option['print_value']) ? $_option['print_value'] : $_option['value']) )) ?>
+                            </dd>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                    </dl>
+                <?php endif; ?>
+            </td>
+			<td class="a-center">
+				<?php $attribute = $_product->getResource()->getAttribute('tiempo_entrega');
+					if ($attribute):
+						echo $attribute_value = $attribute ->getFrontend()->getValue($_product);
+						echo " días";
+					endif; 
+				?>
+			</td>
+            <td class="a-center"><?php echo $items->getSku(); ?></td>
+            <td class="a-center"><?php echo number_format($items->getPrice(),2);?></td>
+            <td class="a-center"><?php echo number_format($items->getQtyOrdered(),0); ?></td>
+            <?php $totalprice = ($items->getQtyOrdered())*($items->getPrice());?>
+            <td class="a-right"><?php echo number_format($totalprice,2); ?></td>
+        </tr>
+        <?php } ?>
+        <tfoot>
+            <tr class="subtotal first">
+                <td colspan="5" class="a-right">
+                    Sub-total
+                </td>
+                <td class="last a-right">
+                    <span class="price"><?php echo $_sub_amount; ?></span>                    
+                </td>
+            </tr>
+            <tr class="shipping">
+                <td colspan="5" class="a-right">
+                    Envío y Manejo                    
+                </td>
+                <td class="last a-right">
+                    <span class="price"><?php echo $envio ?></span>                    
+                </td>
+            </tr>
+			<?php if($discount): ?>
+			<tr class="discount">
+                <td colspan="5" class="a-right">
+                    Descuento                    
+                </td>
+                <td class="last a-right">
+                    <span class="price"><?php echo $discount ?></span>                    
+                </td>
+            </tr>
+			<?php endif ?>
+            <tr class="grand_total last">
+                <td colspan="5" class="a-right">
+                    <strong>Gran Total</strong>
+                </td>
+                <td class="last a-right">
+                    <strong><span class="price"><?php echo $_amount; ?></span></strong>
+                </td>
+            </tr>
+        </tfoot>
+</tbody></table>
+
+<?php echo $this->getLayout()->createBlock('core/template')->setTemplate('sales/view.phtml')->toHtml(); ?>
+
+<?php //endif; ?>
+<?php endif;?>
+<?php endif;?>
+
+<?php if ($this->getAgreementRefId()): ?>
+    <p><?php echo $this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
+<?php endif;?>
+
+<?php if ($profiles = $this->getRecurringProfiles()):?>
+<p><?php echo $this->__('Your recurring payment profiles:'); ?></p>
+<ul class="disc">
+<?php foreach($profiles as $profile):?>
+<?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
+    <li><?php echo $this->__('Payment profile # %s: "%s".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
+<?php endforeach;?>
+</ul>
+<?php endif;?>
+
+<div class="buttons-set">
+    <button type="button" class="button" title="<?php echo $this->__('Seguir Comprando') ?>" onclick="window.top.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
+</div>
+<script type="text/javascript">
+      window.parent.scrollTo(0,0);
+</script>
+<?php
+/*$RequestSignature = md5($_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING'].print_r($_POST, true));
+
+if ($_SESSION['LastRequest'] == $RequestSignature)
+{ ?>
+<script type="text/javascript">
+    alert('Esta operacion no esta permitida');
+</script>
+<?php
+}
+else
+{
+  $_SESSION['LastRequest'] = $RequestSignature;
+}*/
+?>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+
+  if (window.history && window.history.pushState) {
+
+    window.history.pushState('forward', null, './#forward');
+
+    $(window).on('popstate', function() {
+      alert('Esta operacion no esta permitida');
+    });
+
+  }
+   $(window).bind('beforeunload',function(){
+
+     //save info somewhere
+
+    return 'Esta operacion no esta permitida';
+
+});
+});
+</script>
+<script type="text/javascript">
+    dataLayer.push({
+        "ecommerce": {
+            "purchase": {
+                "actionField": {
+                    "id": "<?php echo $_order ?>",
+                    "affiliation": "<?php echo $_payment_method ?>",
+                    "revenue": "<?php echo number_format((float)$_amount_string,2,'.','') ?>",
+                    "location": "<?php echo $urlweb ?>" // Our custom purchase attribute
+                },
+                "products": [
+                <?php 
+                foreach ($orderItems as $items) { 
+                    echo "{";
+                    echo '"name": "'.$items->getName().'",';
+                    echo '"id": "'.$items->getId().'",';
+                    echo '"sku": "'.$items->getSku().'",';
+                    echo '"price": "'.number_format($items->getPrice(),0).'",';
+                    echo '"quantity": "'.number_format($items->getQtyOrdered(),0).'"';
+
+                    if (end($orderItems)) {
+                        echo "},";
+                    }
+                    else{
+                        echo "},";
+                    }
+
+                } ?>
+                    ]
+                }
+            }
+        });
+</script>

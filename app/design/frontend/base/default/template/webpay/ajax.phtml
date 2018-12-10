@@ -1,0 +1,59 @@
+<?php
+/*require_once(Mage::getBaseDir('lib') . '/rc4crypt.php');
+
+function getStringBetween($str,$from,$to){
+    $sub = substr($str, strpos($str,$from)+strlen($from),strlen($str));
+    return substr($sub,0,strpos($sub,$to));
+}
+
+$session_reference  =  Mage::getSingleton('core/session')->getWebpaySuccess();
+
+$day = $this->getRequest()->getParam('d');
+$month = $this->getRequest()->getParam('m');
+$year = $this->getRequest()->getParam('y');
+$reference = $this->getRequest()->getParam('r');
+$date = $day . "/" . $month . "/" . $year;
+$string  = array('filedata' => " " );
+
+$rc4crypt = new rc4();
+$user = "B919CWUS0";
+$pass_string = "B919CWUS0";
+$pass = $rc4crypt->StringToHexString($rc4crypt->Salaa($pass_string,'RepGEmPgs'));       
+
+try {
+    $client = new SoapClient("https://dev.mitec.com.mx/pgs/services/xmltransacciones?wsdl");
+    $string['filedata'] = array("in0" => $user, "in1" => $pass,"in2" => "B919", "in3" => $date, "in4" => "002", "in5" => $reference);
+    $result2 = $client->transacciones($string['filedata']);
+    $result = $result2->out;
+    
+    $_nombre = getStringBetween($result,"<cc_nombre>","</cc_nombre");
+    $_importe = getStringBetween($result,"<nu_importe>","</nu_importe");
+    $_num_tarjeta = getStringBetween($result,"<cc_num>","</cc_num");
+    $_tipo_tarjeta = getStringBetween($result,"<cc_tp>","</cc_tp");
+    $_response = getStringBetween($resul,"<nb_response>","</nb_response");
+    $_banco = getStringBetween($result,"<fh_bank>","</fh_bank");
+    $_tipo_operacion = getStringBetween($result,"<tp_operacion>","</tp_operacion");
+    $_tipo_moneda = getStringBetween($result,"<nb_currency>","</nb_currency");
+    $_fecha = getStringBetween($result,"<fh_registro>","</fh_registro");
+
+    echo "Nombre: " . $_nombre;
+    echo "<br>No. Tarjeta: ************" . $_num_tarjeta;
+    echo "<br>Banco: " . $_tipo_tarjeta;
+    echo "<br>Importe: " . $_importe;
+    echo "<br>Fecha y hora: " . $_fecha;
+    echo "<br>";
+
+} catch(SoapFault $e){
+  var_dump($e);
+}        */
+?>
+<div id="ele" style="width:50px; height:50px; background: transparent">
+
+</div>
+<div id="response" style="width:50px; height:50px; background: red;">
+
+</div>
+<?php 
+    return $_GET['response']="123456789";
+?>
+

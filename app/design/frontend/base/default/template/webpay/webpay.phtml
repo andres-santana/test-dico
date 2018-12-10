@@ -1,0 +1,45 @@
+<?php         if (Mage::getSingleton('customer/session')->isLoggedIn()) { ?>
+
+
+<h1> Bienvenido al Saludador </h1>
+<?php 
+if (isset($_GET['nombre'])) {
+	$saludador = Mage::getSingleton("webpay/checkout");
+    $saludo = $saludador->enviarParametros($_GET['nombre']);
+    $_orderId = $saludador->getOnepage()->getQuote()->getId();
+    $session        = Mage::getSingleton('checkout/session');
+	$quote_id       = $session->getQuoteId();
+	$item_quote     = Mage::getModel('sales/quote')->load($quote_id);
+
+    //$orderId = $_orderId->getOrderId();
+
+    echo("<h4>" . $saludo . "</h4>");
+    $total = $this->helper('checkout/cart')->getQuote()->getGrandTotal();
+    echo $total;
+    $_order = Mage::getSingleton('checkout/session')->getLastRealOrder(); ?>
+
+<?php if (!$_order || !$_order->getId()): 
+	echo "<br>orden: ".$quote_id;
+	echo "<br>orden2: ".$_orderId;
+	echo "<br>orden3: ".$item_quote;
+	echo $_order->getBaseGrandTotal();
+	endif;
+
+} else {
+?>
+ 
+<form action="checkout" method="GET">
+<label for="nombre">Dime tu nombre</label>
+<input type="text" name="nombre"/>
+<input type="submit"/>
+</form>
+ 
+<?php
+	}
+}
+else{
+
+	  Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('customer/account'));
+
+}
+?>

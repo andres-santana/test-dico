@@ -1,0 +1,59 @@
+<!--@subject Welcome, {{var customer.name}}! @-->
+
+<style type="text/css">
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+</style>
+
+<div style="font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;">
+    <table cellspacing="0" cellpadding="0" border="0" width="98%" style="margin-top:10px; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
+        <tr>
+            <td align="center" valign="top">
+                <!-- [ header starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <a href="{{store url=""}}"><img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="Magento"  style="margin-bottom:10px;" border="0"/></a></td>
+                    </tr>
+                </table>
+
+                <!-- [ middle starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                        <td valign="top">
+                            <p><strong>Estimado {{var customer.name}}</strong>,<br/>
+                            Bienvenido a la Tienda Demostrativa Magento. 
+							Para iniciar sesi&oacute;n  al visitar nuestro sitio simplemente haga click en
+							<a href="{{store url="customer/account/"}}" style="color:#1E7EC8;">Iniciar Sesi&oacute;n</a> o
+							<a href="{{store url="customer/account/"}}" style="color:#1E7EC8;">Mi Cuenta</a> 
+							localizados en la parte superior de todas las paginas e ingrese su direcci&oacute;n de correo electr&oacute;nico y contrase&ntilde;a.
+							</p>
+
+                            <p style="border:1px solid #BEBCB7; padding:13px 18px; background:#F8F7F5; ">
+                                Utilice los siguientes valores para iniciar sesi&oacute;n:<br/>
+                                Correo Electr&oacute;nico: {{var customer.email}}<br/>
+                                Contrase&ntilde;a: {{var customer.password}}<p>
+
+                            <p>Cuando usted inicie sesi&oacute;n en su cuenta, usted podra realizar lo siguiente:</p>
+
+                            <ul>
+                                <li>Pasar a pagar m&aacute;s rapidamente cuando haga una compra</li>
+                                <li>Revisar el estatus de una orden</li>
+                                <li>Ver ordenes anteriores</li>
+                                <li>Hacer cambios en la informaci&oacute;n de su cuenta</li>
+                                <li>Cambiar su contrase&ntilde;a</li>
+                                <li>Guardar direcciones alternativas ( &iexcl;para enviar a multiples miembros familiares o amigos!)</li>
+                            </ul>
+
+                            <p>Si usted tiene dudas acerca de su cuenta o de cualquier otro asunto, por favor sientase en la libertad de contactarnos en <a href="mailto:magento@varien.com" style="color:#1E7EC8;">dummyemail@magentocommerce.com</a> o via telefonica en: (800) DEMO-STORE.</p>
+                            <p>&iexcl;Gracias nuevamente!</p>
+
+
+
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+</div>

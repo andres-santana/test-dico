@@ -1,0 +1,252 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Muebles Dico</title>
+    <link href="../media/favicon/default/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <style type="text/css">
+        .hidden{
+            visibility:hidden;
+        }
+         .loader {
+            width: 100px;
+            height: 100px;
+            margin: 300px auto;
+            z-index: 100;
+            overflow: visible;
+        }
+            .loader p {
+                margin: auto;
+                text-align: center;
+                height:auto;
+            }
+
+        loader-inner{
+            top:60px;
+            left:40px;
+        }
+        /* Animation CSS */
+        @-webkit-keyframes ball-triangle-path-1 {
+            33%; {
+                -webkit-transform: translate(25px, -50px);
+                transform: translate(25px, -50px);
+            }
+
+            66% {
+                -webkit-transform: translate(50px, 0px);
+                transform: translate(50px, 0px);
+            }
+
+            100% {
+                -webkit-transform: translate(0px, 0px);
+                transform: translate(0px, 0px);
+            }
+        }
+
+        @keyframes ball-triangle-path-1 {
+            33% {
+                -webkit-transform: translate(25px, -50px);
+                transform: translate(25px, -50px);
+            }
+
+            66% {
+                -webkit-transform: translate(50px, 0px);
+                transform: translate(50px, 0px);
+            }
+
+            100% {
+                -webkit-transform: translate(0px, 0px);
+                transform: translate(0px, 0px);
+            }
+        }
+
+        @-webkit-keyframes ball-triangle-path-2 {
+            33% {
+                -webkit-transform: translate(25px, 50px);
+                transform: translate(25px, 50px);
+            }
+
+            66% {
+                -webkit-transform: translate(-25px, 50px);
+                transform: translate(-25px, 50px);
+            }
+
+            100% {
+                -webkit-transform: translate(0px, 0px);
+                transform: translate(0px, 0px);
+            }
+        }
+
+        @keyframes ball-triangle-path-2 {
+            33% {
+                -webkit-transform: translate(25px, 50px);
+                transform: translate(25px, 50px);
+            }
+
+            66% {
+                -webkit-transform: translate(-25px, 50px);
+                transform: translate(-25px, 50px);
+            }
+
+            100% {
+                -webkit-transform: translate(0px, 0px);
+                transform: translate(0px, 0px);
+            }
+        }
+
+        @-webkit-keyframes ball-triangle-path-3 {
+            33% {
+                -webkit-transform: translate(-50px, 0px);
+                transform: translate(-50px, 0px);
+            }
+
+            66% {
+                -webkit-transform: translate(-25px, -50px);
+                transform: translate(-25px, -50px);
+            }
+
+            100% {
+                -webkit-transform: translate(0px, 0px);
+                transform: translate(0px, 0px);
+            }
+        }
+
+        @keyframes ball-triangle-path-3 {
+            33% {
+                -webkit-transform: translate(-50px, 0px);
+                transform: translate(-50px, 0px);
+            }
+
+            66% {
+                -webkit-transform: translate(-25px, -50px);
+                transform: translate(-25px, -50px);
+            }
+
+            100% {
+                -webkit-transform: translate(0px, 0px);
+                transform: translate(0px, 0px);
+            }
+        }
+
+        .ball-triangle-path {
+            position: relative;
+            top:25px;
+            left:12px;
+            /*-webkit-transform: translate(-29.994px, -37.50938px);
+            -ms-transform: translate(-29.994px, -37.50938px);
+            transform: translate(-29.994px, -37.50938px);*/
+        }
+
+            .ball-triangle-path > div:nth-child(1) {
+                -webkit-animation-name: ball-triangle-path-1;
+                animation-name: ball-triangle-path-1;
+                -webkit-animation-delay: 0;
+                animation-delay: 0;
+                -webkit-animation-duration: 2s;
+                animation-duration: 2s;
+                -webkit-animation-timing-function: ease-in-out;
+                animation-timing-function: ease-in-out;
+                -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+            }
+
+            .ball-triangle-path > div:nth-child(2) {
+                -webkit-animation-name: ball-triangle-path-2;
+                animation-name: ball-triangle-path-2;
+                -webkit-animation-delay: 0;
+                animation-delay: 0;
+                -webkit-animation-duration: 2s;
+                animation-duration: 2s;
+                -webkit-animation-timing-function: ease-in-out;
+                animation-timing-function: ease-in-out;
+                -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+            }
+
+            .ball-triangle-path > div:nth-child(3) {
+                -webkit-animation-name: ball-triangle-path-3;
+                animation-name: ball-triangle-path-3;
+                -webkit-animation-delay: 0;
+                animation-delay: 0;
+                -webkit-animation-duration: 2s;
+                animation-duration: 2s;
+                -webkit-animation-timing-function: ease-in-out;
+                animation-timing-function: ease-in-out;
+                -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+            }
+
+            .ball-triangle-path > div {
+                -webkit-animation-fill-mode: both;
+                animation-fill-mode: both;
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                border-radius: 100%;
+                border: 1px solid #fff;
+            }
+
+                .ball-triangle-path > div:nth-of-type(1) {
+                    top: 50px;
+                }
+
+                .ball-triangle-path > div:nth-of-type(2) {
+                    left: 25px;
+                }
+
+                .ball-triangle-path > div:nth-of-type(3) {
+                    top: 50px;
+                    left: 50px;
+                }
+
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./css/ps.css" rel="stylesheet" type="text/css" />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/plugins/CSSPlugin.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/easing/EasePack.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/TweenLite.min.js"></script>
+    <script data-main="./scripts/app.js" src="./scripts/require.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body style="background-color:#12b5ea;">
+    <div class="loader">
+        <p>Cargando ...</p>
+        <div class="loader-inner ball-triangle-path">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="container">
+        <div id="menu" style="display:none;" >
+            <nav id="nav" role="navigation" data-ng-controller="progressController">
+                <ul id="navLinks" />
+            </nav>
+        </div>
+        <div id="content" style="display:none;" >
+            <div id="bg">
+                <div id="prompts">
+                    <h1 id="page-title" title="Welcome">Bienvenido</h1>
+                    <p id="page-info">Estos 7 pasos simples nos permitirán calcular el mejor soporte para mantener tu cuerpo alineado mientras descansas.
+                    <div id="page-input"></div>
+                    <input id="cBtn" type="button" value="Continuar" />
+                </div>
+                <div id="page-logo"></div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+jQuery(document).ready(function($){
+    $("#SvgjsSvg1007").click(function(){
+        $("#navBtnText0").html("Género");
+    });
+    
+});
+</script>
+</body>
+</html>

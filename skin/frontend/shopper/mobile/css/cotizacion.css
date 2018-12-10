@@ -1,0 +1,18 @@
+.grid_1, .grid_2, .grid_3, .grid_4, .grid_5, .grid_6, .grid_7, .grid_8, .grid_9, .grid_10, .grid_11, .grid_12 {	display:inline;	float: left; position: relative; margin:0 15px; min-height:1px;}
+.grid_1 { width:70px;}
+.grid_2 { width:170px;}
+.grid_3 { width:270px;}
+.grid_4 { width:370px;}
+.grid_5 { width:470px;}
+.grid_6 { width:570px;}
+.grid_7 { width:670px;}
+.grid_8 { width:770px;}
+.grid_9 { width:870px;}
+.grid_10 { width:970px;}
+.grid_11 { width:1070px;}
+.grid_12 { width:1170px;}
+
+.cotizacion-enviada{background: transparent url(../images/cotizacion-enviada-bg.png) 50% 0px no-repeat; min-height: 350px; padding-top: 60px;}
+.cotizacion-enviada h3{padding-bottom: 60px;}
+.centered{position: absolute; top: 50%; left:50%;}
+.titulo{line-height: 24px !important; margin-top: 30px;}

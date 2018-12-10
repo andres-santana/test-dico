@@ -1,0 +1,30 @@
+<div class="quiz-area" ng-show="inProgress">
+    <div ng-show="!quizOver">
+        <h2 id="question">{{question}}</h2>
+        <ul id="options">
+            <li ng-repeat="option in options">
+                <label>
+                    <input type="{{type}}" name="answer" value="{{option}}">
+                    {{option}}
+                </label>
+            </li>
+        </ul>
+        <button ng-click="checkAnswer()" ng-show="answerMode">Submit</button>
+    </div>
+
+    <div ng-show="quizOver">
+        <h2>Resultados</h2>
+        <button ng-click="reset()">Volver a iniciar</button>
+    </div>
+
+    <div id="score">
+        Score: {{score}}
+    </div>
+</div>
+
+<div class="intro" ng-show="!inProgress">
+    <h1 id="page-title" title="Bienvenido">Bienvenido</h1>
+    <p id="page-info">Estos 7 pasos simples nos permitirán calcular el mejor soporte para mantener tu cuerpo alineado mientras descansas.</p>
+    ><p>Para comenzar ingresa tu nombre:</p><input type="text" name="input" ng-model="user.name" ng-pattern="word" required ng-trim="false">
+    <button id="startQuiz" ng-click="start()">Iniciar</button>
+</div>

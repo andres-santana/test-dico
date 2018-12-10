@@ -1,0 +1,423 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/** @var Mage_Checkout_Block_Onepage_Billing $this */
+/* Añadimos los nuevos campos */
+/*
+$setup = new Mage_Eav_Model_Entity_Setup('core_setup');  
+$setup->addAttribute('customer', 'billing:rfc', array(  
+    'label'     => 'RFC',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => false,  
+    'position'  => 1,  
+    ));  
+$setup->addAttribute('customer', 'billing:rfc_nombre', array(  
+    'label'     => 'Razón Social',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => true,  
+    'position'  => 2,  
+    ));  
+
+$setup->addAttribute('customer', 'billing:rfc_calle', array(  
+    'label'     => 'Calle',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => true,  
+    'position'  => 3,  
+    )); 
+
+$setup->addAttribute('customer', 'billing:rfc_no_exterior', array(  
+    'label'     => 'No. Exterior',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => true,  
+    'position'  => 4,  
+    ));  
+
+$setup->addAttribute('customer', 'billing:rfc_no_interior', array(  
+    'label'     => 'No. Interior',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => false,  
+    'position'  => 5,  
+    ));  
+
+$setup->addAttribute('customer', 'billing:cp', array(  
+    'label'     => 'CP',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => true,  
+    'position'  => 6,  
+    ));  
+
+$setup->addAttribute('customer', 'billing:rfc_colonia', array(  
+    'label'     => 'Colonia',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => true,  
+    'position'  => 7,  
+    ));  
+
+$setup->addAttribute('customer', 'billing:rfc_municipio', array(  
+    'label'     => 'Municipio',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => true,  
+    'position'  => 8,  
+    ));
+
+$setup->addAttribute('customer', 'billing:rfc_estado', array(  
+    'label'     => 'Estado',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => true,  
+    'position'  => 9,  
+    )); 
+
+$setup->addAttribute('customer', 'billing:rfc_email', array(  
+    'label'     => 'Correo Electrónico',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => true,  
+    'position'  => 10,  
+    ));  
+
+$setup->addAttribute('customer', 'billing:rfc_solicita', array(  
+    'label'     => 'Nombre de quien solicita',  
+    'type'      => 'varchar',  
+    'input'     => 'text',  
+    'visible'   => true,  
+    'required'  => true,  
+    'position'  => 11,  
+    ));  */
+?>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS);?>cp/cpBilling.js"></script>
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS);?>cp/jquery.email-autocomplete.js"></script>
+
+<form id="co-billing-form" action="">
+<fieldset>
+    <ul class="form-list">
+    <?php if ($this->customerHasAddresses()): ?>
+        <li class="wide">
+            <label for="billing-address-select"><?php echo $this->__('Seleccione su dirección de Registro.') ?></label>
+            <div class="input-box">
+                <?php echo $this->getAddressesHtmlSelect('billing') ?>
+            </div>
+        </li>
+    <?php endif; ?>
+		
+    <li id="billing-new-address-form"<?php if ($this->customerHasAddresses()): ?> style="display:none;"<?php endif; ?>>
+        <fieldset>
+            <input type="hidden" name="billing[address_id]" value="<?php echo $this->getAddress()->getId() ?>" id="billing:address_id" />
+            <ul>
+                <li class="fields"><?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getAddress()->getFirstname() ? $this->getAddress() : $this->getQuote()->getCustomer())->setForceUseCustomerRequiredAttributes(!$this->isCustomerLoggedIn())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?></li>
+				<li class="fields">
+					<?php if(!$this->isCustomerLoggedIn()): ?>
+					<div class="field">
+						<label for="billing:email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+						<div class="input-box">
+							<input type="text" name="billing[email]" id="billing:email" value="<?php echo $this->escapeHtml($this->getAddress()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry email-sugg" />
+						</div>
+					</div>
+					<?php endif; ?>
+                    <?php $_streetValidationClass = $this->helper('customer/address')->getAttributeValidationClass('street'); ?>
+					<div class="field">
+                        <label for="billing:street1" class="required"><em>*</em><?php echo $this->__('Calle y Número') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('Street Address') ?>" name="billing[street][]" id="billing:street1" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
+                        </div>
+                    </div>
+					<div class="field">
+                        <label for="billing:street2" class="required"><em>*</em><?php echo $this->__('Entre Calles') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('Entre Calles') ?>" name="billing[street][]" id="billing:street2" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
+                        </div>
+                    </div>
+                </li>
+        
+                <li class="fields">
+                    <div class="field">
+                        <label for="billing:postcode" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international <?php echo $this->helper('customer/address')->getAttributeValidationClass('postcode') ?>" onblur="buscarCodigo2(this.value)" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="billing:suburbfield" class="required"><em>*</em><?php echo $this->__('Colonia') ?></label>
+                            <div class="input-box">
+                                <div id="billing:suburbfield"><select><option>Selecciona una opción</option></select></div>
+                                <input type="hidden" title="<?php echo $this->__('Colonia %s', $_i) ?>" name="billing[street][]" id="billing:street<?php echo $_i ?>" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
+                            </div>
+                    </div>
+                </li>
+        <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
+                <li class="fields">
+                    <div class="field">
+                        <label for="billing:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('city') ?>" id="billing:city" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+                        <div class="input-box">
+                            <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
+                                <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                            </select>
+                            <script type="text/javascript">
+                            //<![CDATA[
+                                $('billing:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
+                            //]]>
+                            </script>
+                            <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('region') ?>" style="display:none;" />
+                        </div>
+                    </div>
+                </li>
+                <li class="fields">
+                    <div class="field">
+                        <label for="billing:country_id" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
+                        <div class="input-box">
+                            <?php echo $this->getCountryHtmlSelect('billing') ?>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="billing:telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
+                        <div class="input-box">
+                            <input type="text" name="billing[telephone]" value="<?php echo $this->escapeHtml($this->getAddress()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('telephone') ?>" id="billing:telephone" />
+                        </div>
+                    </div>
+                </li>
+                <?php if(!$this->isCustomerLoggedIn()): ?>
+
+        <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
+        <?php $_gender = $this->getLayout()->createBlock('customer/widget_gender') ?>
+            <?php if ($_dob->isEnabled() || $_gender->isEnabled()): ?>
+                <li class="fields">
+                <?php if ($_dob->isEnabled()): ?>
+                    <div class="field">
+                        <?php echo $_dob->setDate($this->getQuote()->getCustomerDob())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                    </div>
+                <?php endif; ?>
+                <?php if ($_gender->isEnabled()): ?>
+                    <div class="field">
+                        <?php echo $_gender->setGender($this->getQuote()->getCustomerGender())->setFieldIdFormat('billing:%s')->setFieldNameFormat('billing[%s]')->toHtml() ?>
+                    </div>
+                <?php endif ?>
+                </li>
+            <?php endif ?>
+
+            <?php /* if ($this->isTaxvatEnabled()):?>
+                <li><?php echo $this->getTaxvatHtml() ?></li>
+            <?php endif; */ ?>
+
+                <li class="fields" id="register-customer-password">
+                    <div class="field">
+                        <label for="billing:customer_password" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
+                        <div class="input-box">
+                            <input type="password" name="billing[customer_password]" id="billing:customer_password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-password" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="billing:confirm_password" class="required"><em>*</em><?php echo $this->__('Confirm Password') ?></label>
+                        <div class="input-box">
+                            <input type="password" name="billing[confirm_password]" title="<?php echo $this->__('Confirm Password') ?>" id="billing:confirm_password" class="input-text required-entry validate-cpassword" />
+                        </div>
+                    </div>
+                </li>
+                <?php echo $this->getChildHtml('persistent.remember.me'); ?>
+                <?php endif; ?>
+                <?php if ($this->isCustomerLoggedIn() && $this->customerHasAddresses()):?>
+                    <li class="control">
+                        <input type="checkbox" name="billing[save_in_address_book]" value="1" title="<?php echo $this->__('Save in address book') ?>" id="billing:save_in_address_book" onchange="if(window.shipping) shipping.setSameAsBilling(false);"<?php if ($this->getAddress()->getSaveInAddressBook()):?> checked="checked"<?php endif;?> class="checkbox" /><label for="billing:save_in_address_book"><?php echo $this->__('Save in address book') ?></label>
+                    </li>
+                <?php else:?>
+                    <li class="no-display"><input type="hidden" name="billing[save_in_address_book]" value="1" /></li>
+                <?php endif; ?>
+                <?php echo $this->getChildHtml('form.additional.info'); ?>
+            </ul>
+			
+            <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
+        </fieldset>
+     </li>
+     <!--<li style="">
+         <input type="checkbox" name="billing[require_invoice]" id="billing:require_invoice" value="facturar" title="¿Necesita facturar su compra?" onclick="javascript:check(this)" class="" style="float: left;" /><label for="billing:require_invoice"><?php echo  $this->__('Requiero factura') ?></label></li>
+     </li>-->
+     <li  style="display: none;" class="rfc-fields">
+         <input type="checkbox" name="billing[autofill]" id="billing:autofill" value="rellenar" title="Usar los mismos datos de registro" onclick="javascript:autofill(this)" class="rfc-fields" style="float: left; display: none;" /><label for="billing:autofill"><?php echo  $this->__('Usar los mismos datos de registro') ?></label></li>
+     </li>
+     <li class="fields rfc-fields" style="display: none;">
+                    <div class="field">
+                        <label for="billing:rfc_nombre" class="required"><em>*</em><?php echo $this->__('Nombre o Razón Social') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('Nombre o Razón Social') ?>" name="billing[rfc_nombre]" id="billing:rfc_nombre" value="" class="input-text required-entry" onblur="validar(this)" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="billing:rfc" class="required"><em>*</em><?php echo $this->__('RFC') ?></label>
+                            <div class="input-box">
+                                <input type="text" title="<?php echo $this->__('RFC') ?>" name="billing[rfc]" id="billing:rfc" value="" class="input-text required-entry" />
+                            </div>
+                    </div>
+    </li>
+    <li class="fields rfc-fields" style="display: none;">
+                    <div class="field">
+                        <label for="billing:direccion" class="required"><em>*</em><?php echo $this->__('Dirección') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('Dirección') ?>" name="billing[direccion]" id="billing:direccion" value="" class="input-text required-entry" onblur="validar(this)" />
+                        </div>
+                    </div>
+                    <div class="field" style="width:15%;">
+                        <label for="billing:no_exterior" class="required"><em>*</em><?php echo $this->__('No. Exterior') ?></label>
+                            <div class="input-box">
+                                <input type="text" title="<?php echo $this->__('No. Exterior') ?>" name="billing[no_exterior]" id="billing:no_exterior" value="" class="input-text required-entry"  style="width:50%;"/>
+                            </div>
+                    </div>
+                    <div class="field" style="width:15%;">
+                        <label for="billing:no_interior" class="required"><?php echo $this->__('No. Interior') ?></label>
+                            <div class="input-box">
+                                <input type="text" title="<?php echo $this->__('No. Interior') ?>" name="billing[no_interior]" id="billing:no_interior" value="" class="input-text"  style="width:50%;"/>
+                            </div>
+                    </div>
+                    <div class="field" style="width:15%;">
+                        <label for="billing:cp" class="required"><em>*</em><?php echo $this->__('CP') ?></label>
+                            <div class="input-box">
+                                <input type="text" title="<?php echo $this->__('CP') ?>" name="billing[cp]" id="billing:cp" value="" class="input-text required-entry"  style="width:50%;"/>
+                            </div>
+                    </div>
+    </li>
+    <li class="fields rfc-fields" style="display: none;">
+                    <div class="field">
+                        <label for="billing:rfc_colonia" class="required"><em>*</em><?php echo $this->__('Colonia') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('Colonia') ?>" name="billing[rfc_colonia]" id="billing:rfc_colonia" value="" class="input-text required-entry" onblur="validar(this)" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="billing:rfc_municipio" class="required"><em>*</em><?php echo $this->__('Delegación o Municipio') ?></label>
+                            <div class="input-box">
+                                <input type="text" title="<?php echo $this->__('Delegación o Municipio') ?>" name="billing[rfc_municipio]" id="billing:rfc_municipio" value="" class="input-text required-entry" />
+                            </div>
+                    </div>
+    </li>
+    <li class="fields rfc-fields" style="display: none;">
+                    <div class="field">
+                        <label for="billing:rfc_estado" class="required"><em>*</em><?php echo $this->__('Ciudad o Estado') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('Ciudad o Estado') ?>" name="billing[rfc_estado]" id="billing:rfc_estado" value="" class="input-text required-entry" onblur="validar(this)" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="billing:rfc_email" class="required"><em>*</em><?php echo $this->__('Correo Electrónico') ?></label>
+                            <div class="input-box">
+                                <input type="text" title="<?php echo $this->__('Correo Electrónico') ?>" name="billing[rfc_email]" id="billing:rfc_email" value="" class="input-text validate-email required-entry email-sugg" />
+                            </div>
+                    </div>
+    </li>
+    <li class="fields rfc-fields" style="display: none;">
+                    <div class="field">
+                        <label for="billing:rfc_solicita" class="required"><em>*</em><?php echo $this->__('Nombre de la persona que solicita') ?></label>
+                        <div class="input-box">
+                            <input type="text" title="<?php echo $this->__('Nombre de la persona que solicita') ?>" name="billing[rfc_solicita]" id="billing:rfc_solicita" value="" class="input-text required-entry" onblur="validar(this)" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="billing:rfc_telefono" class="required"><em>*</em><?php echo $this->__('Teléfono') ?></label>
+                            <div class="input-box">
+                                <input type="text" title="<?php echo $this->__('Teléfono') ?>" name="billing[rfc_telefono]" id="billing:rfc_telefono" value="" class="input-text required-entry" />
+                            </div>
+                    </div>
+    </li>
+    <?php if ($this->canShip()): ?>
+        <li class="control">
+            <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1"<?php if ($this->isUseBillingAddressForShipping()) {?> checked="checked"<?php }?> title="<?php echo  $this->__('Ship to this address') ?>" onclick="$('shipping:same_as_billing').checked = true;" class="radio" /><label for="billing:use_for_shipping_yes"><?php echo  $this->__('Ship to this address') ?></label></li>
+        <li class="control">
+            <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0"<?php if (!$this->isUseBillingAddressForShipping()) {?> checked="checked"<?php }?> title="<?php echo $this->__('Ship to different address') ?>" onclick="$('shipping:same_as_billing').checked = false;" class="radio" /><label for="billing:use_for_shipping_no"><?php echo $this->__('Ship to different address') ?></label>
+        </li>
+    <?php endif; ?>
+    </ul>
+    <?php if (!$this->canShip()): ?>
+        <input type="hidden" name="billing[use_for_shipping]" value="1" />
+    <?php endif; ?>
+	<div class="container right">
+		<div class="agree">
+			<input type="checkbox" id="agreement-1" name="agreement[1]" value="1" title="Acepto términos y condiciones" class="checkbox required-entry" checked=""><label for="agreement-1">Acepto <a href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>terminos-y-condiciones/" title="Términos y condiciones" target="_blank">términos y condiciones</a></label>
+		</div>
+		<div class="aviso-privacidad">
+			<a href="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB); ?>aviso-de-privacidad" title="Aviso de Privacidad" target="_blank" />Aviso de privacidad</a>
+		</div>
+	</div>
+    <div class="buttons-set" id="billing-buttons-container">
+        <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+        <button type="button" title="<?php echo $this->__('Continue') ?>" class="button" onclick="billing.save()"><span><span><?php echo $this->__('Continue') ?></span></span></button>
+        <span class="please-wait" id="billing-please-wait" style="display:none;">
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Loading next step...') ?>" title="<?php echo $this->__('Loading next step...') ?>" class="v-middle" /> <?php echo $this->__('Loading next step...') ?>
+        </span>
+    </div>
+</fieldset>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+    var billing = new Billing('co-billing-form', '<?php echo $this->getUrl('checkout/onepage/getAddress') ?>address/', '<?php echo $this->getUrl('checkout/onepage/saveBilling') ?>');
+    var billingForm = new VarienForm('co-billing-form');
+
+    //billingForm.setElementsRelation('billing:country_id', 'billing:region', '<?php echo $this->getUrl('directory/json/childRegion') ?>', '<?php echo $this->__('Select State/Province...') ?>');
+    $('billing-address-select') && billing.newAddress(!$('billing-address-select').value);
+
+    var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region', 'billing:region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'billing:postcode');
+    if ($('onepage-guest-register-button')) {
+        Event.observe($('onepage-guest-register-button'), 'click', function(event) {
+            var billingRememberMe = $('co-billing-form').select('#remember-me-box');
+            if (billingRememberMe.length > 0) {
+                if ($('login:guest') && $('login:guest').checked) {
+                    billingRememberMe[0].hide();
+                } else if ($('login:register') && ($('login:register').checked || $('login:register').type == 'hidden')) {
+                    billingRememberMe[0].show();
+                }
+            }
+        });
+    }
+//]]>
+</script>
+<script>
+(function($){
+    $(function() {
+      $(".email-sugg").emailautocomplete({
+        domains: ["yahoo.com.mx","yahoo.com"] //add your own domains
+      });
+    });
+  }(jQuery));
+</script>

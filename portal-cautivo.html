@@ -1,0 +1,51 @@
+Hola Portal Guest
+<html>
+<head>
+<title>Facebook Login</title>
+<meta charset="UTF-8">
+</head>
+<body>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId            : 589049611512397,
+      autoLogAppEvents : true,
+      xfbml            : true,
+      version          : 'v3.1'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+    
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v3.1&appId=589049611512397&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="fb-login-button" data-width="100" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"></div>
+<script language=javascript>
+var hs_server = "NONE";
+var port = 880;
+var postToUrl = "/cgi-bin/hslogin.cgi";
+hs_server = getQueryVariable("hs_server");
+Qv = getQueryVariable("Qv");
+postToUrl = ":" + port + postToUrl;
+document.getElementById("f_hs_server").value = hs_s
+erver
+document.getElementById("f_Qv").value = Qv
+document.getElementById("frmLogin").action = "http:" + hs_server + postToUrl;
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<?php if ($this->getRequest()->getParam('order')):
+	
+    $_order = $this->getRequest()->getParam('order');
+    $webpay = Mage::getSingleton("webpay/standard");
+    $order = Mage::getModel('sales/order')->loadByIncrementId($this->getRequest()->getParam('order'));
+    $_orden2 = Mage::getModel('sales/order')->loadByIncrementId($_order);
+    $_payment_method = $_orden2->getPayment()->getMethodInstance()->getCode();
+    $_amount_string = $order->getGrandTotal();
+    $_amount = Mage::helper('core')->currency($_amount_string, true, false);
+    $_sub_amount_string = $order->getSubtotal();
+    $_sub_amount = Mage::helper('core')->currency($_sub_amount_string, true, false);
+	$orderId = Mage::getModel('sales/order')->loadByIncrementId($_order)->getEntityId();
+	//$order2 = $order_->loadByIncrementId($orderId);
+	$urlweb = Mage::getBaseUrl();
+	$printurl = $urlweb.'sales/order/print/order_id/'.$orderId.'/'; 
+	$envio = $order->getShippingAmount();
+	$envio = Mage::helper('core')->currency($envio, true, false);
+	$discount = $order->getDiscountAmount();
+	if ($discount!=0):
+	$discount = Mage::helper('core')->currency($discount, true, false);
+	else:
+	$discount = null;
+	endif;
+?>
+    
+    
+        <h1 style="display: block; color: rgb(120, 0, 36);"><?php echo $this->__('4.- Confirmación de pago!') ?></h1>
+        <h2 style="text-align: center; font-size: 2em; padding: 0 1em;"><strong>¡GRACIAS!</strong></h2>
+
+<div style="width: 70%; margin:0 auto;">
+    <p><?php echo $this->__('<span class="success-message">Tu número de orden es %s', sprintf('<a href="%s" target="_parent" style="color:#000000; font-weight:bold;">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($_order))).' </span>. ' ?><?php echo $this->__('En breve recibirás un correo de confirmación y una llamada para informarte todo lo que necesitas saber del proceso de entrega de tu pedido.') ?></p>
+	<?php 
+			if (!$order->getCustomerIsGuest()) { 
+	?>
+	<p><?php echo $this->__('Clic <a href="%s" onclick="this.target=\'_blank\'" class="print">aquí para imprimir</a> una copia de tu pedido.', $printurl) ?></p><br/>
+	<?php } ?>
+    <?php if($_payment_method == "banktransfer" ){ ?>
+    <br>
+    <p>
+        Una vez realizado el dep&oacute;sito, enviar una copia del comprobante de pago al correo <a href="mailto:infodicocentro@dico.com.mx">infodicocentro@dico.com.mx</a> cuyo asunto deber&aacute; contener su nombre completo y n&uacute;mero de referencia. 
+    <?php } ?>
+
+    </p>
+<?php // if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
+    <p>
+        <?php //echo $this->getChildHtml() ?>
+    </p>
+    <br>
+    <p style="text-align: center;">Si tienes alguna duda, comunícate al <a style="color: #3B88FB; font-weight: bold;" href="tel:58997094">58997094</a> donde nuestro equipo de atención al cliente está listo para ayudarte.</p>
+</div>
+
+
+<?php echo $this->getLayout()->createBlock('core/template')->setTemplate('sales/view.phtml')->toHtml(); ?>
+
+<?php // endif;?>
+<?php endif; ?>
+
+<?php if ($this->getAgreementRefId()): ?>
+    <p><?php echo $this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
+<?php endif;?>
+
+<?php if ($profiles = $this->getRecurringProfiles()):?>
+<p><?php echo $this->__('Your recurring payment profiles:'); ?></p>
+<ul class="disc">
+<?php foreach($profiles as $profile):?>
+<?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
+    <li><?php echo $this->__('Payment profile # %s: "%s".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<br><br>
+<div class="buttons-set" style="width: 70%; margin:0 auto;">
+    <p style="text-align: center;"><strong>¡Esperamos verte pronto y ayudarte a crear #BuenosMomentos en casa!</strong></p>
+    <br>
+    <button type="button" class="button" style="margin-left: 15%;" title="<?php echo $this->__('Seguir Comprando') ?>" onclick="window.top.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
+     <button type="button" class="button" style="background-color: #686868; margin-left:9%;" title="<?php echo $this->__('Facturar') ?>" onclick="window.top.location='<?php echo $this->getUrl() ?>factura.php'"><span style="background-color: #686868;"><span style="background-color: #686868;"><?php echo $this->__('Facturar') ?></span></span></button>
+     <button type="button" class="button" style="float: right; margin-right: 17%;" title="<?php echo $this->__('Preguntas Frecuentes') ?>" onclick="window.top.location='<?php echo $this->getUrl() ?>preguntas-frecuentes'"><span style="background-color: #b8b8b8; margin-left:24%;"><span style="background-color: #b8b8b8;"><?php echo $this->__('Preguntas Frecuentes') ?></span></span></button>
+</div>
+<div id="thankyou-footer" style="padding: 3em;">
+    <div class="thankyou-footer-background grid_12 row">
+<div class="grid_6">&nbsp;</div>
+<div class="grid_4">
+    <div class="form-subscribe-header" style="color: #ffffff;">Correo electrónico</div>
+    <div class="input-box">
+        <input id="newsletter" class="input-text required-entry validate-email" title="Suscr&iacute;base a nuestras noticias" type="text" name="email" placeholder="ejemplo@gmail.com" /> 
+        <button class="button" title="Suscribirse" type="submit"><span><span id="suscribe-boletin">Registrarse</span></span>
+        </button>
+    </div>
+</div>
+</div>
+</div>
+</form>
+</div>
+<script type="text/javascript">
+    dataLayer.push({
+        "ecommerce": {
+            "purchase": {
+                "actionField": {
+                    "id": "<?php echo $_order ?>",
+                    "affiliation": "<?php echo $_payment_method ?>",
+                    "revenue": "<?php echo number_format((float)$_amount_string,2,'.','') ?>",
+                    "location": "<?php echo $urlweb ?>" // Our custom purchase attribute
+                },
+                "products": [
+                <?php 
+                foreach ($orderItems as $items) { 
+                    $cats = $_items->getCategoryIds();
+                    $m = 0;
+                    $category = "";
+                foreach ($cats as $key => $category_id ) {
+                    $_cat = Mage::getModel('catalog/category')->setStoreId(Mage::app()->getStore()->getId())->load($category_id);
+                    $category .= $_cat->getName();
+                    if(!($category_id == end($cats))){
+                        $category .= " > ";             
+                    }
+                        $m++;
+                }
+                    echo "{";
+                    echo '"name": "'.$items->getName().'",';
+                    echo '"id": "'.$items->getId().'",';
+                    echo '"sku": "'.$items->getSku().'",';
+                    echo '"category": "'.$category."'";
+                    echo '"price": "'.number_format($items->getPrice(),0).'"';
+                    echo '"criteoprice": "'.number_format($items->getPrice(),0,'','').'",';
+                    echo '"quantity": "'.number_format($items->getQtyOrdered(),0).'"';
+
+                    if (end($orderItems)) {
+                        echo "},";
+                    }
+                    else{
+                        echo "},";
+                    }
+
+                } ?>
+                    ]
+                }
+            }
+        });
+</script>

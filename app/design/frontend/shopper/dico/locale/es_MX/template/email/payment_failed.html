@@ -1,0 +1,58 @@
+{* This is a comment block
+
+Use vars: {{var var_name}}
+*}<!--@subject Payment Transaction Failed Reminder @-->
+
+<table>
+    <thead>
+        <tr>
+            <th>La transacci&oacute;n de pago fue declinada.</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <p>
+                    <b>Raz&oacute;n</b><br />
+                    {{var reason}}
+                </p>
+                <p>
+                    <b>Tipo de Pago</b><br />
+                    {{var checkoutType}}
+                </p>
+                <p>
+                    <b>Cliente:</b><br />
+                    <a href="mailto:{{var customerEmail}}">{{var customer}}</a> &lt;{{var customerEmail}}&gt;
+                </p>
+                <p>
+                    <b>Productos</b><br />
+                    {{var items}}
+                </p>
+                <p>
+                    <b>Total:</b><br />
+                    {{var total}}
+                </p>
+                <p>
+                    <b>Direcci&oacute;n de Pago:</b><br />
+                    {{var billingAddress.format('html')}}
+                </p>
+                <p>
+                    <b>Direcci&oacute;n de Env&iacute;o:</b><br />
+                    {{var shippingAddress.format('html')}}
+                </p>
+                <p>
+                    <b>M&eacute;todo de En&iacute;o:</b><br />
+                    {{var shippingMethod}}
+                </p>
+                <p>
+                    <b>M&eacute;todo de Pago:</b><br />
+                    {{var paymentMethod}}
+                </p>
+                <p>
+                    <b>Fecha y Hora:</b><br />
+                    {{var dateAndTime}}
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>

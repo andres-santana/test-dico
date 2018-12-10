@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Dico_AjaxCart>
+      <version>0.1.0</version>
+    </Dico_AjaxCart>
+  </modules>
+  <global>
+  </global>
+  <frontend>
+    <routers>
+      <ajaxcart>
+        <use>standard</use>
+        <args>
+          <module>Dico_AjaxCart</module>
+          <frontName>ajaxcart</frontName>
+        </args>
+      </ajaxcart>
+    </routers>
+	<layout>
+           <updates>
+               <ajaxcart>
+                   <file>ajaxcart.xml</file>
+               </ajaxcart>
+           </updates>
+       </layout>
+  </frontend>
+  <global>
+	<blocks>
+      <ajaxcart>
+        <class>Dico_AjaxCart_Block</class>
+           </ajaxcart>
+       </blocks>
+   </global>
+</config>

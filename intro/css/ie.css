@@ -1,0 +1,13 @@
+/* IE transparent bg hack */
+footer {
+
+	background: url(../images/slideshow/ie_bg.png);
+	
+}
+
+/* IE transparent bg hack */
+#info #info-text {
+
+	background: url(../images/slideshow/ie_bg_info.png);
+	
+}

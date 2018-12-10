@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<config>
+    <!--/MENU -->
+    <menu>
+        <lanot>
+            <children>
+                <lanot_easysticker>
+                    <children>
+                        <manage_sticker translate="title" module="lanot_easysticker">
+                            <title>Manage Static Stickers</title>
+                            <action>lanot_easysticker/adminhtml_sticker</action>
+                            <sort_order>10</sort_order>
+                        </manage_sticker>
+                        <dynamic_sticker translate="title" module="lanot_premiumsticker">
+                            <title>Manage Dynamic Stickers</title>
+                            <action>lanot_premiumsticker/adminhtml_sticker_dynamic</action>
+                            <sort_order>21</sort_order>
+                        </dynamic_sticker>
+                    </children>
+                </lanot_easysticker>
+            </children>
+        </lanot>
+    </menu>
+    <!--/MENU -->
+
+    <!--ACL -->
+    <acl>
+        <resources>
+            <admin>
+                <children>
+
+                    <lanot>
+                        <children>
+                            <lanot_easysticker>
+                                <children>
+                                    <manage_sticker translate="title">
+                                        <title>Manage Static Stickers</title>
+                                    </manage_sticker>
+                                    <dynamic_sticker translate="title">
+                                        <title>Manage Dynamic Stickers</title>
+                                        <sort_order>0</sort_order>
+                                        <children>
+                                            <save translate="title">
+                                                <title>Save Stickers</title>
+                                                <sort_order>0</sort_order>
+                                            </save>
+                                        </children>
+                                    </dynamic_sticker>
+                                </children>
+                            </lanot_easysticker>
+
+                        </children>
+                    </lanot>
+
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <!--/ACL -->
+</config>

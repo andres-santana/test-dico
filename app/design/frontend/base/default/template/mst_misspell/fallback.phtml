@@ -1,0 +1,9 @@
+<?php if ($this->isSuggested()): ?>
+<?php
+$_suggest = $this->getQueryText();
+?>
+<p class="note-msg misspell fallback">
+    <?php echo $this->__("Tu búsqueda '<strong>%s</strong>' no coincidió con ningún producto.", Mage::helper('core')->escapeHtml($this->getOriginalQueryText())) ?><br>
+    <?php echo $this->__('Se muestran resultados con el término de búsqueda') ?> '<strong><?php echo $this->highlight($_suggest, 'strike') ?></strong>'
+</p>
+<?php endif ?>

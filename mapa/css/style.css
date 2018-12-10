@@ -1,0 +1,157 @@
+@font-face {
+  font-family: "Crimson Text";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Crimson Text Bold"), local("CrimsonText-Bold"), url("https://fonts.gstatic.com/s/crimsontext/v6/rEy5tGc5HdXy56Xvd4f3I3NuWYKPzoeKl5tYj8yhly0.woff2") format("woff2"), url("https://fonts.gstatic.com/s/crimsontext/v6/rEy5tGc5HdXy56Xvd4f3I3l4twXkwp3_u9ZoePkT564.woff") format("woff");
+}
+body{font-family: open-sans, Verdana, Helvetica; font-size: 13px; color:#000000;}
+
+a img{border: none;}
+
+#container{width: 100%; height: auto; margin-left: 0;}
+
+ul.css-tabs{list-style-type:none; width: 100%; height:auto; padding: 0px;}
+ul.css-tabs li{float:left; width: 163px; background-color:#99042f; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; margin: 2px 7px; transition: background 100ms ease-in-out; -webkit-transition:background 100ms ease-in-out;text-align: center;}
+ul.css-tabs li a{width: 166px; height:20px; display:block; text-decoration:none; color:#ffffff;padding: 4px 0px 0px 12px; line-height: 13px; text-shadow: 2px 1px 4px #000000; filter: dropshadow(color=#000000, offx=2, offy=1);text-align: left;}
+ul.css-tabs li:hover{background-color:#E42A18;}
+
+ul#sucursal{list-style-type:none; width:200px; height:auto; padding:10px; margin-top:-10px;}
+ul#sucursal li{float:left; width:200px; text-decoration:none; color:#000000; font-size:13px;}
+ul#sucursal li:hover{cursor:pointer; color:#99042f;}
+
+.selecciona-sucursal:hover{color:#99042f; cursor:default; padding-bottom:10px;}
+ul#sucursal li#selecciona:hover{color:#99042f; cursor:default; padding-bottom:10px;}
+ul#sucursal li#selecciona{color:#99042f; cursor:default; font-weight:bold; padding-bottom:10px; font-size:13px;}
+
+.title{text-align:left; text-transform:uppercase; color: #99042f; font-size:24px; line-height:0px;padding-bottom: 20px; font-family:"Crimson Text";}
+
+.left-column{float:left; display: inline-block; width: 100%; margin:20px auto;}
+.right-column{float:left; display: inline-block; width: 100%; margin:0 auto;}
+
+.initial-map{margin: 24px 0 0 220px;}
+.internal-map{margin: -24px 0 0 220px;}
+
+#map_canvas{width:600px; height: 500px;}
+
+.css-panes{width: 100%; height:auto; margin:0 auto;}
+
+/* root element for scrollable */
+.vertical {
+
+    /* required settings */
+    position:relative;
+    overflow:hidden;
+
+    /* vertical scrollers have typically larger height than width */
+    
+
+    height: auto;
+    width: 100%;
+
+}
+
+/* root element for scrollable items */
+.items {
+
+    /* this time we have very large space for height */
+    height: auto;
+    margin: 0px;
+}
+
+/* single scrollable item */
+.item {
+    margin:0;
+    padding:0px;
+    height: auto;
+}
+
+/* elements inside single item */
+.item img {
+    float:left;
+    margin-right:20px;
+    height:180px;
+    width:240px;
+}
+
+.item h3 {
+    margin:0 0 5px 0;
+    font-size:16px;
+    color:#456;
+    font-weight:normal;
+}
+
+/* the action buttons above the scrollable */
+.actions {
+    width:200px;
+}
+
+.actions a {
+    font-size:11px;
+    cursor:pointer;
+    color:#666;
+}
+
+.actions a:hover {
+    text-decoration:underline;
+    color:#000;
+}
+
+.disabled {
+    visibility:hidden;
+}
+
+.next {
+}
+
+.mobile{display:none;}
+
+@media only screen and (max-width:767px){
+	.mobile{display:block;}
+	.monitor{display:none;}
+	#accordion {
+    width: 100%;
+    border:1px solid #333;
+    -background:#666;
+    margin: 0 auto;
+}
+
+/* accordion header */
+#accordion h2 {
+    background-color:#cccccc;
+    line-height: 14px;
+    margin:0;
+    padding:15px;
+    font-size:14px;
+    font-weight:normal;
+    border:1px solid #fff;
+    border-bottom:1px solid #ddd;
+    cursor:pointer;
+}
+
+/* currently active header */
+#accordion h2.current {
+    cursor:default;
+    background-color:#e42a18;
+	color:#ffffff;
+	font-weight:bold;
+}
+
+/* accordion pane */
+#accordion .pane {
+    border:1px solid #333333;
+    border-width:0 2px;
+    display:none;
+    height:auto;
+    padding:15px;
+    color:#333333;
+    font-size:12px;
+}
+
+/* a title inside pane */
+#accordion .pane h3 {
+    font-weight:bold;
+    margin:0;
+    font-size:16px;
+    color:#000;
+}
+}
